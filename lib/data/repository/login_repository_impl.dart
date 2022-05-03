@@ -14,8 +14,7 @@ class LoginRepositoryImpl extends LoginRepository {
 
   @override
   Future<Either<LoginError,ResponseLoginBO>> login(String username, String password) async {
-    log("Repository initialized");
-    final response = await network.login();
+    final response = await network.login(username, password);
     if (response.isLeft) {
       return Left(response.left);
     } else {

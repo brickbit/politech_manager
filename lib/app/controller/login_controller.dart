@@ -41,4 +41,8 @@ class LoginController extends GetxController with StateMixin<ResponseLoginBO> {
     _loading.value = false;
     Get.toNamed(Routes.home);
   }
+
+  void hideError() {
+    _error.value = false;
+  }
 }

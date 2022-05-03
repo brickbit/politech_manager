@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../controller/login_controller.dart';
+import '../../navigation/app_routes.dart';
 import '../custom/password_text_field.dart';
 
 class LoginScreen extends GetView<LoginController> {
   LoginScreen({Key? key}) : super(key: key);
 
   final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +41,14 @@ class LoginScreen extends GetView<LoginController> {
     BuildContext context,
   ) {
     final snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.redAccent,
       content: Text(controller.errorMsg),
     );
     Future.delayed(Duration.zero, () {
       if(controller.error) {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        controller.hideError();
       }
     });
 
@@ -58,7 +62,7 @@ class LoginScreen extends GetView<LoginController> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                /*ColorFiltered(
+                ColorFiltered(
                   colorFilter:
                   ColorFilter.mode((Colors.grey[400])!, BlendMode.modulate),
                   child: Container(
@@ -69,13 +73,12 @@ class LoginScreen extends GetView<LoginController> {
                         )),
                     height: mobile ? 280 : 320,
                   ),
-                ),*/
+                ),
                 SizedBox(
                     width: userTextFieldWidth,
                     child: TextField(
                       controller: _usernameController,
                       decoration: InputDecoration(labelText: 'email'.tr),
-                      style: GoogleFonts.montserrat(fontSize: 16.0),
                     )),
                 const SizedBox(
                   height: 16.0,
@@ -84,6 +87,7 @@ class LoginScreen extends GetView<LoginController> {
                   width: passwordTextFieldWidth,
                   child: PasswordTextField(
                     title: 'password'.tr,
+                    passwordController: _passwordController,
                   ),
                 ),
                 const SizedBox(
@@ -95,22 +99,22 @@ class LoginScreen extends GetView<LoginController> {
                     child: ElevatedButton(
                         child: Text('login'.tr),
                         onPressed: () {
-                          controller.login("username", "password");
+                          controller.login(_usernameController.text, _passwordController.text);
                         })),
                 const SizedBox(
-                  height: 20.0,
+                  height: 30.0,
                 ),
                 TextButton(
                     onPressed: () {
-                      //Get.toNamed(Routes.recoverPassword);
+                      Get.toNamed(Routes.recoverPassword);
                     },
                     child: Text('forgottenPassword'.tr)),
                 const SizedBox(
-                  height: 20.0,
+                  height: 8.0,
                 ),
                 TextButton(
                     onPressed: () {
-                      //Get.toNamed(Routes.recoverPassword);
+                      Get.toNamed(Routes.register);
                     },
                     child: Text('register'.tr)),
               ],
