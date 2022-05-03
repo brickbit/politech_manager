@@ -11,7 +11,7 @@ class SplashController extends GetxController {
   void onInit() {
     super.onInit();
     Timer(const Duration(milliseconds: 2000), () {
-      //Get.toNamed(Routes.login);
+      Get.toNamed(Routes.login);
     });
   }
 }
