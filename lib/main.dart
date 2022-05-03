@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'app/navigation/app_pages.dart';
+import 'app/views/themes/themes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +24,7 @@ class EpccApp extends StatelessWidget {
       //logWriterCallback: Logger.write,
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
-      //theme: AppThemes.light,
+      theme: AppThemes.light,
       //translations: LocalizationService(),
     );
   }
