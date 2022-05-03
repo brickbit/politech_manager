@@ -5,7 +5,7 @@ import 'package:politech_manager/domain/error/error_manager.dart';
 import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/model/response_login_bo.dart';
 import '../../../domain/repository/login_repository.dart';
-import '../../navigation/app_routes.dart';
+import '../navigation/app_routes.dart';
 
 class LoginController extends GetxController with StateMixin<ResponseLoginBO> {
   LoginController({required this.loginRepository, required this.errorManager});

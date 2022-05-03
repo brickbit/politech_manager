@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import '../../navigation/app_routes.dart';
+import '../navigation/app_routes.dart';
 
 class SplashController extends GetxController {
   SplashController();

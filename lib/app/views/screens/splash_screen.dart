@@ -1,9 +1,8 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../controller/splash_controller.dart';
+import '../../controller/splash_controller.dart';
 
 class SplashScreen extends GetView<SplashController> {
 

@@ -2,9 +2,8 @@
 import 'package:get/get.dart';
 import 'package:politech_manager/app/views/screens/login_screen.dart';
 import 'package:politech_manager/app/views/screens/splash_screen.dart';
-
-import '../views/binding/login_binding.dart';
-import '../views/binding/splash_binding.dart';
+import '../binding/login_binding.dart';
+import '../binding/splash_binding.dart';
 import 'app_routes.dart';
 
 class AppPages {

@@ -9,6 +9,7 @@ import '../../../domain/repository/login_repository.dart';
 import '../controller/login_controller.dart';
 import 'package:http/http.dart' as http;
 
+
 class LoginBinding extends Bindings {
 
   @override

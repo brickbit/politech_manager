@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../controller/login_controller.dart';
+import '../../controller/login_controller.dart';
 import '../custom/password_text_field.dart';
 
 class LoginScreen extends GetView<LoginController> {
