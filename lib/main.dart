@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'app/navigation/app_pages.dart';
+import 'app/views/language/localization_service.dart';
 import 'app/views/themes/themes.dart';
 
 Future<void> main() async {
@@ -25,7 +26,7 @@ class EpccApp extends StatelessWidget {
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
       theme: AppThemes.light,
-      //translations: LocalizationService(),
+      translations: LocalizationService(),
     );
   }
 }
