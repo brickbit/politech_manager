@@ -17,15 +17,16 @@ class LoginScreen extends GetView<LoginController> {
         builder: (context, constraints) {
           if (constraints.maxWidth < 600) {
             return Obx(
-                  () => controller.loading
+              () => controller.loading
                   ? const Center(child: CircularProgressIndicator())
-                  : _loginScreen(false, 300, 300, 300, context),
+                  : _loginScreen(true, Size.infinite.width, Size.infinite.width,
+                      Size.infinite.width, context),
             );
           } else {
             return Obx(
-                    () => controller.loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : _loginScreen(false, 300, 300, 300, context),
+              () => controller.loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _loginScreen(false, 300, 300, 300, context),
             );
           }
         },
@@ -46,7 +47,7 @@ class LoginScreen extends GetView<LoginController> {
       content: Text(controller.errorMsg),
     );
     Future.delayed(Duration.zero, () {
-      if(controller.error) {
+      if (controller.error) {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         controller.hideError();
       }
@@ -64,13 +65,13 @@ class LoginScreen extends GetView<LoginController> {
               children: [
                 ColorFiltered(
                   colorFilter:
-                  ColorFilter.mode((Colors.grey[400])!, BlendMode.modulate),
+                      ColorFilter.mode((Colors.grey[400])!, BlendMode.modulate),
                   child: Container(
                     decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/mural_epcc.png'),
-                          fit: BoxFit.cover,
-                        )),
+                      image: AssetImage('assets/images/mural_epcc.png'),
+                      fit: BoxFit.cover,
+                    )),
                     height: mobile ? 280 : 320,
                   ),
                 ),
@@ -99,7 +100,8 @@ class LoginScreen extends GetView<LoginController> {
                     child: ElevatedButton(
                         child: Text('login'.tr),
                         onPressed: () {
-                          controller.login(_usernameController.text, _passwordController.text);
+                          controller.login(_usernameController.text,
+                              _passwordController.text);
                         })),
                 const SizedBox(
                   height: 30.0,
