@@ -3,8 +3,10 @@ import 'package:politech_manager/data/model/response_login_dto.dart';
 import 'package:politech_manager/domain/model/response_set_new_password_bo.dart';
 import '../../domain/model/response_login_bo.dart';
 import '../../domain/model/response_recover_password_bo.dart';
+import '../../domain/model/response_sign_in_bo.dart';
 import '../model/response_recover_password_dto.dart';
 import '../model/response_set_new_password_dto.dart';
+import '../model/response_sign_in_dto.dart';
 
 extension ResponseLoginBOMapper on ResponseLoginDto {
   ResponseLoginBO toBO() {
@@ -21,5 +23,11 @@ extension ResponseRecoverPasswordBOMapper on ResponseRecoverPasswordDto {
 extension ResponseSetNewPasswordBOMapper on ResponseSetNewPasswordDto {
   ResponseSetNewPasswordBO toBO() {
     return ResponseSetNewPasswordBO(message, code);
+  }
+}
+
+extension ResponseSignInBOMapper on ResponseSignInDto {
+  ResponseSignInBO toBO() {
+    return ResponseSignInBO(message, code);
   }
 }

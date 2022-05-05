@@ -23,6 +23,16 @@ const Map<String, String> enUS = {
   'putPassword': 'Put your password',
   'setNewPasswordInstructions': 'To recover your account enter a new password. Remember that the password requires a minimum of 8 characters, an uppercase, a lowercase and a special character',
   'wrongNewPwd': 'Failed to change password',
+  //SignIn
+  'signIn': 'Sign In',
+  'putUser': 'Put your user',
+  'signInInstructions': 'Remember that the password requires a minimum of 8 characters, an uppercase, a lowercase and a special character',
+  'putRepeatPassword': 'Repeat your password',
+  'signInButton': 'Sign In',
+  'wrongUserSignIn': 'Username or password entered is not valid',
+  'pwdNotMatch': 'Passwords do not match',
+  'incorrectPassword': 'The password does not meet the security conditions',
+  'unknownError': 'An unknown error has occurred',
   //Home
   'data': 'Data',
   'schedule': 'Schedule',

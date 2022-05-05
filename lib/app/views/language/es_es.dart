@@ -23,6 +23,16 @@ const Map<String, String> esES = {
   'putPassword': 'Introduce tu contraseña',
   'setNewPasswordInstructions': 'Para recuperar su cuenta introduzca una nueva contraseña. Recuerde que la contraseña requiere un mínimo de 8 caracteres, una mayúscula, una minúscula y un caracter especial',
   'wrongNewPwd': 'No se ha podido cambiar la contraseña',
+  //SignIn
+  'signIn': 'Registro',
+  'putUser': 'Introduce tu usuario',
+  'signInInstructions': 'Recuerde que la contraseña requiere un mínimo de 8 caracteres, una mayúscula, una minúscula y un caracter especial',
+  'putRepeatPassword': 'Repita la contraseña',
+  'signInButton': 'Registrarse',
+  'wrongUserSignIn': 'El usuario o la contraseña introducida no son válidos',
+  'pwdNotMatch': 'Las contraseñas no coinciden',
+  'incorrectPassword': 'La contraseña no cumple las condiciones de seguridad',
+  'unknownError': 'Se ha producido un error desconocido',
   //Home
   'data': 'Datos',
   'schedule': 'Horario',

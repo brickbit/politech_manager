@@ -1,12 +1,11 @@
-
-import 'dart:developer';
-
 import 'package:either_dart/either.dart';
 import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
 import 'package:politech_manager/domain/error/set_new_password_error.dart';
+import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/model/response_login_bo.dart';
 import 'package:politech_manager/domain/model/response_set_new_password_bo.dart';
+import 'package:politech_manager/domain/model/response_sign_in_bo.dart';
 import '../../domain/model/response_recover_password_bo.dart';
 import '../../domain/repository/user_repository.dart';
 import '../datasource/network_datasource.dart';
@@ -17,7 +16,8 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this.network);
 
   @override
-  Future<Either<LoginError,ResponseLoginBO>> login(String username, String password) async {
+  Future<Either<LoginError, ResponseLoginBO>> login(
+      String username, String password) async {
     final response = await network.login(username, password);
     if (response.isLeft) {
       return Left(response.left);
@@ -27,7 +27,8 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<RecoverPasswordError, ResponseRecoverPasswordBO>> recoverPassword(String email) async {
+  Future<Either<RecoverPasswordError, ResponseRecoverPasswordBO>>
+      recoverPassword(String email) async {
     final response = await network.recoverPassword(email);
     if (response.isLeft) {
       return Left(response.left);
@@ -37,7 +38,8 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<SetNewPasswordError, ResponseSetNewPasswordBO>> setNewPassword(String password, String token) async {
+  Future<Either<SetNewPasswordError, ResponseSetNewPasswordBO>> setNewPassword(
+      String password, String token) async {
     final response = await network.resetPassword(password, token);
     if (response.isLeft) {
       return Left(response.left);
@@ -46,4 +48,15 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
+  @override
+  Future<Either<SignInError, ResponseSignInBO>> signIn(
+      String user, String email, String password, String repeatPassword) async {
+    final response =
+        await network.signIn(user, email, password, repeatPassword);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
 }

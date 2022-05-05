@@ -6,6 +6,8 @@ import 'package:politech_manager/domain/error/login_error_type.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error_type.dart';
 import 'package:politech_manager/domain/error/set_new_password_error.dart';
+import 'package:politech_manager/domain/error/sign_in_error.dart';
+import 'package:politech_manager/domain/error/sign_in_error_type.dart';
 
 import '../../domain/error/set_new_password_error_type.dart';
 
@@ -33,4 +35,20 @@ class ErrorManagerImpl extends ErrorManager {
         return "wrongNewPwd".tr;
     }
   }
+
+  @override
+  String convertSignIn(SignInError error) {
+    switch (error.errorType) {
+      case SignInErrorType.wrongUser:
+        return "wrongUserSignIn".tr;
+      case SignInErrorType.passwordNotMatch:
+        return "pwdNotMatch".tr;
+      case SignInErrorType.incorrectPassword:
+        return "incorrectPassword".tr;
+      case SignInErrorType.unknownError:
+        return "unknownError".tr;
+    }
+  }
+
+
 }
