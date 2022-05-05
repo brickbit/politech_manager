@@ -17,6 +17,7 @@ const Map<String, String> esES = {
   'recoverPassword': 'Recuperar contraseña',
   'passwordInstructions': 'Introduca su correo, le enviaremos un correo con las intrucciones necesarias para restaurar su contraseña',
   'putEmail': 'Introduce tu correo',
+  'wrongUserRecoverPwd': 'Se ha producido un error al intentar recuperar su contraseña',
   //Home
   'data': 'Datos',
   'schedule': 'Horario',

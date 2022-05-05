@@ -17,6 +17,7 @@ const Map<String, String> enUS = {
   'recoverPassword': 'Recover password',
   'passwordInstructions': 'Enter your email, we will send you an email with the necessary instructions to restore your password',
   'putEmail': 'Put your e-mail',
+  'wrongUserRecoverPwd': 'An error occurred while trying to recover your password',
   //Home
   'data': 'Data',
   'schedule': 'Schedule',
