@@ -4,7 +4,9 @@ import 'dart:developer';
 import 'package:either_dart/either.dart';
 import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
+import 'package:politech_manager/domain/error/set_new_password_error.dart';
 import 'package:politech_manager/domain/model/response_login_bo.dart';
+import 'package:politech_manager/domain/model/response_set_new_password_bo.dart';
 import '../../domain/model/response_recover_password_bo.dart';
 import '../../domain/repository/user_repository.dart';
 import '../datasource/network_datasource.dart';
@@ -27,6 +29,16 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<Either<RecoverPasswordError, ResponseRecoverPasswordBO>> recoverPassword(String email) async {
     final response = await network.recoverPassword(email);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<SetNewPasswordError, ResponseSetNewPasswordBO>> setNewPassword(String password, String token) async {
+    final response = await network.resetPassword(password, token);
     if (response.isLeft) {
       return Left(response.left);
     } else {

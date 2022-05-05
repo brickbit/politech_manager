@@ -18,7 +18,7 @@ class RecoverPasswordController extends BaseController {
     showProgress();
     userRepository.recoverPassword(mail).fold(
         (left) => _onRecoverPasswordKo(left),
-        (right) => _onRecoverPasswordOk());
+        (right) => _onRecoverPasswordOk(right.message));
   }
 
   void _onRecoverPasswordKo(RecoverPasswordError recoverPwdError) {
@@ -27,8 +27,8 @@ class RecoverPasswordController extends BaseController {
     showErrorMessage(errorManager.convertRecoverPwd(recoverPwdError));
   }
 
-  void _onRecoverPasswordOk() {
+  void _onRecoverPasswordOk(String token) {
     hideProgress();
-    Get.offNamed(Routes.login);
+    Get.offNamed(Routes.setNewPassword, arguments: {'token' : token});
   }
 }

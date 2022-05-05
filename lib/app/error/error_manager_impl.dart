@@ -5,6 +5,9 @@ import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/login_error_type.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error_type.dart';
+import 'package:politech_manager/domain/error/set_new_password_error.dart';
+
+import '../../domain/error/set_new_password_error_type.dart';
 
 class ErrorManagerImpl extends ErrorManager {
   @override
@@ -23,4 +26,11 @@ class ErrorManagerImpl extends ErrorManager {
     }
   }
 
+  @override
+  String convertNewRecoverPwd(SetNewPasswordError error) {
+    switch (error.errorType) {
+      case SetNewPasswordErrorType.wrongUser:
+        return "wrongNewPwd".tr;
+    }
+  }
 }

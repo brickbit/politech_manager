@@ -18,6 +18,11 @@ const Map<String, String> enUS = {
   'passwordInstructions': 'Enter your email, we will send you an email with the necessary instructions to restore your password',
   'putEmail': 'Put your e-mail',
   'wrongUserRecoverPwd': 'An error occurred while trying to recover your password',
+  //Set new password
+  'setNewPassword': 'Update password',
+  'putPassword': 'Put your password',
+  'setNewPasswordInstructions': 'To recover your account enter a new password. Remember that the password requires a minimum of 8 characters, an uppercase, a lowercase and a special character',
+  'wrongNewPwd': 'Failed to change password',
   //Home
   'data': 'Data',
   'schedule': 'Schedule',

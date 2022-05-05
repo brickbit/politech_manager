@@ -18,6 +18,11 @@ const Map<String, String> esES = {
   'passwordInstructions': 'Introduca su correo, le enviaremos un correo con las intrucciones necesarias para restaurar su contraseña',
   'putEmail': 'Introduce tu correo',
   'wrongUserRecoverPwd': 'Se ha producido un error al intentar recuperar su contraseña',
+  //Set new password
+  'setNewPassword': 'Actualizar la contraseña',
+  'putPassword': 'Introduce tu contraseña',
+  'setNewPasswordInstructions': 'Para recuperar su cuenta introduzca una nueva contraseña. Recuerde que la contraseña requiere un mínimo de 8 caracteres, una mayúscula, una minúscula y un caracter especial',
+  'wrongNewPwd': 'No se ha podido cambiar la contraseña',
   //Home
   'data': 'Datos',
   'schedule': 'Horario',
