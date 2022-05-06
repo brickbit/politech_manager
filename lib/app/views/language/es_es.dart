@@ -36,6 +36,7 @@ const Map<String, String> esES = {
   //Home
   'data': 'Datos',
   'schedule': 'Horario',
+  'exam':'Exámenes',
   'setting': 'Ajustes',
   'noDataLoaded': 'No se encontraron datos',
   //Data

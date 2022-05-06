@@ -36,6 +36,7 @@ const Map<String, String> enUS = {
   //Home
   'data': 'Data',
   'schedule': 'Schedule',
+  'exam':'Exams',
   'setting': 'Setting',
   'noDataLoaded': 'There is not data to load',
   //Data
