@@ -1,12 +1,12 @@
 
-class ResponseSignInDto {
+class ResponseOkDto {
   String message;
   int code;
 
-  ResponseSignInDto({required this.message, required this.code});
+  ResponseOkDto({required this.message, required this.code});
 
-  factory ResponseSignInDto.fromJson(Map<String, dynamic> json) {
-    return ResponseSignInDto(
+  factory ResponseOkDto.fromJson(Map<String, dynamic> json) {
+    return ResponseOkDto(
       message: json['message'],
       code: json['code'],
     );

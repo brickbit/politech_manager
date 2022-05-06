@@ -96,7 +96,10 @@ const Map<String, String> enUS = {
   'darkTheme': 'Dark theme',
   'version': 'Version',
   'compilationNumber': 'Compilation number',
-  'selectLanguage': 'Seleccione el idioma',
+  'selectLanguage': 'Select the language',
+  'logout': 'Logout',
+  'deleteAccount': 'Delete account',
+  'errorDeletingAccount': 'There was an error deleting your account',
   //Schedule
   'createSchedule': 'Create Schedule',
   'editSchedule': 'Edit Schedule',

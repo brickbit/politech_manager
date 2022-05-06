@@ -61,18 +61,6 @@ class SignInScreen extends GetView<SignInController> {
           child: Center(
             child: Column(
               children: [
-                /*ColorFiltered(
-                  colorFilter:
-                      ColorFilter.mode((Colors.grey[400])!, BlendMode.modulate),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                      image: AssetImage('assets/images/mural_epcc.png'),
-                      fit: BoxFit.cover,
-                    )),
-                    height: 350,
-                  ),
-                ),*/
                 SizedBox(
                   width: mailTextFieldWidth,
                   child: TextField(

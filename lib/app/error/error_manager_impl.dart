@@ -1,5 +1,6 @@
 
 import 'package:get/get.dart';
+import 'package:politech_manager/domain/error/delete_account_error.dart';
 import 'package:politech_manager/domain/error/error_manager.dart';
 import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/login_error_type.dart';
@@ -9,6 +10,7 @@ import 'package:politech_manager/domain/error/set_new_password_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error_type.dart';
 
+import '../../domain/error/delete_account_error_type.dart';
 import '../../domain/error/set_new_password_error_type.dart';
 
 class ErrorManagerImpl extends ErrorManager {
@@ -47,6 +49,14 @@ class ErrorManagerImpl extends ErrorManager {
         return "incorrectPassword".tr;
       case SignInErrorType.unknownError:
         return "unknownError".tr;
+    }
+  }
+
+  @override
+  String convertDeleteAccount(DeleteAccountError error) {
+    switch (error.errorType) {
+      case DeleteAccountErrorType.wrongUser:
+        return "errorDeletingAccount".tr;
     }
   }
 

@@ -56,70 +56,79 @@ class LoginScreen extends GetView<LoginController> {
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ColorFiltered(
-                  colorFilter:
-                      ColorFilter.mode((Colors.grey[400])!, BlendMode.modulate),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                      image: AssetImage('assets/images/mural_epcc.png'),
-                      fit: BoxFit.cover,
-                    )),
-                    height: mobile ? 280 : 320,
-                  ),
-                ),
-                SizedBox(
-                    width: userTextFieldWidth,
-                    child: TextField(
-                      controller: _usernameController,
-                      decoration: InputDecoration(labelText: 'email'.tr),
-                    )),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                SizedBox(
-                  width: passwordTextFieldWidth,
-                  child: PasswordTextField(
-                    title: 'password'.tr,
-                    passwordController: _passwordController,
-                  ),
-                ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                SizedBox(
-                    width: buttonWidth,
-                    height: 45,
-                    child: ElevatedButton(
-                        child: Text('login'.tr),
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width,
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                          (Colors.grey[400])!, BlendMode.modulate),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage('assets/images/mural_epcc.png'),
+                          fit: BoxFit.cover,
+                        )),
+                        height: mobile ? 280 : 320,
+                      ),
+                    ),
+                    SizedBox(
+                        width: userTextFieldWidth,
+                        child: TextField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(labelText: 'email'.tr),
+                        )),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    SizedBox(
+                      width: passwordTextFieldWidth,
+                      child: PasswordTextField(
+                        title: 'password'.tr,
+                        passwordController: _passwordController,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    SizedBox(
+                        width: buttonWidth,
+                        height: 45,
+                        child: ElevatedButton(
+                            child: Text('login'.tr),
+                            onPressed: () {
+                              controller.login(_usernameController.text,
+                                  _passwordController.text);
+                            })),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    TextButton(
                         onPressed: () {
-                          controller.login(_usernameController.text,
-                              _passwordController.text);
-                        })),
-                const SizedBox(
-                  height: 30.0,
+                          Get.toNamed(Routes.recoverPassword);
+                        },
+                        child: Text('forgottenPassword'.tr)),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          Get.toNamed(Routes.register);
+                        },
+                        child: Text('register'.tr)),
+                  ],
                 ),
-                TextButton(
-                    onPressed: () {
-                      Get.toNamed(Routes.recoverPassword);
-                    },
-                    child: Text('forgottenPassword'.tr)),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                TextButton(
-                    onPressed: () {
-                      Get.toNamed(Routes.register);
-                    },
-                    child: Text('register'.tr)),
-              ],
+              ),
             ),
           ),
         ),

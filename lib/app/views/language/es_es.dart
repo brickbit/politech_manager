@@ -96,6 +96,9 @@ const Map<String, String> esES = {
   'version': 'Versión',
   'compilationNumber': 'Número de compilación',
   'selectLanguage': 'Seleccione el idioma',
+  'logout': 'Cerrar sesión',
+  'deleteAccount': 'Eliminar cuenta',
+  'errorDeletingAccount': 'Se ha producido un error al eliminar su cuenta',
   //schedule
   'createSchedule': 'Crear horario',
   'editSchedule': 'Editar horario',
