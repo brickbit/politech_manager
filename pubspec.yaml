@@ -16,6 +16,7 @@ dependencies:
   google_fonts: ^2.1.0
   either_dart: ^0.1.4
   package_info_plus: ^1.4.2
+  uuid: 3.0.5
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

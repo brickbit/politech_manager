@@ -7,12 +7,14 @@ class HomeController extends BaseController {
 
   static HomeController get to => Get.find();
 
-  var currentIndex = 0.obs;
+  final _currentIndex = 0.obs;
+
+  int get currentIndex => _currentIndex.value;
 
   final pages = <String>[Routes.data, Routes.schedule, Routes.exam, Routes.setting];
 
   void changePage(int index) {
-    currentIndex.value = index;
+    _currentIndex.value = index;
     Get.toNamed(pages[index], id: 1);
   }
 }

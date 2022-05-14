@@ -34,7 +34,7 @@ class HomeScreen extends GetView<HomeController> {
               label: 'setting'.tr,
             ),
           ],
-          currentIndex: controller.currentIndex.value,
+          currentIndex: controller.currentIndex,
               selectedItemColor: Colors.green,
               unselectedItemColor: Colors.grey,
           onTap: controller.changePage,

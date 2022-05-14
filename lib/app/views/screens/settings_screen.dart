@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../controller/settings_controller.dart';
+import '../dialog/language_dialog.dart';
 
 class SettingsScreen extends GetView<SettingsController> {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -64,12 +64,11 @@ class SettingsScreen extends GetView<SettingsController> {
             color: Colors.grey,
           ),
           onTap: () async {
-            _languageDialog(context);
+            languageDialog(context);
           },
         );
       case 1:
-        return (Platform.isIOS || Platform.isAndroid || Platform.isMacOS)
-            ? ListTile(
+        return ListTile(
                 title: Text('darkTheme'.tr),
                 trailing: ObxValue(
                   (data) => Switch(
@@ -88,10 +87,6 @@ class SettingsScreen extends GetView<SettingsController> {
                     Get.changeThemeMode(ThemeMode.dark);
                   }
                 },
-              )
-            : const SizedBox(
-                height: 0,
-                width: 0,
               );
       case 2:
         return ListTile(
@@ -128,50 +123,5 @@ class SettingsScreen extends GetView<SettingsController> {
       default:
         return const SizedBox();
     }
-  }
-
-  void _languageDialog(BuildContext context) {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('selectLanguage'.tr),
-        content: SizedBox(
-          height: 140,
-          child: Column(
-            children: [
-              ListTile(
-                title: const Text('Español'),
-                onTap: () {
-                  Get.updateLocale(const Locale('es', 'ES'));
-                  Get.back();
-                },
-              ),
-              Container(
-                height: 1,
-                width: 200,
-                color: Colors.grey,
-              ),
-              ListTile(
-                title: const Text('English'),
-                onTap: () {
-                  Get.updateLocale(const Locale('en', 'US'));
-                  Get.back();
-                },
-              ),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: Text('cancel'.tr),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: Text('ok'.tr),
-          ),
-        ],
-      ),
-    );
   }
 }

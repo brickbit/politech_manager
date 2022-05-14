@@ -25,6 +25,7 @@ abstract class BaseController extends GetxController {
 
   void hideError() {
     _error.value = false;
+    _errorMsg.value = '';
   }
 
   void showErrorMessage(String msg) {

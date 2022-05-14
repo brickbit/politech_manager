@@ -49,14 +49,32 @@ const Map<String, String> esES = {
   'createClassroom': 'Crear aula',
   'createDepartment': 'Crear departamento',
   'createSubject': 'Crear asignatura',
+  'createExam': 'Crear examen',
   'seeAll': 'Ver todos',
   'editDegree': 'Editar titulación',
   'editClassroom': 'Editar aula',
   'editDepartment': 'Editar departmento',
   'editSubject': 'Editar asignatura',
+  'errorGetClassrooms':'Ha ocurrido un error intentando obtener las aulas',
+  'errorGetDegrees':'Ha ocurrido un error intentando obtener los grados y másters',
+  'errorGetDepartments':'Ha ocurrido un error intentando obtener los departamentos',
+  'errorGetExams':'Ha ocurrido un error intentando obtener los exámenes',
+  'errorGetSubjects':'Ha ocurrido un error intentando obtener las asignaturas',
+  'canNotCreateSubject': 'No se pueden crear asignaturas si no hay titulaciones, aulas o departamentos',
+  'canNotCreateExam': 'No se pueden crear exámenes si no hay asignaturas',
+  'morning': 'Mañana',
+  'afternoon': 'Tarde',
+  'january': 'Enero',
+  'may': 'Mayo',
+  'june': 'Junio',
   //List Degree
   'degreeSemesters':'Núm.semestres: @semester',
   'degreeYear':'Año: @year',
+  'noDegree': 'No se han encontrado titulaciones',
+  'noClassroom': 'No se han encontrado clases',
+  'noDepartment': 'No se han encontrado departamentos',
+  'noSubject': 'No se han encontrado asignaturas',
+  'noExam': 'No se han encontrado exámenes',
   //List classroom
   'classroomPavilion': 'Pabellón: @pavilion',
   //List subjects
@@ -70,6 +88,7 @@ const Map<String, String> esES = {
   //Degree dialog
   'name': 'Nombre',
   'year': 'Año',
+  'semesters': 'Núm. Semestres',
   //Department dialog
   'acronym': 'Siglas',
   //Classroom dialog

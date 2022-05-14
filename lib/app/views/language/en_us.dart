@@ -49,14 +49,32 @@ const Map<String, String> enUS = {
   'createClassroom': 'Create classroom',
   'createDepartment': 'Create department',
   'createSubject': 'Create subject',
+  'createExam': 'Create exam',
   'seeAll': 'See all',
   'editDegree': 'Edit title',
   'editClassroom': 'Edit classroom',
   'editDepartment': 'Edit department',
   'editSubject': 'Edit subject',
+  'errorGetClassrooms':'An error has occurred trying to obtain the classrooms',
+  'errorGetDegrees':'An error has occurred trying to obtain the degrees and masters',
+  'errorGetDepartments':'An error has occurred trying to obtain the departments',
+  'errorGetExams':'An error has occurred trying to obtain the exams',
+  'errorGetSubjects':'An error has occurred trying to obtain the subjects',
+  'canNotCreateSubject': 'Subjects cannot be created if there are no degrees, classrooms or departments',
+  'canNotCreateExam': 'Exams cannot be created if there are no subjects',
+  'morning': 'Morning',
+  'afternoon': 'Afternoon',
+  'january': 'January',
+  'may': 'May',
+  'june': 'June',
   //List Degree
   'degreeSemesters':'Num.semesters: @semester',
   'degreeYear':'Year: @year',
+  'noDegree': 'No degrees found',
+  'noClassroom': 'No classrooms found',
+  'noDepartment': 'No departments found',
+  'noSubject': 'No subjects found',
+  'noExam': 'No exams found',
   //List classroom
   'classroomPavilion': 'Pavilion: @pavilion',
   //List subjects
@@ -70,6 +88,7 @@ const Map<String, String> enUS = {
   //Degree dialog
   'name': 'Name',
   'year': 'Year',
+  'semesters': 'Num. Semesters',
   //Department dialog
   'acronym': 'Acronym',
   //Classroom dialog
