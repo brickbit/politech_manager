@@ -8,13 +8,13 @@ import '../custom/material_dropdown.dart';
 import '../custom/material_dropdown_subject.dart';
 
 void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects, bool mobile, void Function(ExamBO) manageExam) {
-  final _acronymController = TextEditingController();
+  final _acronymController = TextEditingController(text: exam?.acronym ?? '');
   var _semester = (exam?.semester ?? 1).toString().obs;
   var id = exam?.id;
   var _subjectItems = subjects;
-  var _subject = _subjectItems[0].obs;
-  var _turn = (exam?.turn ?? 'morning'.tr).obs;
-  var _call = (exam?.call ?? 'january'.tr).obs;
+  var _subject = (exam?.subject ?? _subjectItems[0]).obs;
+  var _turn = (exam?.turn.toTurn() ?? 'morning'.tr).obs;
+  var _call = (exam?.call.toCall() ?? 'january'.tr).obs;
 
   showDialog<String>(
     context: context,
@@ -32,7 +32,7 @@ void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects, bo
                 TextField(
                   controller: _acronymController,
                   decoration: InputDecoration(
-                    labelText: exam?.acronym ?? 'acronym'.tr,
+                    labelText: 'acronym'.tr,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -78,8 +78,8 @@ void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects, bo
                 _acronymController.text,
                 int.parse(_semester.value),
                 '',
-                _call.value.getCall() ?? '',
-                _turn.value.getTurn() ?? '',
+                _call.value.getCall(),
+                _turn.value.getTurn(),
                 id ?? uuid.v4().hashCode
             );
             manageExam(exam);

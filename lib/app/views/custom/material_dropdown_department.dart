@@ -21,7 +21,7 @@ Widget materialDropdownDepartment(
       }).toList(),
       onChanged: (String? updatedValue) {
         var result =
-        items.firstWhere((element) => element.acronym == updatedValue!);
+        items.firstWhere((element) => element.name == updatedValue!);
         selected.value = result;
       },
     ),

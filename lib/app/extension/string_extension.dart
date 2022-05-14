@@ -13,6 +13,18 @@ extension StringCall on String {
       return 'JANUARY';
     }
   }
+
+  String toCall() {
+    if (this == 'JANUARY') {
+      return 'january'.tr;
+    } else if (this == 'MAY') {
+      return 'may'.tr;
+    } else if (this == 'JUNE') {
+      return 'june'.tr;
+    } else {
+      return 'january'.tr;
+    }
+  }
 }
 
 extension StringTurn on String {
@@ -21,6 +33,14 @@ extension StringTurn on String {
       return 'MORNING';
     } else {
       return 'AFTERNOON';
+    }
+  }
+
+  String toTurn() {
+    if (this == 'MORNING') {
+      return 'morning'.tr;
+    } else {
+      return 'afternoon'.tr;
     }
   }
 }

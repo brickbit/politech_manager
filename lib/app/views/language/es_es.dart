@@ -109,6 +109,9 @@ const Map<String, String> esES = {
   'red': 'Rojo',
   'yellow': 'Amarillo',
   'orange': 'Naranja',
+  //Exam dialog
+  'call':'Convocatoria',
+  'turn':'Turno',
   //Setting
   'language': 'Idioma',
   'darkTheme': 'Modo oscuro',

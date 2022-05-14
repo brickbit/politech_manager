@@ -109,6 +109,9 @@ const Map<String, String> enUS = {
   'red': 'Red',
   'yellow': 'Yellow',
   'orange': 'Orange',
+  //Exam dialog
+  'call':'Call',
+  'turn':'Turn',
   //Setting
   'settings': 'Settings',
   'language': 'Language',

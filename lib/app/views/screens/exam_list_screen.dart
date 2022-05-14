@@ -49,7 +49,7 @@ class ExamListScreen extends GetView<ExamListController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('department'.tr),
+        title: Text('exam'.tr),
       ),
       body: controller.exams.isEmpty
           ? _emptyView()
