@@ -290,6 +290,7 @@ class DataScreen extends GetView<DataController> {
           ? emptyView('noDegree'.tr)
           : SafeArea(
           child: ListView.separated(
+              primary: false,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(16),
@@ -360,6 +361,7 @@ class DataScreen extends GetView<DataController> {
           ? emptyView('noClassroom'.tr)
           : SafeArea(
           child: ListView.separated(
+              primary: false,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(16),
@@ -427,6 +429,7 @@ class DataScreen extends GetView<DataController> {
           ? emptyView('noDepartment'.tr)
           : SafeArea(
           child: ListView.separated(
+              primary: false,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(16),
@@ -508,6 +511,7 @@ class DataScreen extends GetView<DataController> {
           ? emptyView('noSubject'.tr)
           : SafeArea(
           child: ListView.separated(
+            primary: false,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(16),
@@ -587,6 +591,7 @@ class DataScreen extends GetView<DataController> {
           ? emptyView('noExam'.tr)
           : SafeArea(
           child: ListView.separated(
+              primary: false,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(16),
