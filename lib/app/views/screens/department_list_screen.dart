@@ -62,6 +62,7 @@ class DepartmentListScreen extends GetView<DepartmentListController> {
                           IconButton(
                             onPressed: () async {
                               departmentDialog(
+                                  'editDepartment'.tr,
                                   context,
                                   controller.departments[index],
                                       (department) =>

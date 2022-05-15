@@ -7,7 +7,7 @@ import '../../../domain/model/subject_bo.dart';
 import '../custom/material_dropdown.dart';
 import '../custom/material_dropdown_subject.dart';
 
-void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects,
+void examDialog(String title, BuildContext context, ExamBO? exam, List<SubjectBO> subjects,
     bool mobile, void Function(ExamBO) manageExam) {
   final _acronymController = TextEditingController(text: exam?.acronym ?? '');
   var _semester = (exam?.semester ?? 1).toString().obs;
@@ -20,7 +20,7 @@ void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects,
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: Text('createExam'.tr),
+      title: Text(title),
       content: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

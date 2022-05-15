@@ -14,6 +14,7 @@ import '../custom/material_dropdown_degree.dart';
 import '../custom/material_dropdown_department.dart';
 
 void subjectDialog(
+    String title,
     BuildContext context,
     SubjectBO? subject,
     List<ClassroomBO> classrooms,
@@ -43,7 +44,7 @@ void subjectDialog(
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: Text('createSubject'.tr),
+      title: Text(title),
       content: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

@@ -51,12 +51,18 @@ class ClassroomListScreen extends GetView<ClassroomListController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          classroomTile(MediaQuery.of(context).size.width < 600, controller.classrooms, index),
+                          classroomTile(MediaQuery.of(context).size.width < 600,
+                              controller.classrooms, index),
                           Row(
                             children: [
                               IconButton(
                                 onPressed: () async {
-                                  classroomDialog(context, controller.classrooms[index], (classroom) => (controller.updateClassroom(classroom)));
+                                  classroomDialog(
+                                      'editClassroom'.tr,
+                                      context,
+                                      controller.classrooms[index],
+                                      (classroom) => (controller
+                                          .updateClassroom(classroom)));
                                 },
                                 icon: const Icon(
                                   Icons.edit,
@@ -65,7 +71,8 @@ class ClassroomListScreen extends GetView<ClassroomListController> {
                               ),
                               IconButton(
                                 onPressed: () async {
-                                  controller.deleteClassroom(controller.classrooms[index]);
+                                  controller.deleteClassroom(
+                                      controller.classrooms[index]);
                                 },
                                 icon: const Icon(
                                   Icons.delete,

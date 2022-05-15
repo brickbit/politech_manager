@@ -144,7 +144,9 @@ class DataScreen extends GetView<DataController> {
                 },
                 itemCount: 5,
                 itemBuilder: (BuildContext context, int index) {
-                  return _dataTile(getName(index), index, false, context);
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: _dataTile(getName(index), index, false, context),);
                 },
               ),
             ),
@@ -184,6 +186,7 @@ class DataScreen extends GetView<DataController> {
 
   Widget _dataTile(String title, int index, mobile, BuildContext context) {
     return ListTile(
+      tileColor: controller.currentIndex == index ? Colors.black12: Colors.grey[150],
       leading: IconButton(
           icon: const Icon(
             Icons.add,
@@ -193,15 +196,15 @@ class DataScreen extends GetView<DataController> {
             controller.hideError();
             switch (index) {
               case 0:
-                degreeDialog(context, null,
+                degreeDialog('createDegree'.tr, context, null,
                     (degree) => (controller.uploadDegree(degree)));
                 break;
               case 1:
-                classroomDialog(context, null,
+                classroomDialog('createClassroom'.tr, context, null,
                     (classroom) => (controller.uploadClassroom(classroom)));
                 break;
               case 2:
-                departmentDialog(context, null,
+                departmentDialog('createDepartment'.tr, context, null,
                     (department) => (controller.uploadDepartment(department)));
                 break;
               case 3:
@@ -212,6 +215,7 @@ class DataScreen extends GetView<DataController> {
                   controller.showErrorMessage('canNotCreateSubject'.tr);
                 } else {
                   subjectDialog(
+                      'createSubject'.tr,
                       context,
                       null,
                       controller.classrooms,
@@ -226,12 +230,12 @@ class DataScreen extends GetView<DataController> {
                   controller.showError();
                   controller.showErrorMessage('canNotCreateExam'.tr);
                 } else {
-                  examDialog(context, null, controller.subjects, mobile,
+                  examDialog('createExam'.tr,context, null, controller.subjects, mobile,
                       (exam) => (controller.uploadExam(exam)));
                 }
                 break;
               default:
-                degreeDialog(context, null,
+                degreeDialog('createDegree'.tr, context, null,
                     (degree) => (controller.uploadDegree(degree)));
             }
           }),
@@ -343,6 +347,7 @@ class DataScreen extends GetView<DataController> {
                               IconButton(
                                 onPressed: () async {
                                   degreeDialog(
+                                      'editDegree'.tr,
                                       context,
                                       controller.degrees[index],
                                       (degree) =>
@@ -419,6 +424,7 @@ class DataScreen extends GetView<DataController> {
                               IconButton(
                                 onPressed: () async {
                                   classroomDialog(
+                                      'editClassroom'.tr,
                                       context,
                                       controller.classrooms[index],
                                       (classroom) => (controller
@@ -497,6 +503,7 @@ class DataScreen extends GetView<DataController> {
                               IconButton(
                                 onPressed: () async {
                                   departmentDialog(
+                                      'editDepartment'.tr,
                                       context,
                                       controller.departments[index],
                                       (department) => (controller
@@ -571,6 +578,7 @@ class DataScreen extends GetView<DataController> {
                               IconButton(
                                 onPressed: () async {
                                   subjectDialog(
+                                      'editSubject'.tr,
                                       context,
                                       controller.subjects[index],
                                       controller.classrooms,
@@ -649,6 +657,7 @@ class DataScreen extends GetView<DataController> {
                               IconButton(
                                 onPressed: () async {
                                   examDialog(
+                                      'editExam'.tr,
                                       context,
                                       controller.exams[index],
                                       controller.subjects,

@@ -4,7 +4,7 @@ import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:uuid/uuid.dart';
 import '../custom/material_dropdown.dart';
 
-void degreeDialog(BuildContext context, DegreeBO? degree,
+void degreeDialog(String title, BuildContext context, DegreeBO? degree,
     void Function(DegreeBO) manageDegree) {
   final _nameController = TextEditingController(text: degree?.name ?? '');
   final _yearController = TextEditingController(text: degree?.year ?? '');
@@ -14,7 +14,7 @@ void degreeDialog(BuildContext context, DegreeBO? degree,
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: Text('createDegree'.tr),
+      title: Text(title),
       content: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

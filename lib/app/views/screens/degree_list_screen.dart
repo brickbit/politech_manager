@@ -56,7 +56,7 @@ class DegreeListScreen extends GetView<DegreeListController> {
                             children: [
                               IconButton(
                                 onPressed: () async {
-                                  degreeDialog(context, controller.degrees[index], (degree) => (controller.updateDegree(degree)));
+                                  degreeDialog('editDegree'.tr, context, controller.degrees[index], (degree) => (controller.updateDegree(degree)));
                                 },
                                 icon: const Icon(
                                   Icons.edit,

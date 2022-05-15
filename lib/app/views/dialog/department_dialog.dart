@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
 import 'package:uuid/uuid.dart';
 
-void departmentDialog(BuildContext context, DepartmentBO? department, void Function(DepartmentBO) manageDepartment) {
+void departmentDialog(String title, BuildContext context, DepartmentBO? department, void Function(DepartmentBO) manageDepartment) {
   final _nameController = TextEditingController(text: department?.name ?? '');
   final _acronymController = TextEditingController(text: department?.acronym ?? '');
   var id = department?.id;
@@ -11,7 +11,7 @@ void departmentDialog(BuildContext context, DepartmentBO? department, void Funct
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: Text('createDepartment'.tr),
+      title: Text(title),
       content: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

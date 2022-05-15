@@ -55,6 +55,7 @@ const Map<String, String> esES = {
   'editClassroom': 'Editar aula',
   'editDepartment': 'Editar departmento',
   'editSubject': 'Editar asignatura',
+  'editExam': 'Editar examen',
   'errorGetClassrooms':'Ha ocurrido un error intentando obtener las aulas',
   'errorGetDegrees':'Ha ocurrido un error intentando obtener los grados y másters',
   'errorGetDepartments':'Ha ocurrido un error intentando obtener los departamentos',

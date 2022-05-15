@@ -89,6 +89,7 @@ class SubjectListScreen extends GetView<SubjectListController> {
                               IconButton(
                                 onPressed: () async {
                                   subjectDialog(
+                                      'editSubject'.tr,
                                       context,
                                       controller.subjects[index],
                                       controller.classrooms,

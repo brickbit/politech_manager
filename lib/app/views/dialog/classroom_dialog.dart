@@ -5,7 +5,7 @@ import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:uuid/uuid.dart';
 import '../custom/material_dropdown.dart';
 
-void classroomDialog(BuildContext context, ClassroomBO? classroom,
+void classroomDialog(String title, BuildContext context, ClassroomBO? classroom,
     void Function(ClassroomBO) manageClassroom) {
   final _nameController = TextEditingController(text: classroom?.name ?? '');
   final _acronymController =
@@ -17,7 +17,7 @@ void classroomDialog(BuildContext context, ClassroomBO? classroom,
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: Text('createClassroom'.tr),
+      title: Text(title),
       content: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

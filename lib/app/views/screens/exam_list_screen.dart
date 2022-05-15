@@ -93,6 +93,7 @@ class ExamListScreen extends GetView<ExamListController> {
                           IconButton(
                             onPressed: () async {
                               examDialog(
+                                  'editExam'.tr,
                                   context,
                                   controller.exams[index],
                                   controller.subjects,
