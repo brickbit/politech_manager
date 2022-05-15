@@ -7,7 +7,8 @@ import '../../../domain/model/subject_bo.dart';
 import '../custom/material_dropdown.dart';
 import '../custom/material_dropdown_subject.dart';
 
-void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects, bool mobile, void Function(ExamBO) manageExam) {
+void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects,
+    bool mobile, void Function(ExamBO) manageExam) {
   final _acronymController = TextEditingController(text: exam?.acronym ?? '');
   var _semester = (exam?.semester ?? 1).toString().obs;
   var id = exam?.id;
@@ -47,18 +48,21 @@ void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects, bo
                   materialDropdownSubject(_subject, _subjectItems),
                 ]),
                 const SizedBox(height: 24),
-                SizedBox(
-                    height: 50,
-                    width: Size.infinite.width,
-                    child: materialDropdown(_call, ['january'.tr, 'may'.tr, 'june'.tr]
-                    ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('call'.tr),
+                    materialDropdown(
+                        _call, ['january'.tr, 'may'.tr, 'june'.tr]),
+                  ],
                 ),
                 const SizedBox(height: 24),
-                SizedBox(
-                  height: 50,
-                  width: Size.infinite.width,
-                  child: materialDropdown(_turn, ['morning'.tr, 'afternoon'.tr]
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('turn'.tr),
+                    materialDropdown(_turn, ['morning'.tr, 'afternoon'.tr]),
+                  ],
                 ),
               ],
             ),
@@ -80,8 +84,7 @@ void examDialog(BuildContext context, ExamBO? exam, List<SubjectBO> subjects, bo
                 '',
                 _call.value.getCall(),
                 _turn.value.getTurn(),
-                id ?? uuid.v4().hashCode
-            );
+                id ?? uuid.v4().hashCode);
             manageExam(exam);
             Navigator.pop(context, 'OK');
           },

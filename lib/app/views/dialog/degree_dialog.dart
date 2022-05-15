@@ -4,7 +4,8 @@ import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:uuid/uuid.dart';
 import '../custom/material_dropdown.dart';
 
-void degreeDialog(BuildContext context, DegreeBO? degree, void Function(DegreeBO) manageDegree) {
+void degreeDialog(BuildContext context, DegreeBO? degree,
+    void Function(DegreeBO) manageDegree) {
   final _nameController = TextEditingController(text: degree?.name ?? '');
   final _yearController = TextEditingController(text: degree?.year ?? '');
   var id = degree?.id;
@@ -34,11 +35,13 @@ void degreeDialog(BuildContext context, DegreeBO? degree, void Function(DegreeBO
                 ),
               ),
               const SizedBox(height: 24),
-              Text('semesters'.tr),
-              SizedBox(
-                  height: 50,
-                  width: Size.infinite.width,
-                  child: materialDropdown(_numSemesters, ['4', '8'])),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('semesters'.tr),
+                  materialDropdown(_numSemesters, ['4', '8']),
+                ],
+              ),
             ],
           ),
         ),

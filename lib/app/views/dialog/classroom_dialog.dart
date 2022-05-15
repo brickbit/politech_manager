@@ -5,9 +5,11 @@ import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:uuid/uuid.dart';
 import '../custom/material_dropdown.dart';
 
-void classroomDialog(BuildContext context, ClassroomBO? classroom, void Function(ClassroomBO) manageClassroom) {
+void classroomDialog(BuildContext context, ClassroomBO? classroom,
+    void Function(ClassroomBO) manageClassroom) {
   final _nameController = TextEditingController(text: classroom?.name ?? '');
-  final _acronymController = TextEditingController(text: classroom?.acronym ?? '');
+  final _acronymController =
+      TextEditingController(text: classroom?.acronym ?? '');
   var id = classroom?.id;
   String? classroomName = classroom?.pavilion.toDropdownItem();
   var _pavilion = (classroomName ?? 'telecommunication'.tr).obs;
@@ -36,16 +38,19 @@ void classroomDialog(BuildContext context, ClassroomBO? classroom, void Function
                 ),
               ),
               const SizedBox(height: 24),
-              SizedBox(
-                  height: 50,
-                  width: Size.infinite.width,
-                  child: materialDropdown(_pavilion, [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('pavilion'.tr),
+                  materialDropdown(_pavilion, [
                     'telecommunication'.tr,
                     'computing'.tr,
                     'architecture'.tr,
                     'civil_work'.tr,
                     'central'.tr
-                  ])),
+                  ]),
+                ],
+              ),
             ],
           ),
         ),

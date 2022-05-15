@@ -97,6 +97,7 @@ const Map<String, String> esES = {
   'architecture': 'Arquitectura',
   'civil_work': 'Obras públicas',
   'central': 'Central',
+  'pavilion': 'Pabellón',
   //Subject dialog
   'group':'Grupo',
   'time':'Tiempo(minutos)',
