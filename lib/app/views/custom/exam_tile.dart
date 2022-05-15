@@ -7,7 +7,9 @@ import '../../../domain/model/department_bo.dart';
 
 Widget examTile(bool mobile, List<ExamBO> exams, int index) {
   return Container(
-    constraints: mobile ? const BoxConstraints(maxWidth: 240) : const BoxConstraints(maxWidth: 650),
+    constraints: mobile
+        ? const BoxConstraints(maxWidth: 240)
+        : const BoxConstraints(maxWidth: 650),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,27 +21,41 @@ Widget examTile(bool mobile, List<ExamBO> exams, int index) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('acronym'.tr),
-            Text(
-              exams[index].acronym,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('acronym'.tr + ': '),
+                Text(
+                  exams[index].acronym,
+                ),
+              ],
             ),
-            const SizedBox(
-              width: 16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('turn'.tr + ': '),
+                Text(exams[index].turn.toTurn()),
+              ],
             ),
-            Text('turn'.tr),
-            Text(exams[index].turn.toTurn()),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('semester'.tr),
-            Text(exams[index].semester.toString()),
-            const SizedBox(
-              width: 16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('semester'.tr+': '),
+                Text(exams[index].semester.toString()),
+              ],
             ),
-            Text('call'.tr),
-            Text(exams[index].call.toCall()),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('call'.tr+': '),
+                Text(exams[index].call.toCall()),
+              ],
+            ),
           ],
         ),
       ],
