@@ -1,6 +1,7 @@
 
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/domain/error/exam_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/model/exam_bo.dart';
@@ -25,6 +26,10 @@ class ExamListController extends BaseController {
   final _subjects = Rx<List<SubjectBO>>([]);
 
   List<SubjectBO> get subjects => _subjects.value;
+
+  final _filterActive = false.obs;
+
+  bool get filterActive => _filterActive.value;
 
   @override
   void onInit() {
@@ -91,5 +96,33 @@ class ExamListController extends BaseController {
   void _onDeleteExamOk() {
     hideProgress();
     _getExams();
+  }
+
+  void getFilteredExams(filters) {
+    var semesterFilter = filters['semester'] as int?;
+    var callFilter = filters['call'] as String?;
+    var turnFilter = filters['turn'] as String?;
+    var subjectFilter = filters['subject'] as SubjectBO?;
+
+    if(semesterFilter != null) {
+      _exams.value = _exams.value.where((element) => element.semester == semesterFilter).toList();
+    }
+    if(callFilter != null) {
+      _exams.value = _exams.value.where((element) => element.call == callFilter.getCall()).toList();
+    }
+    if(turnFilter != null) {
+      _exams.value = _exams.value.where((element) => element.turn == turnFilter.getTurn()).toList();
+    }
+    if(subjectFilter != null) {
+      _exams.value = _exams.value.where((element) => element.subject.id == subjectFilter.id).toList();
+    }
+    _filterActive.value = true;
+    update();
+  }
+
+  void eraseFilters() {
+    _getExams();
+    _filterActive.value = false;
+    update();
   }
 }

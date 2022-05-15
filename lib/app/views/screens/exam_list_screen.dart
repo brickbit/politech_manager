@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/app/views/dialog/filter_exam_dialog.dart';
 import '../../controller/exam_list_controller.dart';
 import '../custom/empty_view.dart';
 import '../custom/exam_tile.dart';
@@ -49,6 +50,25 @@ class ExamListScreen extends GetView<ExamListController> {
     return Scaffold(
       appBar: AppBar(
         title: Text('exam'.tr),
+        actions: <Widget>[
+          controller.filterActive
+              ? IconButton(
+            icon: const Icon(Icons.delete_sweep),
+            onPressed: () {
+              controller.eraseFilters();
+            },
+          )
+              : IconButton(
+            icon: const Icon(Icons.filter_list),
+            color: controller.filterActive ? Colors.green : Colors.grey,
+            onPressed: () {
+              filterExamDialog(
+                  context,
+                  controller.subjects,
+                      (filters) => (controller.getFilteredExams(filters)));
+            },
+          ),
+        ],
       ),
       body: controller.exams.isEmpty
           ? emptyView('noExam'.tr)
