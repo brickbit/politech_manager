@@ -129,5 +129,9 @@ const Map<String, String> esES = {
   'morningShift': 'Turno de mañana',
   'afternoonShift': 'Turno de tarde',
   'saveSchedule': 'Guardar',
-  'downloadSchedule': 'Descargar'
+  'downloadSchedule': 'Descargar',
+  //Filters
+  'filter': 'Filtrar',
+  'filterSubject': 'Filtrar asignaturas',
+  'filterExam': 'Filtrar exámenes',
 };

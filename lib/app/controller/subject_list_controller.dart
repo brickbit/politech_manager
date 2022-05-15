@@ -36,6 +36,10 @@ class SubjectListController extends BaseController {
 
   List<DegreeBO> get degrees => _degrees.value;
 
+  final _filterActive = false.obs;
+
+  bool get filterActive => _filterActive.value;
+
   @override
   void onInit() {
     _subjects.value = argumentData['subjects'];
@@ -103,5 +107,45 @@ class SubjectListController extends BaseController {
   void _onDeleteSubjectOk() {
     hideProgress();
     _getSubjects();
+  }
+
+  void getFilteredSubjects(filters) {
+    var seminaryFilter = filters['seminary'] as bool?;
+    var laboratoryFilter = filters['laboratory'] as bool?;
+    var englishFilter = filters['english'] as bool?;
+    var semesterFilter = filters['semester'] as String?;
+    var classroomFilter = filters['classroom'] as ClassroomBO?;
+    var departmentFilter = filters['department'] as DepartmentBO?;
+    var degreeFilter = filters['degree'] as DegreeBO?;
+
+    if(seminaryFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.seminary == seminaryFilter).toList();
+    }
+    if(laboratoryFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.laboratory == laboratoryFilter).toList();
+    }
+    if(englishFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.english == englishFilter).toList();
+    }
+    if(semesterFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.semester == int.parse(semesterFilter)).toList();
+    }
+    if(classroomFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.classroom.id == classroomFilter.id).toList();
+    }
+    if(departmentFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.department.id == departmentFilter.id).toList();
+    }
+    if(degreeFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.degree.id == degreeFilter.id).toList();
+    }
+    _filterActive.value = true;
+    update();
+  }
+
+  void eraseFilters() {
+    _getSubjects();
+    _filterActive.value = false;
+    update();
   }
 }

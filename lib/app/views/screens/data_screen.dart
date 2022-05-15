@@ -92,6 +92,12 @@ class DataScreen extends GetView<DataController> {
       appBar: AppBar(
         title: Text('fillData'.tr),
         automaticallyImplyLeading: false,
+        actions: <Widget>[IconButton(
+          icon: const Icon(Icons.filter_list),
+          onPressed: () {
+
+          },),
+        ],
       ),
       body: SafeArea(
         child: Row(

@@ -130,5 +130,9 @@ const Map<String, String> enUS = {
   'morningShift': 'Morning shift',
   'afternoonShift': 'Afternoon shift',
   'saveSchedule': 'Save',
-  'downloadSchedule': 'Download'
+  'downloadSchedule': 'Download',
+  //Filters
+  'filter': 'Filter',
+  'filterSubject': 'Filter subjects',
+  'filterExam': 'Filter exams',
 };
