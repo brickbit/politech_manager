@@ -261,4 +261,204 @@ class DataController extends BaseController {
     hideProgress();
     _getExams();
   }
+
+  void updateDegree(DegreeBO degree) {
+    hideError();
+    showProgress();
+    dataRepository.updateDegree(degree).fold(
+          (left) => _onUpdateDegreeKo(left),
+          (right) => _onUpdateDegreeOk(),
+    );
+  }
+
+  void _onUpdateDegreeKo(DegreeError degreeError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertDegree(degreeError));
+  }
+
+  void _onUpdateDegreeOk() {
+    hideProgress();
+    _getDegrees();
+  }
+
+  void deleteDegree(DegreeBO degree) {
+    hideError();
+    showProgress();
+    dataRepository.deleteDegree(degree.id).fold(
+          (left) => _onDeleteDegreeKo(left),
+          (right) => _onDeleteDegreeOk(),
+    );
+  }
+
+  void _onDeleteDegreeKo(DegreeError degreeError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertDegree(degreeError));
+  }
+
+  void _onDeleteDegreeOk() {
+    hideProgress();
+    _getDegrees();
+  }
+
+  void updateClassroom(ClassroomBO classroom) {
+    hideError();
+    showProgress();
+    dataRepository.updateClassroom(classroom).fold(
+          (left) => _onUpdateClassroomKo(left),
+          (right) => _onUpdateClassroomOk(),
+    );
+  }
+
+  void _onUpdateClassroomKo(ClassroomError classroomError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertClassroom(classroomError));
+  }
+
+  void _onUpdateClassroomOk() {
+    hideProgress();
+    _getClassrooms();
+  }
+
+  void deleteClassroom(ClassroomBO classroom) {
+    hideError();
+    showProgress();
+    dataRepository.deleteClassroom(classroom.id).fold(
+          (left) => _onDeleteClassroomKo(left),
+          (right) => _onDeleteClassroomOk(),
+    );
+  }
+
+  void _onDeleteClassroomKo(ClassroomError classroomError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertClassroom(classroomError));
+  }
+
+  void _onDeleteClassroomOk() {
+    hideProgress();
+    _getClassrooms();
+  }
+
+  void updateDepartment(DepartmentBO department) {
+    hideError();
+    showProgress();
+    dataRepository.updateDepartment(department).fold(
+          (left) => _onUpdateDepartmentKo(left),
+          (right) => _onUpdateDepartmentOk(),
+    );
+  }
+
+  void _onUpdateDepartmentKo(DepartmentError departmentError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertDepartment(departmentError));
+  }
+
+  void _onUpdateDepartmentOk() {
+    hideProgress();
+    _getDepartments();
+  }
+
+  void deleteDepartment(DepartmentBO department) {
+    hideError();
+    showProgress();
+    dataRepository.deleteDepartment(department.id).fold(
+          (left) => _onDeleteDepartmentKo(left),
+          (right) => _onDeleteDepartmentOk(),
+    );
+  }
+
+  void _onDeleteDepartmentKo(DepartmentError departmentError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertDepartment(departmentError));
+  }
+
+  void _onDeleteDepartmentOk() {
+    hideProgress();
+    _getDepartments();
+  }
+
+  void updateSubject(SubjectBO subject) {
+    hideError();
+    showProgress();
+    dataRepository.updateSubject(subject).fold(
+          (left) => _onUpdateSubjectKo(left),
+          (right) => _onUpdateSubjectOk(),
+    );
+  }
+
+  void _onUpdateSubjectKo(SubjectError subjectError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertSubject(subjectError));
+  }
+
+  void _onUpdateSubjectOk() {
+    hideProgress();
+    _getSubjects();
+  }
+
+  void deleteSubject(SubjectBO subject) {
+    hideError();
+    showProgress();
+    dataRepository.deleteSubject(subject.id).fold(
+          (left) => _onDeleteSubjectKo(left),
+          (right) => _onDeleteSubjectOk(),
+    );
+  }
+
+  void _onDeleteSubjectKo(SubjectError subjectError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertSubject(subjectError));
+  }
+
+  void _onDeleteSubjectOk() {
+    hideProgress();
+    _getSubjects();
+  }
+
+  void updateExam(ExamBO exam) {
+    hideError();
+    showProgress();
+    dataRepository.updateExam(exam).fold(
+          (left) => _onUpdateExamKo(left),
+          (right) => _onUpdateExamOk(),
+    );
+  }
+
+  void _onUpdateExamKo(ExamError examError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertExam(examError));
+  }
+
+  void _onUpdateExamOk() {
+    hideProgress();
+    _getExams();
+  }
+
+  void deleteExam(ExamBO exam) {
+    hideError();
+    showProgress();
+    dataRepository.deleteExam(exam.id).fold(
+          (left) => _onDeleteExamKo(left),
+          (right) => _onDeleteExamOk(),
+    );
+  }
+
+  void _onDeleteExamKo(ExamError examError) {
+    hideProgress();
+    showError();
+    showErrorMessage(errorManager.convertExam(examError));
+  }
+
+  void _onDeleteExamOk() {
+    hideProgress();
+    _getExams();
+  }
 }

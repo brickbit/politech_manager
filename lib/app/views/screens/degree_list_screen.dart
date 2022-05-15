@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:politech_manager/app/views/dialog/degree_dialog.dart';
 import '../../controller/degree_list_controller.dart';
 import '../custom/degree_tile.dart';
+import '../custom/empty_view.dart';
 
 class DegreeListScreen extends GetView<DegreeListController> {
   const DegreeListScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class DegreeListScreen extends GetView<DegreeListController> {
         title: Text('degree'.tr),
       ),
       body: controller.degrees.isEmpty
-          ? _emptyView()
+          ? emptyView('noDegree'.tr)
           : SafeArea(
               child: ListView.separated(
                   itemBuilder: (context, index) {
@@ -89,32 +90,6 @@ class DegreeListScreen extends GetView<DegreeListController> {
                     );
                   },
                   itemCount: controller.degrees.length)),
-    );
-  }
-
-  Widget _emptyView() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/no_data_bro.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                height: 500,
-              ),
-              Text('noDegree'.tr, style: const TextStyle(fontSize: 22), textAlign: TextAlign.center,)
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

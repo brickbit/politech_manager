@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:politech_manager/app/views/custom/classroom_tile.dart';
 import 'package:politech_manager/app/views/dialog/classroom_dialog.dart';
 import '../../controller/classroom_list_controller.dart';
+import '../custom/empty_view.dart';
 
 class ClassroomListScreen extends GetView<ClassroomListController> {
   const ClassroomListScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class ClassroomListScreen extends GetView<ClassroomListController> {
         title: Text('classroom'.tr),
       ),
       body: controller.classrooms.isEmpty
-          ? _emptyView()
+          ? emptyView('noClassroom'.tr)
           : SafeArea(
               child: ListView.separated(
                   itemBuilder: (context, index) {
@@ -89,32 +90,6 @@ class ClassroomListScreen extends GetView<ClassroomListController> {
                     );
                   },
                   itemCount: controller.classrooms.length)),
-    );
-  }
-
-  Widget _emptyView() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/no_data_bro.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                height: 500,
-              ),
-              Text('noClassroom'.tr, style: const TextStyle(fontSize: 22), textAlign: TextAlign.center,)
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
