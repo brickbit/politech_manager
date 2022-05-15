@@ -1,6 +1,7 @@
 
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
@@ -45,6 +46,10 @@ class DataController extends BaseController {
   final _exams = Rx<List<ExamBO>>([]);
 
   List<ExamBO> get exams => _exams.value;
+
+  final _filterActive = false.obs;
+
+  bool get filterActive => _filterActive.value;
 
   final section = <int>[0, 1, 2, 3, 4];
 
@@ -460,5 +465,73 @@ class DataController extends BaseController {
   void _onDeleteExamOk() {
     hideProgress();
     _getExams();
+  }
+
+  void getFilteredSubjects(filters) {
+    var seminaryFilter = filters['seminary'] as bool?;
+    var laboratoryFilter = filters['laboratory'] as bool?;
+    var englishFilter = filters['english'] as bool?;
+    var semesterFilter = filters['semester'] as String?;
+    var classroomFilter = filters['classroom'] as ClassroomBO?;
+    var departmentFilter = filters['department'] as DepartmentBO?;
+    var degreeFilter = filters['degree'] as DegreeBO?;
+
+    if(seminaryFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.seminary == seminaryFilter).toList();
+    }
+    if(laboratoryFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.laboratory == laboratoryFilter).toList();
+    }
+    if(englishFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.english == englishFilter).toList();
+    }
+    if(semesterFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.semester == int.parse(semesterFilter)).toList();
+    }
+    if(classroomFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.classroom.id == classroomFilter.id).toList();
+    }
+    if(departmentFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.department.id == departmentFilter.id).toList();
+    }
+    if(degreeFilter != null) {
+      _subjects.value = _subjects.value.where((element) => element.degree.id == degreeFilter.id).toList();
+    }
+    _filterActive.value = true;
+    update();
+  }
+
+  void getFilteredExams(filters) {
+    var semesterFilter = filters['semester'] as int?;
+    var callFilter = filters['call'] as String?;
+    var turnFilter = filters['turn'] as String?;
+    var subjectFilter = filters['subject'] as SubjectBO?;
+
+    if(semesterFilter != null) {
+      _exams.value = _exams.value.where((element) => element.semester == semesterFilter).toList();
+    }
+    if(callFilter != null) {
+      _exams.value = _exams.value.where((element) => element.call == callFilter.getCall()).toList();
+    }
+    if(turnFilter != null) {
+      _exams.value = _exams.value.where((element) => element.turn == turnFilter.getTurn()).toList();
+    }
+    if(subjectFilter != null) {
+      _exams.value = _exams.value.where((element) => element.subject.id == subjectFilter.id).toList();
+    }
+    _filterActive.value = true;
+    update();
+  }
+
+  void eraseSubjectFilters() {
+    _getSubjects();
+    _filterActive.value = false;
+    update();
+  }
+
+  void eraseExamFilters() {
+    _getExams();
+    _filterActive.value = false;
+    update();
   }
 }

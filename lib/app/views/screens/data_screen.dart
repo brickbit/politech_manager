@@ -13,6 +13,8 @@ import '../custom/subject_tile.dart';
 import '../dialog/classroom_dialog.dart';
 import '../dialog/department_dialog.dart';
 import '../dialog/exam_dialog.dart';
+import '../dialog/filter_exam_dialog.dart';
+import '../dialog/filter_subject_dialog.dart';
 
 class DataScreen extends GetView<DataController> {
   const DataScreen({Key? key}) : super(key: key);
@@ -92,12 +94,41 @@ class DataScreen extends GetView<DataController> {
       appBar: AppBar(
         title: Text('fillData'.tr),
         automaticallyImplyLeading: false,
-        actions: <Widget>[IconButton(
-          icon: const Icon(Icons.filter_list),
-          onPressed: () {
+        actions: controller.currentIndex == 3 || controller.currentIndex == 4
+            ? <Widget>[
+          controller.filterActive
+              ? IconButton(
+            icon: const Icon(Icons.delete_sweep),
+            onPressed: () {
+              if(controller.currentIndex == 3) {
+                controller.eraseSubjectFilters();
+              } else {
+                controller.eraseExamFilters();
+              }
+            },
+          )
+              : IconButton(
+            icon: const Icon(Icons.filter_list),
+            color: controller.filterActive ? Colors.green : Colors.grey,
+            onPressed: () {
+              if(controller.currentIndex == 3) {
+                filterSubjectDialog(
+                    context,
+                    controller.classrooms,
+                    controller.departments,
+                    controller.degrees,
+                        (filters) => (controller.getFilteredSubjects(filters)));
+              } else {
+                filterExamDialog(
+                    context,
+                    controller.subjects,
+                        (filters) => (controller.getFilteredExams(filters)));
+              }
 
-          },),
-        ],
+            },
+          ),
+              ]
+            : <Widget>[],
       ),
       body: SafeArea(
         child: Row(
@@ -270,15 +301,16 @@ class DataScreen extends GetView<DataController> {
       case 4:
         return Expanded(child: _setExamList(context, false));
       default:
-        return Expanded(child: Container(
+        return Expanded(
+            child: Container(
           color: Colors.white54,
         ));
     }
   }
 
   Widget _setDegreeList(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -295,61 +327,66 @@ class DataScreen extends GetView<DataController> {
       body: controller.degrees.isEmpty
           ? emptyView('noDegree'.tr)
           : SafeArea(
-          child: ListView.separated(
-              primary: false,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      degreeTile(MediaQuery.of(context).size.width < 600, controller.degrees, index),
-                      Row(
+              child: ListView.separated(
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () async {
-                              degreeDialog(context, controller.degrees[index], (degree) => (controller.updateDegree(degree)));
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              controller.deleteDegree(controller.degrees[index]);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          degreeTile(MediaQuery.of(context).size.width < 600,
+                              controller.degrees, index),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  degreeDialog(
+                                      context,
+                                      controller.degrees[index],
+                                      (degree) =>
+                                          (controller.updateDegree(degree)));
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  controller
+                                      .deleteDegree(controller.degrees[index]);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: SizedBox(
-                    height: 1,
-                    child: Container(
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              },
-              itemCount: controller.degrees.length)),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: SizedBox(
+                        height: 1,
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: controller.degrees.length)),
     );
   }
 
-
   Widget _setClassroomList(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -366,58 +403,66 @@ class DataScreen extends GetView<DataController> {
       body: controller.classrooms.isEmpty
           ? emptyView('noClassroom'.tr)
           : SafeArea(
-          child: ListView.separated(
-              primary: false,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      classroomTile(MediaQuery.of(context).size.width < 600, controller.classrooms, index),
-                      Row(
+              child: ListView.separated(
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () async {
-                              classroomDialog(context, controller.classrooms[index], (classroom) => (controller.updateClassroom(classroom)));
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              controller.deleteClassroom(controller.classrooms[index]);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          classroomTile(MediaQuery.of(context).size.width < 600,
+                              controller.classrooms, index),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  classroomDialog(
+                                      context,
+                                      controller.classrooms[index],
+                                      (classroom) => (controller
+                                          .updateClassroom(classroom)));
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  controller.deleteClassroom(
+                                      controller.classrooms[index]);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: SizedBox(
-                    height: 1,
-                    child: Container(
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              },
-              itemCount: controller.classrooms.length)),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: SizedBox(
+                        height: 1,
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: controller.classrooms.length)),
     );
   }
 
-  Widget _setDepartmentList(BuildContext context,) {
+  Widget _setDepartmentList(
+    BuildContext context,
+  ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -434,72 +479,66 @@ class DataScreen extends GetView<DataController> {
       body: controller.departments.isEmpty
           ? emptyView('noDepartment'.tr)
           : SafeArea(
-          child: ListView.separated(
-              primary: false,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      departmentTile(
-                          MediaQuery
-                              .of(context)
-                              .size
-                              .width < 600,
-                          controller.departments,
-                          index),
-                      Row(
+              child: ListView.separated(
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () async {
-                              departmentDialog(
-                                  context,
-                                  controller.departments[index],
-                                      (department) =>
-                                  (controller
-                                      .updateDepartment(department)));
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              controller.deleteDepartment(
-                                  controller.departments[index]);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          departmentTile(
+                              MediaQuery.of(context).size.width < 600,
+                              controller.departments,
+                              index),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  departmentDialog(
+                                      context,
+                                      controller.departments[index],
+                                      (department) => (controller
+                                          .updateDepartment(department)));
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  controller.deleteDepartment(
+                                      controller.departments[index]);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: SizedBox(
-                    height: 1,
-                    child: Container(
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              },
-              itemCount: controller.departments.length)),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: SizedBox(
+                        height: 1,
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: controller.departments.length)),
     );
   }
 
-  Widget _setSubjectList(
-      BuildContext context,
-      bool mobile) {
+  Widget _setSubjectList(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -516,70 +555,68 @@ class DataScreen extends GetView<DataController> {
       body: controller.subjects.isEmpty
           ? emptyView('noSubject'.tr)
           : SafeArea(
-          child: ListView.separated(
-            primary: false,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      subjectTile(MediaQuery
-                          .of(context)
-                          .size
-                          .width < 600, controller.subjects, index),
-                      Row(
+              child: ListView.separated(
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () async {
-                              subjectDialog(
-                                  context,
-                                  controller.subjects[index],
-                                  controller.classrooms,
-                                  controller.departments,
-                                  controller.degrees,
-                                  mobile, (subject) =>
-                              (controller.updateSubject(subject)));
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              controller.deleteSubject(
-                                  controller.subjects[index]);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          subjectTile(MediaQuery.of(context).size.width < 600,
+                              controller.subjects, index),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  subjectDialog(
+                                      context,
+                                      controller.subjects[index],
+                                      controller.classrooms,
+                                      controller.departments,
+                                      controller.degrees,
+                                      mobile,
+                                      (subject) =>
+                                          (controller.updateSubject(subject)));
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  controller.deleteSubject(
+                                      controller.subjects[index]);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: SizedBox(
-                    height: 1,
-                    child: Container(
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              },
-              itemCount: controller.subjects.length)),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: SizedBox(
+                        height: 1,
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: controller.subjects.length)),
     );
   }
 
-  Widget _setExamList(
-      BuildContext context, bool mobile) {
+  Widget _setExamList(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -596,69 +633,61 @@ class DataScreen extends GetView<DataController> {
       body: controller.exams.isEmpty
           ? emptyView('noExam'.tr)
           : SafeArea(
-          child: ListView.separated(
-              primary: false,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      examTile(
-                          MediaQuery
-                              .of(context)
-                              .size
-                              .width < 600,
-                          controller.exams,
-                          index),
-                      Row(
+              child: ListView.separated(
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () async {
-                              examDialog(
-                                  context,
-                                  controller.exams[index],
-                                  controller.subjects,
-                                  mobile,
-                                      (exam) =>
-                                  (controller
-                                      .updateExam(exam)));
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              controller.deleteExam(
-                                  controller.exams[index]);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          examTile(MediaQuery.of(context).size.width < 600,
+                              controller.exams, index),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  examDialog(
+                                      context,
+                                      controller.exams[index],
+                                      controller.subjects,
+                                      mobile,
+                                      (exam) => (controller.updateExam(exam)));
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  controller
+                                      .deleteExam(controller.exams[index]);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: SizedBox(
-                    height: 1,
-                    child: Container(
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              },
-              itemCount: controller.exams.length)),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: SizedBox(
+                        height: 1,
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: controller.exams.length)),
     );
   }
-
 }
