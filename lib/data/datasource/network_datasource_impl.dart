@@ -3,9 +3,11 @@ import 'package:either_dart/either.dart';
 import 'package:http/http.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/data/mapper/user_mapper.dart';
+import 'package:politech_manager/data/model/query_change_password_dto.dart';
 import 'package:politech_manager/data/model/query_delete_user_dto.dart';
 import 'package:politech_manager/data/model/query_login_dto.dart';
 import 'package:politech_manager/data/model/response_sign_in_ko_dto.dart';
+import 'package:politech_manager/domain/error/change_password_error.dart';
 import 'package:politech_manager/domain/error/classroom_error.dart';
 import 'package:politech_manager/domain/error/classroom_error_type.dart';
 import 'package:politech_manager/domain/error/degree_error.dart';
@@ -30,6 +32,7 @@ import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:politech_manager/domain/model/response_login_bo.dart';
 import 'package:politech_manager/domain/model/response_ok_bo.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
+import '../../domain/error/change_password_error_type.dart';
 import '../../domain/error/degree_error_type.dart';
 import '../../domain/error/recover_password_error_type.dart';
 import '../../domain/error/set_new_password_error_type.dart';
@@ -278,7 +281,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<DepartmentError, ResponseOkBO>> postDepartment(
       DepartmentBO department) async {
-    final departmentJson= department.toDto().toJson();
+    final departmentJson = department.toDto().toJson();
     final response = await client.post(Uri.parse(endpoint + "department"),
         headers: authJsonHeaders, body: json.encode(departmentJson));
     if (response.statusCode != 200) {
@@ -317,7 +320,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
-  Future<Either<ClassroomError, ResponseOkBO>> updateClassroom(ClassroomBO classroom) async {
+  Future<Either<ClassroomError, ResponseOkBO>> updateClassroom(
+      ClassroomBO classroom) async {
     final classroomJson = classroom.toDto().toJson();
     final response = await client.post(Uri.parse(endpoint + "classroom/update"),
         headers: authJsonHeaders, body: json.encode(classroomJson));
@@ -330,7 +334,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
-  Future<Either<DegreeError, ResponseOkBO>> updateDegree(DegreeBO degree) async {
+  Future<Either<DegreeError, ResponseOkBO>> updateDegree(
+      DegreeBO degree) async {
     final degreeJson = degree.toDto().toJson();
     final response = await client.post(Uri.parse(endpoint + "degree/update"),
         headers: authJsonHeaders, body: json.encode(degreeJson));
@@ -343,10 +348,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
-  Future<Either<DepartmentError, ResponseOkBO>> updateDepartment(DepartmentBO department) async {
-    final departmentJson= department.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "department/update"),
-        headers: authJsonHeaders, body: json.encode(departmentJson));
+  Future<Either<DepartmentError, ResponseOkBO>> updateDepartment(
+      DepartmentBO department) async {
+    final departmentJson = department.toDto().toJson();
+    final response = await client.post(
+        Uri.parse(endpoint + "department/update"),
+        headers: authJsonHeaders,
+        body: json.encode(departmentJson));
     if (response.statusCode != 200) {
       return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
     } else {
@@ -369,7 +377,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
-  Future<Either<SubjectError, ResponseOkBO>> updateSubject(SubjectBO subject) async {
+  Future<Either<SubjectError, ResponseOkBO>> updateSubject(
+      SubjectBO subject) async {
     final subjectJson = subject.toDto().toJson();
     final response = await client.post(Uri.parse(endpoint + "subject/update"),
         headers: authJsonHeaders, body: json.encode(subjectJson));
@@ -383,7 +392,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<ClassroomError, ResponseOkBO>> deleteClassroom(int id) async {
-    final response = await client.post(Uri.parse(endpoint + "classroom/delete/$id"),
+    final response = await client.post(
+        Uri.parse(endpoint + "classroom/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
@@ -395,7 +405,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<DegreeError, ResponseOkBO>> deleteDegree(int id) async {
-    final response = await client.post(Uri.parse(endpoint + "degree/delete/$id"),
+    final response = await client.post(
+        Uri.parse(endpoint + "degree/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
@@ -407,7 +418,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<DepartmentError, ResponseOkBO>> deleteDepartment(int id) async {
-    final response = await client.post(Uri.parse(endpoint + "department/delete/$id"),
+    final response = await client.post(
+        Uri.parse(endpoint + "department/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
@@ -431,10 +443,28 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<SubjectError, ResponseOkBO>> deleteSubject(int id) async {
-    final response = await client.post(Uri.parse(endpoint + "subject/delete/$id"),
+    final response = await client.post(
+        Uri.parse(endpoint + "subject/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
+    } else {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    }
+  }
+
+  @override
+  Future<Either<ChangePasswordError, ResponseOkBO>> changePassword(
+      String oldPassword, String newPassword) async {
+    var query = QueryChangePasswordDto(
+            email: user, oldPassword: oldPassword, newPassword: newPassword)
+        .toJson();
+    final response = await client.post(Uri.parse(endpoint + "update"),
+        headers: authHeaders, body: query);
+    if (response.statusCode != 200) {
+      return Left(
+          ChangePasswordError(errorType: ChangePasswordErrorType.wrongUser));
     } else {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());

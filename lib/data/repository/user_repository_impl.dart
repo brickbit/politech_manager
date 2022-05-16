@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:politech_manager/domain/error/change_password_error.dart';
 import 'package:politech_manager/domain/error/delete_account_error.dart';
 import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
@@ -68,6 +69,17 @@ class UserRepositoryImpl extends UserRepository {
   Future<Either<DeleteAccountError, ResponseOkBO>> deleteUser() async {
     final response =
     await network.deleteUser();
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<ChangePasswordError, ResponseOkBO>> changePassword(String oldPassword, String newPassword) async {
+    final response =
+        await network.changePassword(oldPassword,newPassword);
     if (response.isLeft) {
       return Left(response.left);
     } else {

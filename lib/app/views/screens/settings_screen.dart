@@ -39,7 +39,7 @@ class SettingsScreen extends GetView<SettingsController> {
       ),
       body: SafeArea(
         child: ListView.separated(
-          itemCount: 6,
+          itemCount: 7,
           separatorBuilder: (BuildContext context, int index) {
             return const Padding(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
@@ -100,6 +100,17 @@ class SettingsScreen extends GetView<SettingsController> {
         );
       case 4:
         return ListTile(
+          title: Text('changePassword'.tr),
+          trailing: const Icon(
+            Icons.password,
+            color: Colors.grey,
+          ),
+          onTap: () async {
+            controller.changePassword();
+          },
+        );
+      case 5:
+        return ListTile(
           title: Text('logout'.tr),
           trailing: const Icon(
             Icons.logout,
@@ -109,7 +120,7 @@ class SettingsScreen extends GetView<SettingsController> {
             controller.logOut();
           },
         );
-      case 5:
+      case 6:
         return ListTile(
           title: Text('deleteAccount'.tr),
           trailing: const Icon(

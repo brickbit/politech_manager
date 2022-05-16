@@ -15,4 +15,5 @@ abstract class Routes {
   static const departmentList = '/departmentList';
   static const subjectList = '/subjectList';
   static const examList = '/examList';
+  static const changePassword = '/changePassword';
 }

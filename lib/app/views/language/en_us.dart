@@ -55,6 +55,7 @@ const Map<String, String> enUS = {
   'editClassroom': 'Edit classroom',
   'editDepartment': 'Edit department',
   'editSubject': 'Edit subject',
+  'editExam': 'Edit exam',
   'errorGetClassrooms':'An error has occurred trying to obtain the classrooms',
   'errorGetDegrees':'An error has occurred trying to obtain the degrees and masters',
   'errorGetDepartments':'An error has occurred trying to obtain the departments',
@@ -121,8 +122,14 @@ const Map<String, String> enUS = {
   'compilationNumber': 'Compilation number',
   'selectLanguage': 'Select the language',
   'logout': 'Logout',
+  'changePassword':'Change password',
   'deleteAccount': 'Delete account',
   'errorDeletingAccount': 'There was an error deleting your account',
+  'errorChangingPassword': 'There was an error changing your password',
+  //update password
+  'updatePassword': 'Update password',
+  'putOldPassword': 'Put your old password',
+  'putNewPassword': 'Put your new password',
   //Schedule
   'createSchedule': 'Create Schedule',
   'editSchedule': 'Edit Schedule',

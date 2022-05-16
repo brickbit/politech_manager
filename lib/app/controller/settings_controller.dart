@@ -2,6 +2,7 @@
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import '../../domain/error/change_password_error.dart';
 import '../../domain/error/delete_account_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/repository/user_repository.dart';
@@ -47,6 +48,9 @@ class SettingsController extends BaseController {
     update();
   }
 
+  void changePassword() {
+    Get.toNamed(Routes.changePassword);
+  }
 
   void logOut() {
     userRepository.logout();

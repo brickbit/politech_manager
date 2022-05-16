@@ -7,12 +7,14 @@ import 'package:politech_manager/app/binding/degree_list_binding.dart';
 import 'package:politech_manager/app/binding/exam_list_binding.dart';
 import 'package:politech_manager/app/binding/recover_password_binding.dart';
 import 'package:politech_manager/app/binding/subject_list_binding.dart';
+import 'package:politech_manager/app/views/screens/change_password_screen.dart';
 import 'package:politech_manager/app/views/screens/classroom_list_screen.dart';
 import 'package:politech_manager/app/views/screens/department_list_screen.dart';
 import 'package:politech_manager/app/views/screens/exam_list_screen.dart';
 import 'package:politech_manager/app/views/screens/login_screen.dart';
 import 'package:politech_manager/app/views/screens/recover_password_screen.dart';
 import 'package:politech_manager/app/views/screens/splash_screen.dart';
+import '../binding/change_password_binding.dart';
 import '../binding/department_list_binding.dart';
 import '../binding/home_binding.dart';
 import '../binding/login_binding.dart';
@@ -87,6 +89,11 @@ class AppPages {
       name: Routes.examList,
       page: () => const ExamListScreen(),
       binding: ExamListBinding(),
+    ),
+    GetPage(
+      name: Routes.changePassword,
+      page: () => ChangePasswordScreen(),
+      binding: ChangePasswordBinding(),
     ),
   ];
 

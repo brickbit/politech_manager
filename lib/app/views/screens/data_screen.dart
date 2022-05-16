@@ -186,7 +186,7 @@ class DataScreen extends GetView<DataController> {
 
   Widget _dataTile(String title, int index, mobile, BuildContext context) {
     return ListTile(
-      tileColor: controller.currentIndex == index ? Colors.black12: Colors.grey[150],
+      tileColor: mobile ? Colors.transparent : controller.currentIndex == index ? Colors.black12: Colors.grey[150],
       leading: IconButton(
           icon: const Icon(
             Icons.add,

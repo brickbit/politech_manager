@@ -3,6 +3,7 @@ import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/model/response_login_bo.dart';
+import '../../domain/error/change_password_error.dart';
 import '../../domain/error/classroom_error.dart';
 import '../../domain/error/degree_error.dart';
 import '../../domain/error/delete_account_error.dart';
@@ -52,4 +53,5 @@ abstract class NetworkDataSource {
   Future<Either<DepartmentError, ResponseOkBO>> deleteDepartment(int id);
   Future<Either<SubjectError, ResponseOkBO>> deleteSubject(int id);
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id);
+  Future<Either<ChangePasswordError, ResponseOkBO>> changePassword(String oldPassword, String newPassword);
 }

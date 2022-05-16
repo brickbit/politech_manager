@@ -1,5 +1,7 @@
 
 import 'package:get/get.dart';
+import 'package:politech_manager/domain/error/change_password_error.dart';
+import 'package:politech_manager/domain/error/change_password_error_type.dart';
 import 'package:politech_manager/domain/error/classroom_error.dart';
 import 'package:politech_manager/domain/error/classroom_error_type.dart';
 import 'package:politech_manager/domain/error/degree_error.dart';
@@ -63,6 +65,14 @@ class ErrorManagerImpl extends ErrorManager {
   }
 
   @override
+  String convertChangePassword(ChangePasswordError error) {
+    switch (error.errorType) {
+      case ChangePasswordErrorType.wrongUser:
+        return "errorChangingPassword".tr;
+    }
+  }
+
+  @override
   String convertDeleteAccount(DeleteAccountError error) {
     switch (error.errorType) {
       case DeleteAccountErrorType.wrongUser:
@@ -109,6 +119,4 @@ class ErrorManagerImpl extends ErrorManager {
         return "errorGetSubjects".tr;
     }
   }
-
-
 }
