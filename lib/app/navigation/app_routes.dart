@@ -7,6 +7,7 @@ abstract class Routes {
   static const setNewPassword = '/setNewPassword';
   static const register = '/register';
   static const data = '/data';
+  static const schedule = '/schedule';
   static const scheduleList = '/scheduleList';
   static const exam = '/exam';
   static const setting = '/setting';

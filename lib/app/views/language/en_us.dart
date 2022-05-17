@@ -116,6 +116,8 @@ const Map<String, String> enUS = {
   //Exam dialog
   'call':'Call',
   'turn':'Turn',
+  //Schedule dialog
+  'scheduleType':'Schedule type',
   //Setting
   'settings': 'Settings',
   'language': 'Language',

@@ -116,6 +116,8 @@ const Map<String, String> esES = {
   //Exam dialog
   'call':'Convocatoria',
   'turn':'Turno',
+  //Schedule dialog
+  'scheduleType':'Tipo de horario',
   //Setting
   'settings': 'Ajustes',
   'language': 'Idioma',

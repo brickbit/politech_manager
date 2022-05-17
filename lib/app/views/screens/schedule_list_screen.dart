@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/app/views/dialog/schedule_dialog.dart';
 import '../../controller/schedule_list_controller.dart';
 import '../custom/empty_view.dart';
 
@@ -40,7 +41,16 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
         automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          scheduleDialog(
+              'createSchedule'.tr,
+              context,
+              controller.degrees,
+              controller.subjects,
+              (scheduleFilters) {
+                controller.createSchedule(scheduleFilters);
+              });
+        },
         backgroundColor: Colors.green,
         child: const Icon(
           Icons.add,

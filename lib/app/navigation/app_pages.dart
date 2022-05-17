@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/binding/classroom_list_binding.dart';
+import 'package:politech_manager/app/binding/create_schedule_binding.dart';
 import 'package:politech_manager/app/binding/data_binding.dart';
 import 'package:politech_manager/app/binding/degree_list_binding.dart';
 import 'package:politech_manager/app/binding/exam_list_binding.dart';
@@ -10,6 +11,7 @@ import 'package:politech_manager/app/binding/schedule_list_binding.dart';
 import 'package:politech_manager/app/binding/subject_list_binding.dart';
 import 'package:politech_manager/app/views/screens/change_password_screen.dart';
 import 'package:politech_manager/app/views/screens/classroom_list_screen.dart';
+import 'package:politech_manager/app/views/screens/create_schedule_screen.dart';
 import 'package:politech_manager/app/views/screens/department_list_screen.dart';
 import 'package:politech_manager/app/views/screens/exam_list_screen.dart';
 import 'package:politech_manager/app/views/screens/login_screen.dart';
@@ -96,6 +98,11 @@ class AppPages {
       name: Routes.changePassword,
       page: () => ChangePasswordScreen(),
       binding: ChangePasswordBinding(),
+    ),
+    GetPage(
+      name: Routes.schedule,
+      page: () => const CreateScheduleScreen(),
+      binding: CreateScheduleBinding(),
     ),
   ];
 
