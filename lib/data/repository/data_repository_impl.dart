@@ -7,6 +7,7 @@ import 'package:politech_manager/domain/error/degree_error.dart';
 import 'package:politech_manager/domain/error/department_error.dart';
 
 import 'package:politech_manager/domain/error/exam_error.dart';
+import 'package:politech_manager/domain/error/schedule_error.dart';
 
 import 'package:politech_manager/domain/error/subject_error.dart';
 
@@ -18,6 +19,7 @@ import 'package:politech_manager/domain/model/department_bo.dart';
 
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:politech_manager/domain/model/response_ok_bo.dart';
+import 'package:politech_manager/domain/model/schedule_bo.dart';
 
 import 'package:politech_manager/domain/model/subject_bo.dart';
 
@@ -80,6 +82,16 @@ class DataRepositoryImpl extends DataRepository {
   }
 
   @override
+  Future<Either<ScheduleError, List<ScheduleBO>>> getSchedules() async {
+    final response = await network.getSchedules();
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
   Future<Either<ClassroomError, ResponseOkBO>> postClassroom(
       ClassroomBO classroom) async {
     final response = await network.postClassroom(classroom);
@@ -125,6 +137,16 @@ class DataRepositoryImpl extends DataRepository {
   Future<Either<SubjectError, ResponseOkBO>> postSubject(
       SubjectBO subject) async {
     final response = await network.postSubject(subject);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<ScheduleError, ResponseOkBO>> postSchedule(ScheduleBO schedule) async {
+    final response = await network.postSchedule(schedule);
     if (response.isLeft) {
       return Left(response.left);
     } else {
@@ -187,6 +209,16 @@ class DataRepositoryImpl extends DataRepository {
   }
 
   @override
+  Future<Either<ScheduleError, ResponseOkBO>> updateSchedule(ScheduleBO schedule) async {
+    final response = await network.updateSchedule(schedule);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
   Future<Either<ClassroomError, ResponseOkBO>> deleteClassroom(
       int id) async {
     final response = await network.deleteClassroom(id);
@@ -239,4 +271,15 @@ class DataRepositoryImpl extends DataRepository {
       return Right(response.right);
     }
   }
+
+  @override
+  Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id) async {
+    final response = await network.deleteSchedule(id);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
 }

@@ -16,6 +16,7 @@ import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/login_error_type.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error_type.dart';
+import 'package:politech_manager/domain/error/schedule_error.dart';
 import 'package:politech_manager/domain/error/set_new_password_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error_type.dart';
@@ -23,6 +24,7 @@ import 'package:politech_manager/domain/error/subject_error.dart';
 import 'package:politech_manager/domain/error/subject_error_type.dart';
 
 import '../../domain/error/delete_account_error_type.dart';
+import '../../domain/error/schedule_error_type.dart';
 import '../../domain/error/set_new_password_error_type.dart';
 
 class ErrorManagerImpl extends ErrorManager {
@@ -117,6 +119,14 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case SubjectErrorType.wrongUser:
         return "errorGetSubjects".tr;
+    }
+  }
+
+  @override
+  String convertSchedule(ScheduleError error) {
+    switch (error.errorType) {
+      case ScheduleErrorType.wrongUser:
+        return "errorGetSchedules".tr;
     }
   }
 }

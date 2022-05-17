@@ -20,6 +20,8 @@ import 'package:politech_manager/domain/error/exam_error_type.dart';
 import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/login_error_type.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
+import 'package:politech_manager/domain/error/schedule_error.dart';
+import 'package:politech_manager/domain/error/schedule_error_type.dart';
 import 'package:politech_manager/domain/error/set_new_password_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error_type.dart';
@@ -31,6 +33,7 @@ import 'package:politech_manager/domain/model/department_bo.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:politech_manager/domain/model/response_login_bo.dart';
 import 'package:politech_manager/domain/model/response_ok_bo.dart';
+import 'package:politech_manager/domain/model/schedule_bo.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import '../../domain/error/change_password_error_type.dart';
 import '../../domain/error/degree_error_type.dart';
@@ -44,6 +47,7 @@ import '../model/query_recover_password_dto.dart';
 import '../model/query_sign_in_dto.dart';
 import '../model/response_login_dto.dart';
 import '../model/response_ok_dto.dart';
+import '../model/schedule_dto.dart';
 import '../model/subject_dto.dart';
 import 'network_datasource.dart';
 
@@ -252,6 +256,21 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
+  Future<Either<ScheduleError, List<ScheduleBO>>> getSchedules() async {
+    final response = await client.get(Uri.parse(endpoint + "schedule"),
+        headers: authJsonHeaders);
+    if (response.statusCode != 200) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
+    } else {
+      final List list = json.decode(utf8.decode(response.bodyBytes));
+      final List<ScheduleDto> scheduleList =
+      list.map((item) => ScheduleDto.fromJson(item)).toList();
+      final dto = scheduleList.map((item) => item.toBO()).toList();
+      return Right(dto);
+    }
+  }
+
+  @override
   Future<Either<ClassroomError, ResponseOkBO>> postClassroom(
       ClassroomBO classroom) async {
     final classroomJson = classroom.toDto().toJson();
@@ -455,6 +474,19 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
+  Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id) async {
+    final response = await client.post(
+        Uri.parse(endpoint + "schedule/delete/$id"),
+        headers: authJsonHeaders);
+    if (response.statusCode != 200) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
+    } else {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    }
+  }
+
+  @override
   Future<Either<ChangePasswordError, ResponseOkBO>> changePassword(
       String oldPassword, String newPassword) async {
     var query = QueryChangePasswordDto(
@@ -470,4 +502,18 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       return Right(dto.toBO());
     }
   }
+
+  @override
+  Future<Either<ScheduleError, ResponseOkBO>> postSchedule(ScheduleBO schedule) {
+    // TODO: implement postSchedule
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ScheduleError, ResponseOkBO>> updateSchedule(ScheduleBO schedule) {
+    // TODO: implement updateSchedule
+    throw UnimplementedError();
+  }
+
+
 }

@@ -7,8 +7,10 @@ import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
+import 'package:politech_manager/domain/model/schedule_bo.dart';
 import '../../domain/model/pavilion.dart';
 import '../../domain/model/subject_bo.dart';
+import '../model/schedule_dto.dart';
 import '../model/subject_dto.dart';
 
 extension ClassroomBOMapper on ClassroomDto {
@@ -60,6 +62,19 @@ extension SubjectBOMapper on SubjectDto {
 extension ClassroomDtoMapper on ClassroomBO {
   ClassroomDto toDto() {
     return ClassroomDto(name: name, pavilion: pavilion.toPavilion().toDto(), acronym: acronym, id: id);
+  }
+}
+
+extension ScheduleBOMapper on ScheduleDto {
+  ScheduleBO toBO() {
+    return ScheduleBO(
+        subjects. map((e) => e.map((f) => f.map((g) => g?.toBO()).toList()).toList()).toList(),
+        scheduleType,
+        fileType,
+        degree,
+        year,
+        id
+    );
   }
 }
 

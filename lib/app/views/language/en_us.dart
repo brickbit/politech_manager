@@ -61,6 +61,7 @@ const Map<String, String> enUS = {
   'errorGetDepartments':'An error has occurred trying to obtain the departments',
   'errorGetExams':'An error has occurred trying to obtain the exams',
   'errorGetSubjects':'An error has occurred trying to obtain the subjects',
+  'errorGetSchedules': 'An error has occurred trying to obtain the schedules',
   'canNotCreateSubject': 'Subjects cannot be created if there are no degrees, classrooms or departments',
   'canNotCreateExam': 'Exams cannot be created if there are no subjects',
   'morning': 'Morning',
@@ -76,6 +77,7 @@ const Map<String, String> enUS = {
   'noDepartment': 'No departments found',
   'noSubject': 'No subjects found',
   'noExam': 'No exams found',
+  'noSchedule': 'No schedules found',
   //List classroom
   'classroomPavilion': 'Pavilion: @pavilion',
   //List subjects

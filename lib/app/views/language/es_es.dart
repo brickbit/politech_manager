@@ -61,6 +61,7 @@ const Map<String, String> esES = {
   'errorGetDepartments':'Ha ocurrido un error intentando obtener los departamentos',
   'errorGetExams':'Ha ocurrido un error intentando obtener los exámenes',
   'errorGetSubjects':'Ha ocurrido un error intentando obtener las asignaturas',
+  'errorGetSchedules': 'Ha ocurrido un error intentando obtener los horarios',
   'canNotCreateSubject': 'No se pueden crear asignaturas si no hay titulaciones, aulas o departamentos',
   'canNotCreateExam': 'No se pueden crear exámenes si no hay asignaturas',
   'morning': 'Mañana',
@@ -75,6 +76,7 @@ const Map<String, String> esES = {
   'noClassroom': 'No se han encontrado clases',
   'noDepartment': 'No se han encontrado departamentos',
   'noSubject': 'No se han encontrado asignaturas',
+  'noSchedule': 'No se han encontrado horarios de asignaturas',
   'noExam': 'No se han encontrado exámenes',
   //List classroom
   'classroomPavilion': 'Pabellón: @pavilion',

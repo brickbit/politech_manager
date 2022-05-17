@@ -3,6 +3,7 @@ import 'package:politech_manager/domain/error/classroom_error.dart';
 import 'package:politech_manager/domain/error/degree_error.dart';
 import 'package:politech_manager/domain/error/delete_account_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
+import 'package:politech_manager/domain/error/schedule_error.dart';
 import 'package:politech_manager/domain/error/set_new_password_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/error/subject_error.dart';
@@ -23,4 +24,6 @@ abstract class ErrorManager {
   String convertDepartment(DepartmentError error);
   String convertSubject(SubjectError error);
   String convertExam(ExamError error);
+  String convertSchedule(ScheduleError error);
+
 }
