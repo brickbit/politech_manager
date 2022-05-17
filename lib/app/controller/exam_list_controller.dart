@@ -38,7 +38,7 @@ class ExamListController extends BaseController {
     super.onInit();
   }
 
-  void _getExams() {
+  void getExams() {
     hideError();
     showProgress();
     dataRepository.getExams().fold(
@@ -75,7 +75,7 @@ class ExamListController extends BaseController {
 
   void _onUpdateExamOk() {
     hideProgress();
-    _getExams();
+    getExams();
   }
 
   void deleteExam(ExamBO exam) {
@@ -95,7 +95,7 @@ class ExamListController extends BaseController {
 
   void _onDeleteExamOk() {
     hideProgress();
-    _getExams();
+    getExams();
   }
 
   void getFilteredExams(filters) {
@@ -121,7 +121,7 @@ class ExamListController extends BaseController {
   }
 
   void eraseFilters() {
-    _getExams();
+    getExams();
     _filterActive.value = false;
     update();
   }

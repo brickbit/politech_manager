@@ -27,7 +27,7 @@ class ClassroomListController extends BaseController {
     super.onInit();
   }
 
-  void _getClassrooms() {
+  void getClassrooms() {
     hideError();
     showProgress();
     dataRepository.getClassrooms().fold(
@@ -64,7 +64,7 @@ class ClassroomListController extends BaseController {
 
   void _onUpdateClassroomOk() {
     hideProgress();
-    _getClassrooms();
+    getClassrooms();
   }
 
   void deleteClassroom(ClassroomBO classroom) {
@@ -84,6 +84,6 @@ class ClassroomListController extends BaseController {
 
   void _onDeleteClassroomOk() {
     hideProgress();
-    _getClassrooms();
+    getClassrooms();
   }
 }

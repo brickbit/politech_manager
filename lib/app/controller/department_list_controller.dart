@@ -27,7 +27,7 @@ class DepartmentListController extends BaseController {
     super.onInit();
   }
 
-  void _getDepartments() {
+  void getDepartments() {
     hideError();
     showProgress();
     dataRepository.getDepartments().fold(
@@ -64,7 +64,7 @@ class DepartmentListController extends BaseController {
 
   void _onUpdateDepartmentOk() {
     hideProgress();
-    _getDepartments();
+    getDepartments();
   }
 
   void deleteDepartment(DepartmentBO department) {
@@ -84,6 +84,6 @@ class DepartmentListController extends BaseController {
 
   void _onDeleteDepartmentOk() {
     hideProgress();
-    _getDepartments();
+    getDepartments();
   }
 }

@@ -1,13 +1,10 @@
 
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
-import 'package:politech_manager/domain/error/set_new_password_error.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import '../../domain/error/degree_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/repository/data_repository.dart';
-import '../../domain/repository/user_repository.dart';
-import '../navigation/app_routes.dart';
 import 'base_controller.dart';
 
 class DegreeListController extends BaseController {
@@ -30,7 +27,7 @@ class DegreeListController extends BaseController {
     super.onInit();
   }
 
-  void _getDegrees() {
+  void getDegrees() {
     hideError();
     showProgress();
     dataRepository.getDegrees().fold(
@@ -67,7 +64,7 @@ class DegreeListController extends BaseController {
 
   void _onUpdateDegreeOk() {
     hideProgress();
-    _getDegrees();
+    getDegrees();
   }
 
   void deleteDegree(DegreeBO degree) {
@@ -87,6 +84,6 @@ class DegreeListController extends BaseController {
 
   void _onDeleteDegreeOk() {
     hideProgress();
-    _getDegrees();
+    getDegrees();
   }
 }

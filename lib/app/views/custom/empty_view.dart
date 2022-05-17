@@ -19,6 +19,7 @@ Widget emptyView(String text) {
               ),
               height: 500,
             ),
+            const SizedBox(height: 32,),
             Text(text, style: const TextStyle(fontSize: 22), textAlign: TextAlign.center,)
           ],
         ),

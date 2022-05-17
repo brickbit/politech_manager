@@ -74,64 +74,71 @@ class SubjectListScreen extends GetView<SubjectListController> {
       body: controller.subjects.isEmpty
           ? emptyView('noSubject'.tr)
           : SafeArea(
-              child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          subjectTile(MediaQuery.of(context).size.width < 600,
-                              controller.subjects, index),
-                          Row(
+              child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.getSubjects();
+                  },
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              IconButton(
-                                onPressed: () async {
-                                  subjectDialog(
-                                      'editSubject'.tr,
-                                      context,
-                                      controller.subjects[index],
-                                      controller.classrooms,
-                                      controller.departments,
-                                      controller.degrees,
-                                      mobile,
-                                      (subject) =>
-                                          (controller.updateSubject(subject)));
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  controller.deleteSubject(
-                                      controller.subjects[index]);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.grey,
-                                ),
-                              ),
+                              subjectTile(
+                                  MediaQuery.of(context).size.width < 600,
+                                  controller.subjects,
+                                  index),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      subjectDialog(
+                                          'editSubject'.tr,
+                                          context,
+                                          controller.subjects[index],
+                                          controller.classrooms,
+                                          controller.departments,
+                                          controller.degrees,
+                                          mobile,
+                                          (subject) => (controller
+                                              .updateSubject(subject)));
+                                    },
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      controller.deleteSubject(
+                                          controller.subjects[index]);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: SizedBox(
-                        height: 1,
-                        child: Container(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: controller.subjects.length)),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: SizedBox(
+                            height: 1,
+                            child: Container(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: controller.subjects.length)),
+            ),
     );
   }
 }

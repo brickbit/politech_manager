@@ -21,7 +21,7 @@ class ScheduleListController extends BaseController {
 
   List<ScheduleBO> get schedules => _schedules.value;
 
-  void _getSchedules() {
+  void getSchedules() {
     hideError();
     showProgress();
     dataRepository.getSchedules().fold(
@@ -58,7 +58,7 @@ class ScheduleListController extends BaseController {
 
   void _onUpdateScheduleOk() {
     hideProgress();
-    _getSchedules();
+    getSchedules();
   }
 
   void deleteSchedule(ScheduleBO schedule) {
@@ -78,6 +78,6 @@ class ScheduleListController extends BaseController {
 
   void _onDeleteScheduleOk() {
     hideProgress();
-    _getSchedules();
+    getSchedules();
   }
 }

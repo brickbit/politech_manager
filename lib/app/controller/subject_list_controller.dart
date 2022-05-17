@@ -49,7 +49,7 @@ class SubjectListController extends BaseController {
     super.onInit();
   }
 
-  void _getSubjects() {
+  void getSubjects() {
     hideError();
     showProgress();
     dataRepository.getSubjects().fold(
@@ -86,7 +86,7 @@ class SubjectListController extends BaseController {
 
   void _onUpdateSubjectOk() {
     hideProgress();
-    _getSubjects();
+    getSubjects();
   }
 
   void deleteSubject(SubjectBO subject) {
@@ -106,7 +106,7 @@ class SubjectListController extends BaseController {
 
   void _onDeleteSubjectOk() {
     hideProgress();
-    _getSubjects();
+    getSubjects();
   }
 
   void getFilteredSubjects(filters) {
@@ -144,7 +144,7 @@ class SubjectListController extends BaseController {
   }
 
   void eraseFilters() {
-    _getSubjects();
+    getSubjects();
     _filterActive.value = false;
     update();
   }

@@ -43,53 +43,67 @@ class DegreeListScreen extends GetView<DegreeListController> {
       body: controller.degrees.isEmpty
           ? emptyView('noDegree'.tr)
           : SafeArea(
-              child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          degreeTile(MediaQuery.of(context).size.width < 600, controller.degrees, index),
-                          Row(
+              child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.getDegrees();
+                  },
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              IconButton(
-                                onPressed: () async {
-                                  degreeDialog('editDegree'.tr, context, controller.degrees[index], (degree) => (controller.updateDegree(degree)));
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  controller.deleteDegree(controller.degrees[index]);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.grey,
-                                ),
-                              ),
+                              degreeTile(
+                                  MediaQuery.of(context).size.width < 600,
+                                  controller.degrees,
+                                  index),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      degreeDialog(
+                                          'editDegree'.tr,
+                                          context,
+                                          controller.degrees[index],
+                                          (degree) => (controller
+                                              .updateDegree(degree)));
+                                    },
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      controller.deleteDegree(
+                                          controller.degrees[index]);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: SizedBox(
-                        height: 1,
-                        child: Container(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: controller.degrees.length)),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: SizedBox(
+                            height: 1,
+                            child: Container(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: controller.degrees.length)),
+            ),
     );
   }
 }
