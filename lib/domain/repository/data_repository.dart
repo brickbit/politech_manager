@@ -42,4 +42,5 @@ abstract class DataRepository {
   Future<Either<SubjectError, ResponseOkBO>> deleteSubject(int id);
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id);
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id);
+  Future<Either<ScheduleError, ResponseOkBO>> downloadSchedule(ScheduleBO schedule);
 }

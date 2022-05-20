@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:politech_manager/app/views/dialog/schedule_dialog.dart';
 import '../../controller/schedule_list_controller.dart';
 import '../custom/empty_view.dart';
+import '../custom/schedule_tile.dart';
 
 class ScheduleListScreen extends GetView<ScheduleListController> {
   const ScheduleListScreen({Key? key}) : super(key: key);
@@ -72,11 +73,13 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              //scheduleTile(MediaQuery.of(context).size.width < 600, controller.schedules, index),
+                              scheduleTile(MediaQuery.of(context).size.width < 600, controller.schedules, index),
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () async {},
+                                    onPressed: () async {
+                                      controller.updateSchedule(controller.schedules[index]);
+                                    },
                                     icon: const Icon(
                                       Icons.edit,
                                       color: Colors.grey,

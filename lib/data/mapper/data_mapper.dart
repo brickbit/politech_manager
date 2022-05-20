@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/data/model/classroom_dto.dart';
 import 'package:politech_manager/data/model/degree_dto.dart';
@@ -155,6 +156,28 @@ extension SubjectDtoMapper on SubjectBO {
         department: department.toDto(),
         degree: degree.toDto(),
         color: color,
+        id: id);
+  }
+}
+
+extension ScheduleMapper on ScheduleBO {
+  ScheduleDto toDto() {
+    return ScheduleDto(
+        subjects: subjects.map((list1) {
+          return list1.map((list2) {
+            return list2.map((subject) {
+              if (subject != null) {
+                subject.toDto();
+              } else {
+                return null;
+              }
+            }).toList();
+          }).toList();
+        }).toList(),
+        scheduleType: scheduleType,
+        fileType: fileType,
+        degree: degree,
+        year: year,
         id: id);
   }
 }

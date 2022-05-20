@@ -88,6 +88,8 @@ const Map<String, String> enUS = {
   'subjectLanguage': 'Language: @language',
   'subjectLaboratory': 'Laboratory: @laboratory',
   'subjectSeminar': 'Seminar: @seminary',
+  //List schedules
+  'scheduleYear':'Year: @year',
   //Degree dialog
   'name': 'Name',
   'year': 'Year',

@@ -60,4 +60,5 @@ abstract class NetworkDataSource {
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id);
   Future<Either<ChangePasswordError, ResponseOkBO>> changePassword(String oldPassword, String newPassword);
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id);
+  Future<Either<ScheduleError, ResponseOkBO>> downloadSchedule(ScheduleBO schedule);
 }

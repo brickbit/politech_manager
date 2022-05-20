@@ -44,3 +44,13 @@ extension StringTurn on String {
     }
   }
 }
+
+extension StringScheduleType on String {
+  int toScheduleTypeInt() {
+    if (this == 'oneSubjectPerHour'.tr) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+}

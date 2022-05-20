@@ -282,4 +282,13 @@ class DataRepositoryImpl extends DataRepository {
     }
   }
 
+  @override
+  Future<Either<ScheduleError, ResponseOkBO>> downloadSchedule(ScheduleBO schedule) async {
+    final response = await network.downloadSchedule(schedule);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
 }

@@ -88,6 +88,8 @@ const Map<String, String> esES = {
   'subjectLanguage': 'Idioma: @language',
   'subjectLaboratory': 'Laboratorio: @laboratory',
   'subjectSeminar': 'Seminario: @seminary',
+  //List schedules
+  'scheduleYear':'Año: @year',
   //Degree dialog
   'name': 'Nombre',
   'year': 'Año',

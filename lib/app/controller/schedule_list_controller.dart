@@ -38,6 +38,7 @@ class ScheduleListController extends BaseController {
   @override
   void onInit() {
     _getDegrees();
+    getSchedules();
     super.onInit();
   }
 
@@ -110,12 +111,20 @@ class ScheduleListController extends BaseController {
   }
 
   void updateSchedule(ScheduleBO schedule) {
-    hideError();
+    //TODO: fix server model
+    /*var candidateSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.id == schedule.degree.id).toList();
+    Get.toNamed(Routes.schedule, arguments: {
+      'subjects': candidateSubjects,
+      'savedSubjects': schedule.subjects
+      'scheduleType': schedule.type,
+      'semester': scheduleFilter.semester,
+    });*/
+    /*hideError();
     showProgress();
     dataRepository.updateSchedule(schedule).fold(
           (left) => _onUpdateScheduleKo(left),
           (right) => _onUpdateScheduleOk(),
-    );
+    );*/
   }
 
   void _onUpdateScheduleKo(ScheduleError scheduleError) {

@@ -35,7 +35,13 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('schedule'.tr),
+        title: Text('editSchedule'.tr),
+        actions:  [
+          IconButton(onPressed: () {
+            controller.saveSchedule();
+          }, icon: const Icon(Icons.save_sharp)),
+          IconButton(onPressed: () {controller.downloadFile();}, icon: const Icon(Icons.download))
+        ],
       ),
       body: SafeArea(
               child: Container(),

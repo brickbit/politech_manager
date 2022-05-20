@@ -504,16 +504,40 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
-  Future<Either<ScheduleError, ResponseOkBO>> postSchedule(ScheduleBO schedule) {
-    // TODO: implement postSchedule
-    throw UnimplementedError();
+  Future<Either<ScheduleError, ResponseOkBO>> postSchedule(ScheduleBO schedule) async {
+    final scheduleJson = schedule.toDto().toJson();
+    final response = await client.post(Uri.parse(endpoint + "schedule"),
+        headers: authJsonHeaders, body: json.encode(scheduleJson));
+    if (response.statusCode != 200) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
+    } else {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    }
   }
 
   @override
-  Future<Either<ScheduleError, ResponseOkBO>> updateSchedule(ScheduleBO schedule) {
-    // TODO: implement updateSchedule
-    throw UnimplementedError();
+  Future<Either<ScheduleError, ResponseOkBO>> updateSchedule(ScheduleBO schedule) async {
+    final subjectJson = schedule.toDto().toJson();
+    final response = await client.post(Uri.parse(endpoint + "schedule/update"),
+        headers: authJsonHeaders, body: json.encode(subjectJson));
+    if (response.statusCode != 200) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
+    } else {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    }
   }
 
-
+  @override
+  Future<Either<ScheduleError, ResponseOkBO>> downloadSchedule(ScheduleBO schedule) async {
+    final scheduleJson = schedule.toDto().toJson();
+    final response = await client.get(Uri.parse(endpoint + "schedule/download"), headers: authJsonHeaders);
+    if (response.statusCode != 200) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
+    } else {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    }
+  }
 }
