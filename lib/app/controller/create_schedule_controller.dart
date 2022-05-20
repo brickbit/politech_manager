@@ -1,7 +1,10 @@
 
+import 'dart:typed_data';
+import 'dart:io';
+import 'package:file_saver/file_saver.dart';
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
-import 'package:politech_manager/app/extension/string_extension.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/error/schedule_error.dart';
@@ -77,7 +80,7 @@ class CreateScheduleController extends BaseController {
     var schedule = ScheduleBO([], 0, 0, "degree", "year", 0);
     dataRepository.downloadSchedule(schedule).fold(
           (left) => _onDownloadScheduleKo(left),
-          (right) => _onDownloadScheduleOk(),
+          (right) => _onDownloadScheduleOk(right),
     );
   }
 
@@ -87,8 +90,26 @@ class CreateScheduleController extends BaseController {
     showErrorMessage(errorManager.convertSchedule(scheduleError));
   }
 
-  void _onDownloadScheduleOk() {
+  void _onDownloadScheduleOk(Uint8List bytes) async {
+    MimeType type = MimeType.MICROSOFTEXCEL;
+    if (Platform.isAndroid || Platform. isIOS) {
+      String path = await FileSaver.instance.saveAs(
+          "schedule",
+          bytes,
+          "xlsx",
+          type);
+    } else  if (Platform.isMacOS){
+      final path = await _localPath;
+      File f = File('$path/schedule.xlsx');
+      await f.writeAsBytes(bytes);
+    }
     hideProgress();
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
   }
 
   List<List<SubjectBO?>> _transpose(List<List<SubjectBO?>> colsInRows) {

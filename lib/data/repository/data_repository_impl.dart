@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:either_dart/src/either.dart';
 
 import 'package:politech_manager/domain/error/classroom_error.dart';
@@ -283,7 +285,7 @@ class DataRepositoryImpl extends DataRepository {
   }
 
   @override
-  Future<Either<ScheduleError, ResponseOkBO>> downloadSchedule(ScheduleBO schedule) async {
+  Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule) async {
     final response = await network.downloadSchedule(schedule);
     if (response.isLeft) {
       return Left(response.left);

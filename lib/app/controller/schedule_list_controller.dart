@@ -37,8 +37,8 @@ class ScheduleListController extends BaseController {
 
   @override
   void onInit() {
-    _getDegrees();
     getSchedules();
+    _getDegrees();
     super.onInit();
   }
 

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:either_dart/either.dart';
 import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
@@ -60,5 +62,5 @@ abstract class NetworkDataSource {
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id);
   Future<Either<ChangePasswordError, ResponseOkBO>> changePassword(String oldPassword, String newPassword);
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id);
-  Future<Either<ScheduleError, ResponseOkBO>> downloadSchedule(ScheduleBO schedule);
+  Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule);
 }

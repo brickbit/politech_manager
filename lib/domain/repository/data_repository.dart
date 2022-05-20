@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:either_dart/either.dart';
 import 'package:politech_manager/domain/error/classroom_error.dart';
 import 'package:politech_manager/domain/error/degree_error.dart';
@@ -42,5 +44,5 @@ abstract class DataRepository {
   Future<Either<SubjectError, ResponseOkBO>> deleteSubject(int id);
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id);
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id);
-  Future<Either<ScheduleError, ResponseOkBO>> downloadSchedule(ScheduleBO schedule);
+  Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule);
 }
