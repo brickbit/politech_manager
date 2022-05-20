@@ -11,19 +11,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.1
+  get: ^4.6.3
   http: ^0.13.4
-  google_fonts: ^2.1.0
+  google_fonts: ^3.0.0
   either_dart: ^0.1.4
   package_info_plus: ^1.4.2
-  uuid: 3.0.5
+  uuid: 3.0.6
   cupertino_icons: ^1.0.2
+  file_saver: ^0.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true
