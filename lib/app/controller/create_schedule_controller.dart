@@ -113,6 +113,13 @@ class CreateScheduleController extends BaseController {
   void openFile() async {
     if(Platform.isAndroid || Platform.isIOS) {
       OpenFile.open(path);
+    } else if (Platform.isWindows) {
+      if (await canLaunchUrl(Uri.file(path,windows: true))) {
+        await launchUrl(Uri.file(path, windows: true));
+      } else {
+        showErrorMessage('canNotOpenDocument'.tr);
+        showError();
+      }
     } else {
       if (await canLaunchUrl(Uri.parse("file://$path"))) {
         await launchUrl(Uri.parse("file://$path"));
