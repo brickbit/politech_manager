@@ -64,6 +64,8 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
               child: RefreshIndicator(
                   onRefresh: () async {
                     controller.getSchedules();
+                    controller.getDegrees();
+                    controller.getSubjects();
                   },
                   child: ListView.separated(
                       itemBuilder: (context, index) {

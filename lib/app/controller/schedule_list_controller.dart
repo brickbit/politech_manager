@@ -38,7 +38,8 @@ class ScheduleListController extends BaseController {
   @override
   void onInit() {
     getSchedules();
-    _getDegrees();
+    getDegrees();
+    getSubjects();
     super.onInit();
   }
 
@@ -50,7 +51,7 @@ class ScheduleListController extends BaseController {
     });
   }
 
-  void _getDegrees() {
+  void getDegrees() {
     hideError();
     showProgress();
     dataRepository.getDegrees().fold(

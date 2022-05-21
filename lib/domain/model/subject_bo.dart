@@ -1,3 +1,5 @@
+import 'package:politech_manager/domain/model/pavilion.dart';
+
 import 'classroom_bo.dart';
 import 'degree_bo.dart';
 import 'department_bo.dart';
@@ -37,4 +39,24 @@ class SubjectBO {
       this.degree,
       this.color,
       this.id);
+
+  static SubjectBO mock() {
+    return SubjectBO(
+        "mock",
+        "M",
+        "A",
+        false,
+        false,
+        false,
+        60,
+        1,
+        "",
+        "",
+        "",
+        ClassroomBO("C1", Pavilion.central.toString(), "C1", 1),
+        DepartmentBO("Mock", "M", 1),
+        DegreeBO("Mock", 8, "2021-2022", 1),
+        1,
+        1);
+  }
 }

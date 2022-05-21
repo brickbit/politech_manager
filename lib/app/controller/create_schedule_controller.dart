@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../domain/error/error_manager.dart';
@@ -24,7 +25,7 @@ class CreateScheduleController extends BaseController {
 
   final _subjects = Rx<List<SubjectBO>>([]);
 
-  List<SubjectBO> get degrees => _subjects.value;
+  List<SubjectBO> get subjects => _subjects.value;
 
   final _scheduleType = "".obs;
 
@@ -39,6 +40,9 @@ class CreateScheduleController extends BaseController {
   bool get fileDownloaded => _fileDownloaded.value;
 
   String path = "";
+
+  Rx<SubjectBO> selectedSubject = SubjectBO.mock().obs;
+
 
   @override
   void onInit() {
@@ -119,6 +123,33 @@ class CreateScheduleController extends BaseController {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
+  }
+
+  void startDrag(int index) {
+    selectedSubject.value = _subjects.value.firstWhere((element) =>
+    _subjects.value
+        .map((data) => data.toSubjectBox())
+        .toList()[index]
+        .subject
+        .id ==
+        element.id);
+  }
+
+  void dragItemSuccessfully(int index) {
+    selectedSubject = _subjects.value
+        .firstWhere((element) =>
+    _subjects.value
+        .map((data) => data.toSubjectBox())
+        .toList()[index]
+        .subject
+        .id ==
+        element.id)
+        .obs;
+    var pos = _subjects.value.indexOf(selectedSubject.value);
+    if (_subjects.value[pos].time == 0) {
+      _subjects.value.removeAt(pos);
+    }
+    update();
   }
 
   List<List<SubjectBO?>> _transpose(List<List<SubjectBO?>> colsInRows) {

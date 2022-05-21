@@ -9,6 +9,7 @@ import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:politech_manager/domain/model/schedule_bo.dart';
+import '../../app/views/custom/subject_box.dart';
 import '../../domain/model/pavilion.dart';
 import '../../domain/model/subject_bo.dart';
 import '../model/schedule_dto.dart';
@@ -179,5 +180,11 @@ extension ScheduleMapper on ScheduleBO {
         degree: degree,
         year: year,
         id: id);
+  }
+}
+
+extension SubjectModelMapper on SubjectBO {
+  SubjectBox toSubjectBox() {
+    return SubjectBox(subject: this);
   }
 }
