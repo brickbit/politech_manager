@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
@@ -110,11 +111,15 @@ class CreateScheduleController extends BaseController {
   }
 
   void openFile() async {
-    if (await canLaunchUrl(Uri.parse("file://$path"))) {
-      await launchUrl(Uri.parse("file://$path"));
+    if(Platform.isAndroid || Platform.isIOS) {
+      OpenFile.open(path);
     } else {
-      showErrorMessage('canNotOpenDocument'.tr);
-      showError();
+      if (await canLaunchUrl(Uri.parse("file://$path"))) {
+        await launchUrl(Uri.parse("file://$path"));
+      } else {
+        showErrorMessage('canNotOpenDocument'.tr);
+        showError();
+      }
     }
     _fileDownloaded.value = false;
   }
