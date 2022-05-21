@@ -81,7 +81,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       String username, String password) async {
     user = username;
     final query = QueryLoginDto(email: username, password: password).toJson();
-    final response = await client.post(Uri.parse(endpoint + "user/login"),
+    final response = await client.post(Uri.parse("${endpoint}user/login"),
         headers: headers, body: query);
     if (response.statusCode != 200) {
       return Left(LoginError(errorType: LoginErrorType.wrongUser));
@@ -99,7 +99,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       String email) async {
     final query = QueryRecoverPasswordDto(email: email).toJson();
     final response = await client.post(
-        Uri.parse(endpoint + "user/forgot-password"),
+        Uri.parse("${endpoint}user/forgot-password"),
         headers: headers,
         body: query);
     if (response.statusCode != 200) {
@@ -134,7 +134,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
             password: password,
             repeatPassword: repeatPassword)
         .toJson();
-    final response = await client.post(Uri.parse(endpoint + "user/register"),
+    final response = await client.post(Uri.parse("${endpoint}user/register"),
         headers: headers, body: query);
     if (response.statusCode != 200) {
       final responseKo =
@@ -169,7 +169,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<DeleteAccountError, ResponseOkBO>> deleteUser() async {
     final query = QueryDeleteUserDto(email: user).toJson();
-    final response = await client.post(Uri.parse(endpoint + "delete"),
+    final response = await client.post(Uri.parse("${endpoint}delete"),
         headers: authHeaders, body: query);
     if (response.statusCode != 200) {
       return Left(
@@ -184,7 +184,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<ClassroomError, List<ClassroomBO>>> getClassrooms() async {
-    final response = await client.get(Uri.parse(endpoint + "classroom"),
+    final response = await client.get(Uri.parse("${endpoint}classroom"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
@@ -199,7 +199,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<DegreeError, List<DegreeBO>>> getDegrees() async {
-    final response = await client.get(Uri.parse(endpoint + "degree"),
+    final response = await client.get(Uri.parse("${endpoint}degree"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
@@ -214,7 +214,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<DepartmentError, List<DepartmentBO>>> getDepartments() async {
-    final response = await client.get(Uri.parse(endpoint + "department"),
+    final response = await client.get(Uri.parse("${endpoint}department"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
@@ -229,7 +229,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<ExamError, List<ExamBO>>> getExams() async {
-    final response = await client.get(Uri.parse(endpoint + "exam"),
+    final response = await client.get(Uri.parse("${endpoint}exam"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ExamError(errorType: ExamErrorType.wrongUser));
@@ -244,7 +244,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<SubjectError, List<SubjectBO>>> getSubjects() async {
-    final response = await client.get(Uri.parse(endpoint + "subject"),
+    final response = await client.get(Uri.parse("${endpoint}subject"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
@@ -259,7 +259,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<ScheduleError, List<ScheduleBO>>> getSchedules() async {
-    final response = await client.get(Uri.parse(endpoint + "schedule"),
+    final response = await client.get(Uri.parse("${endpoint}schedule"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
@@ -276,7 +276,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<ClassroomError, ResponseOkBO>> postClassroom(
       ClassroomBO classroom) async {
     final classroomJson = classroom.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "classroom"),
+    final response = await client.post(Uri.parse("${endpoint}classroom"),
         headers: authJsonHeaders, body: json.encode(classroomJson));
     if (response.statusCode != 200) {
       return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
@@ -289,7 +289,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<DegreeError, ResponseOkBO>> postDegree(DegreeBO degree) async {
     final degreeJson = degree.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "degree"),
+    final response = await client.post(Uri.parse("${endpoint}degree"),
         headers: authJsonHeaders, body: json.encode(degreeJson));
     if (response.statusCode != 200) {
       return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
@@ -303,7 +303,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<DepartmentError, ResponseOkBO>> postDepartment(
       DepartmentBO department) async {
     final departmentJson = department.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "department"),
+    final response = await client.post(Uri.parse("${endpoint}department"),
         headers: authJsonHeaders, body: json.encode(departmentJson));
     if (response.statusCode != 200) {
       return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
@@ -316,7 +316,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<ExamError, ResponseOkBO>> postExam(ExamBO exam) async {
     final examDto = exam.toDto();
-    final response = await client.post(Uri.parse(endpoint + "exam"),
+    final response = await client.post(Uri.parse("${endpoint}exam"),
         headers: authJsonHeaders, body: json.encode(examDto.toJson()));
     if (response.statusCode != 200) {
       return Left(ExamError(errorType: ExamErrorType.wrongUser));
@@ -330,7 +330,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<SubjectError, ResponseOkBO>> postSubject(
       SubjectBO subject) async {
     final subjectJson = subject.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "subject"),
+    final response = await client.post(Uri.parse("${endpoint}subject"),
         headers: authJsonHeaders, body: json.encode(subjectJson));
     if (response.statusCode != 200) {
       return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
@@ -344,7 +344,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<ClassroomError, ResponseOkBO>> updateClassroom(
       ClassroomBO classroom) async {
     final classroomJson = classroom.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "classroom/update"),
+    final response = await client.post(Uri.parse("${endpoint}classroom/update"),
         headers: authJsonHeaders, body: json.encode(classroomJson));
     if (response.statusCode != 200) {
       return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
@@ -358,7 +358,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<DegreeError, ResponseOkBO>> updateDegree(
       DegreeBO degree) async {
     final degreeJson = degree.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "degree/update"),
+    final response = await client.post(Uri.parse("${endpoint}degree/update"),
         headers: authJsonHeaders, body: json.encode(degreeJson));
     if (response.statusCode != 200) {
       return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
@@ -373,7 +373,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       DepartmentBO department) async {
     final departmentJson = department.toDto().toJson();
     final response = await client.post(
-        Uri.parse(endpoint + "department/update"),
+        Uri.parse("${endpoint}department/update"),
         headers: authJsonHeaders,
         body: json.encode(departmentJson));
     if (response.statusCode != 200) {
@@ -387,7 +387,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<ExamError, ResponseOkBO>> updateExam(ExamBO exam) async {
     final examDto = exam.toDto();
-    final response = await client.post(Uri.parse(endpoint + "exam/update"),
+    final response = await client.post(Uri.parse("${endpoint}exam/update"),
         headers: authJsonHeaders, body: json.encode(examDto.toJson()));
     if (response.statusCode != 200) {
       return Left(ExamError(errorType: ExamErrorType.wrongUser));
@@ -401,7 +401,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<SubjectError, ResponseOkBO>> updateSubject(
       SubjectBO subject) async {
     final subjectJson = subject.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "subject/update"),
+    final response = await client.post(Uri.parse("${endpoint}subject/update"),
         headers: authJsonHeaders, body: json.encode(subjectJson));
     if (response.statusCode != 200) {
       return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
@@ -414,7 +414,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<ClassroomError, ResponseOkBO>> deleteClassroom(int id) async {
     final response = await client.post(
-        Uri.parse(endpoint + "classroom/delete/$id"),
+        Uri.parse("${endpoint}classroom/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
@@ -427,7 +427,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<DegreeError, ResponseOkBO>> deleteDegree(int id) async {
     final response = await client.post(
-        Uri.parse(endpoint + "degree/delete/$id"),
+        Uri.parse("${endpoint}degree/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
@@ -440,7 +440,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<DepartmentError, ResponseOkBO>> deleteDepartment(int id) async {
     final response = await client.post(
-        Uri.parse(endpoint + "department/delete/$id"),
+        Uri.parse("${endpoint}department/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
@@ -452,7 +452,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id) async {
-    final response = await client.post(Uri.parse(endpoint + "exam/delete/$id"),
+    final response = await client.post(Uri.parse("${endpoint}exam/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ExamError(errorType: ExamErrorType.wrongUser));
@@ -465,7 +465,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<SubjectError, ResponseOkBO>> deleteSubject(int id) async {
     final response = await client.post(
-        Uri.parse(endpoint + "subject/delete/$id"),
+        Uri.parse("${endpoint}subject/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
@@ -478,7 +478,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id) async {
     final response = await client.post(
-        Uri.parse(endpoint + "schedule/delete/$id"),
+        Uri.parse("${endpoint}schedule/delete/$id"),
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
@@ -494,7 +494,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     var query = QueryChangePasswordDto(
             email: user, oldPassword: oldPassword, newPassword: newPassword)
         .toJson();
-    final response = await client.post(Uri.parse(endpoint + "update"),
+    final response = await client.post(Uri.parse("${endpoint}update"),
         headers: authHeaders, body: query);
     if (response.statusCode != 200) {
       return Left(
@@ -508,7 +508,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<ScheduleError, ResponseOkBO>> postSchedule(ScheduleBO schedule) async {
     final scheduleJson = schedule.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "schedule"),
+    final response = await client.post(Uri.parse("${endpoint}schedule"),
         headers: authJsonHeaders, body: json.encode(scheduleJson));
     if (response.statusCode != 200) {
       return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
@@ -521,7 +521,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<ScheduleError, ResponseOkBO>> updateSchedule(ScheduleBO schedule) async {
     final subjectJson = schedule.toDto().toJson();
-    final response = await client.post(Uri.parse(endpoint + "schedule/update"),
+    final response = await client.post(Uri.parse("${endpoint}schedule/update"),
         headers: authJsonHeaders, body: json.encode(subjectJson));
     if (response.statusCode != 200) {
       return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
@@ -533,7 +533,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule) async {
-    var request = http.Request('GET', Uri.parse(endpoint + "schedule/download"));
+    var request = http.Request('GET', Uri.parse("${endpoint}schedule/download"));
     request.body = mock;
     request.headers.addAll(authJsonHeaders);
     http.StreamedResponse response = await request.send();

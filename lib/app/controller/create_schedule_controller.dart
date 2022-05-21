@@ -1,11 +1,11 @@
 
 import 'dart:typed_data';
 import 'dart:io';
-import 'package:file_saver/file_saver.dart';
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/error/schedule_error.dart';
 import '../../domain/model/schedule_bo.dart';
@@ -33,6 +33,12 @@ class CreateScheduleController extends BaseController {
   final _semester = 1.obs;
 
   int get semester => _semester.value;
+
+  final Rx<bool> _fileDownloaded = false.obs;
+
+  bool get fileDownloaded => _fileDownloaded.value;
+
+  String path = "";
 
   @override
   void onInit() {
@@ -86,24 +92,27 @@ class CreateScheduleController extends BaseController {
 
   void _onDownloadScheduleKo(ScheduleError scheduleError) {
     hideProgress();
-    showError();
     showErrorMessage(errorManager.convertSchedule(scheduleError));
+    showError();
   }
 
   void _onDownloadScheduleOk(Uint8List bytes) async {
-    MimeType type = MimeType.MICROSOFTEXCEL;
-    if (Platform.isAndroid || Platform. isIOS) {
-      String path = await FileSaver.instance.saveAs(
-          "schedule",
-          bytes,
-          "xlsx",
-          type);
-    } else  if (Platform.isMacOS){
-      final path = await _localPath;
-      File f = File('$path/schedule.xlsx');
-      await f.writeAsBytes(bytes);
-    }
+    final pathAux = await _localPath;
+    var scheduleFile = File('$pathAux/schedule.xlsx');
+    await scheduleFile.writeAsBytes(bytes);
+    path = '$pathAux/schedule.xlsx';
     hideProgress();
+    _fileDownloaded.value = true;
+  }
+
+  void openFile() async {
+    if (await canLaunchUrl(Uri.parse("file://$path"))) {
+      await launchUrl(Uri.parse("file://$path"));
+    } else {
+      showErrorMessage('canNotOpenDocument'.tr);
+      showError();
+    }
+    _fileDownloaded.value = false;
   }
 
   Future<String> get _localPath async {

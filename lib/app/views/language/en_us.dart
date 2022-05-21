@@ -120,6 +120,10 @@ const Map<String, String> enUS = {
   'turn':'Turn',
   //Schedule dialog
   'scheduleType':'Schedule type',
+  //File dialog
+  'openDocumentSaved': 'Document saved successfully. Do you want to open it?',
+  'documentSaved': 'The document is saved as an excel document in the path: @path',
+  'canNotOpenDocument': 'The file could not be opened',
   //Setting
   'settings': 'Settings',
   'language': 'Language',

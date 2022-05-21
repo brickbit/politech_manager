@@ -120,6 +120,10 @@ const Map<String, String> esES = {
   'turn':'Turno',
   //Schedule dialog
   'scheduleType':'Tipo de horario',
+  //File dialog
+  'openDocumentSaved': 'Documento guardado con éxito. ¿Desea abrirlo?',
+  'documentSaved': 'El documento se guardado como un documento excel en la ruta: @path',
+  'canNotOpenDocument': 'No se ha podido abrir el archivo',
   //Setting
   'settings': 'Ajustes',
   'language': 'Idioma',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/create_schedule_controller.dart';
+import '../dialog/file_dialog.dart';
 
 class CreateScheduleScreen extends GetView<CreateScheduleController> {
   const CreateScheduleScreen({Key? key}) : super(key: key);
@@ -26,26 +27,40 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       backgroundColor: Colors.redAccent,
       content: Text(controller.errorMsg),
     );
+
     Future.delayed(Duration.zero, () {
       if (controller.error) {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         controller.hideError();
       }
     });
+    Future.delayed(Duration.zero, () {
+      if (controller.fileDownloaded) {
+        fileDialog(controller.path, context, () {
+          controller.openFile();
+        });
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
         title: Text('editSchedule'.tr),
-        actions:  [
-          IconButton(onPressed: () {
-            controller.saveSchedule();
-          }, icon: const Icon(Icons.save_sharp)),
-          IconButton(onPressed: () {controller.downloadFile();}, icon: const Icon(Icons.download))
+        actions: [
+          IconButton(
+              onPressed: () {
+                controller.saveSchedule();
+              },
+              icon: const Icon(Icons.save_sharp)),
+          IconButton(
+              onPressed: () {
+                controller.downloadFile();
+              },
+              icon: const Icon(Icons.download))
         ],
       ),
       body: SafeArea(
-              child: Container(),
-            ),
+        child: Container(),
+      ),
     );
   }
 }
