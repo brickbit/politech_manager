@@ -78,6 +78,7 @@ const Map<String, String> enUS = {
   'noSubject': 'No subjects found',
   'noExam': 'No exams found',
   'noSchedule': 'No schedules found',
+  'noCalendar': 'No exam schedules found',
   //List classroom
   'classroomPavilion': 'Pavilion: @pavilion',
   //List subjects
@@ -90,6 +91,9 @@ const Map<String, String> enUS = {
   'subjectSeminar': 'Seminar: @seminary',
   //List schedules
   'scheduleYear':'Year: @year',
+  //List calendars
+  'calendar': 'Exam schedule',
+  'datesError': 'The end date must be greater than the start date',
   //Degree dialog
   'name': 'Name',
   'year': 'Year',
@@ -120,6 +124,12 @@ const Map<String, String> enUS = {
   'turn':'Turn',
   //Schedule dialog
   'scheduleType':'Schedule type',
+  //Calendar dialog
+  'createCalendar': 'Create exam calendar',
+  'startDate': 'Start date',
+  'endDate': 'End date',
+  'selectStartDate': 'Select start date',
+  'selectEndDate': 'Select end date',
   //File dialog
   'openDocumentSaved': 'Document saved successfully. Do you want to open it?',
   'documentSaved': 'The document is saved as an excel document in the path: @path',

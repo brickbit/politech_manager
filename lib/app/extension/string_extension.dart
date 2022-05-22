@@ -54,3 +54,23 @@ extension StringScheduleType on String {
     }
   }
 }
+
+extension StringDateTime on String {
+  bool previousThan(String endDate) {
+    final startDateArray = split("-");
+    final endDateArray = endDate.split("-");
+    if (int.parse(endDateArray[0]) < int.parse(startDateArray[0])) {
+      return false;
+    } else {
+      if (int.parse(endDateArray[1]) < int.parse(startDateArray[1])) {
+        return false;
+      } else {
+        if (int.parse(endDateArray[2]) < int.parse(startDateArray[2])) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+  }
+}

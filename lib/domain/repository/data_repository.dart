@@ -7,7 +7,9 @@ import 'package:politech_manager/domain/error/department_error.dart';
 import 'package:politech_manager/domain/error/exam_error.dart';
 import 'package:politech_manager/domain/error/subject_error.dart';
 import 'package:politech_manager/domain/model/response_ok_bo.dart';
+import '../error/calendar_error.dart';
 import '../error/schedule_error.dart';
+import '../model/calendar_bo.dart';
 import '../model/classroom_bo.dart';
 import '../model/degree_bo.dart';
 import '../model/department_bo.dart';
@@ -22,6 +24,7 @@ abstract class DataRepository {
   Future<Either<SubjectError, List<SubjectBO>>> getSubjects();
   Future<Either<ExamError, List<ExamBO>>> getExams();
   Future<Either<ScheduleError, List<ScheduleBO>>> getSchedules();
+  Future<Either<CalendarError, List<CalendarBO>>> getCalendars();
   Future<Either<ClassroomError, ResponseOkBO>> postClassroom(
       ClassroomBO classroom);
   Future<Either<DegreeError, ResponseOkBO>> postDegree(DegreeBO degree);
@@ -44,5 +47,6 @@ abstract class DataRepository {
   Future<Either<SubjectError, ResponseOkBO>> deleteSubject(int id);
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id);
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id);
+  Future<Either<CalendarError, ResponseOkBO>> deleteCalendar(int id);
   Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule);
 }

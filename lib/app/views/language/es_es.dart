@@ -78,6 +78,7 @@ const Map<String, String> esES = {
   'noSubject': 'No se han encontrado asignaturas',
   'noSchedule': 'No se han encontrado horarios de asignaturas',
   'noExam': 'No se han encontrado exámenes',
+  'noCalendar': 'No se han encontrado calendarios de exámenes',
   //List classroom
   'classroomPavilion': 'Pabellón: @pavilion',
   //List subjects
@@ -90,6 +91,9 @@ const Map<String, String> esES = {
   'subjectSeminar': 'Seminario: @seminary',
   //List schedules
   'scheduleYear':'Año: @year',
+  //List calendars
+  'calendar': 'Calendario de exámenes',
+  'datesError': 'La fecha de finalización debe ser mayor que la de inicio',
   //Degree dialog
   'name': 'Nombre',
   'year': 'Año',
@@ -120,6 +124,12 @@ const Map<String, String> esES = {
   'turn':'Turno',
   //Schedule dialog
   'scheduleType':'Tipo de horario',
+  //Calendar dialog
+  'createCalendar': 'Crear calendario de exámenes',
+  'startDate': 'Fecha de inicio',
+  'endDate': 'Fecha de fin',
+  'selectStartDate': 'Selecciona la fecha de inicio',
+  'selectEndDate': 'Selecciona la fecha de fin',
   //File dialog
   'openDocumentSaved': 'Documento guardado con éxito. ¿Desea abrirlo?',
   'documentSaved': 'El documento se guardado como un documento excel en la ruta: @path',

@@ -11,7 +11,7 @@ class HomeController extends BaseController {
 
   int get currentIndex => _currentIndex.value;
 
-  final pages = <String>[Routes.data, Routes.scheduleList, Routes.exam, Routes.setting];
+  final pages = <String>[Routes.data, Routes.scheduleList, Routes.calendarList, Routes.setting];
 
   void changePage(int index) {
     _currentIndex.value = index;

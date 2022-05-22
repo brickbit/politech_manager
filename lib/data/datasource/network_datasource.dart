@@ -5,6 +5,7 @@ import 'package:politech_manager/domain/error/login_error.dart';
 import 'package:politech_manager/domain/error/recover_password_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/model/response_login_bo.dart';
+import '../../domain/error/calendar_error.dart';
 import '../../domain/error/change_password_error.dart';
 import '../../domain/error/classroom_error.dart';
 import '../../domain/error/degree_error.dart';
@@ -14,6 +15,7 @@ import '../../domain/error/exam_error.dart';
 import '../../domain/error/schedule_error.dart';
 import '../../domain/error/set_new_password_error.dart';
 import '../../domain/error/subject_error.dart';
+import '../../domain/model/calendar_bo.dart';
 import '../../domain/model/classroom_bo.dart';
 import '../../domain/model/degree_bo.dart';
 import '../../domain/model/department_bo.dart';
@@ -39,6 +41,7 @@ abstract class NetworkDataSource {
   Future<Either<SubjectError, List<SubjectBO>>> getSubjects();
   Future<Either<ExamError, List<ExamBO>>> getExams();
   Future<Either<ScheduleError, List<ScheduleBO>>> getSchedules();
+  Future<Either<CalendarError, List<CalendarBO>>> getCalendars();
   Future<Either<ClassroomError, ResponseOkBO>> postClassroom(
       ClassroomBO classroom);
   Future<Either<DegreeError, ResponseOkBO>> postDegree(DegreeBO degree);
@@ -62,5 +65,6 @@ abstract class NetworkDataSource {
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id);
   Future<Either<ChangePasswordError, ResponseOkBO>> changePassword(String oldPassword, String newPassword);
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id);
+  Future<Either<CalendarError, ResponseOkBO>> deleteCalendar(int id);
   Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule);
 }

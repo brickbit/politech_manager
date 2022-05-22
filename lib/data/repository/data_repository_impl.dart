@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:either_dart/src/either.dart';
+import 'package:politech_manager/domain/error/calendar_error.dart';
 
 import 'package:politech_manager/domain/error/classroom_error.dart';
 
@@ -12,6 +13,7 @@ import 'package:politech_manager/domain/error/exam_error.dart';
 import 'package:politech_manager/domain/error/schedule_error.dart';
 
 import 'package:politech_manager/domain/error/subject_error.dart';
+import 'package:politech_manager/domain/model/calendar_bo.dart';
 
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 
@@ -86,6 +88,16 @@ class DataRepositoryImpl extends DataRepository {
   @override
   Future<Either<ScheduleError, List<ScheduleBO>>> getSchedules() async {
     final response = await network.getSchedules();
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<CalendarError, List<CalendarBO>>> getCalendars() async {
+    final response = await network.getCalendars();
     if (response.isLeft) {
       return Left(response.left);
     } else {
@@ -277,6 +289,16 @@ class DataRepositoryImpl extends DataRepository {
   @override
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id) async {
     final response = await network.deleteSchedule(id);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<CalendarError, ResponseOkBO>> deleteCalendar(int id) async {
+    final response = await network.deleteCalendar(id);
     if (response.isLeft) {
       return Left(response.left);
     } else {

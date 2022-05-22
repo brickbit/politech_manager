@@ -4,6 +4,7 @@ import 'package:politech_manager/data/model/classroom_dto.dart';
 import 'package:politech_manager/data/model/degree_dto.dart';
 import 'package:politech_manager/data/model/department_dto.dart';
 import 'package:politech_manager/data/model/exam_dto.dart';
+import 'package:politech_manager/domain/model/calendar_bo.dart';
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
@@ -12,6 +13,7 @@ import 'package:politech_manager/domain/model/schedule_bo.dart';
 import '../../app/views/custom/subject_box.dart';
 import '../../domain/model/pavilion.dart';
 import '../../domain/model/subject_bo.dart';
+import '../model/calendar_dto.dart';
 import '../model/schedule_dto.dart';
 import '../model/subject_dto.dart';
 
@@ -75,6 +77,20 @@ extension ScheduleBOMapper on ScheduleDto {
         fileType,
         degree,
         year,
+        id
+    );
+  }
+}
+
+extension CalendarBOMapper on CalendarDto {
+  CalendarBO toBO() {
+    return CalendarBO(
+        exams.map((exam) => exam.toBO()).toList(),
+        degree,
+        year,
+        startDate,
+        endDate,
+        call,
         id
     );
   }

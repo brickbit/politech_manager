@@ -9,7 +9,8 @@ abstract class Routes {
   static const data = '/data';
   static const schedule = '/schedule';
   static const scheduleList = '/scheduleList';
-  static const exam = '/exam';
+  static const calendar = '/calendar';
+  static const calendarList = '/calendarList';
   static const setting = '/setting';
   static const degreeList = '/degreeList';
   static const classroomList = '/classroomList';

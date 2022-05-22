@@ -7,6 +7,7 @@ import 'package:politech_manager/domain/error/schedule_error.dart';
 import 'package:politech_manager/domain/error/set_new_password_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/error/subject_error.dart';
+import 'calendar_error.dart';
 import 'change_password_error.dart';
 import 'department_error.dart';
 import 'exam_error.dart';
@@ -25,5 +26,5 @@ abstract class ErrorManager {
   String convertSubject(SubjectError error);
   String convertExam(ExamError error);
   String convertSchedule(ScheduleError error);
-
+  String convertCalendar(CalendarError error);
 }

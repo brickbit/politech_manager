@@ -9,6 +9,7 @@ import 'package:politech_manager/data/model/query_change_password_dto.dart';
 import 'package:politech_manager/data/model/query_delete_user_dto.dart';
 import 'package:politech_manager/data/model/query_login_dto.dart';
 import 'package:politech_manager/data/model/response_sign_in_ko_dto.dart';
+import 'package:politech_manager/domain/error/calendar_error.dart';
 import 'package:politech_manager/domain/error/change_password_error.dart';
 import 'package:politech_manager/domain/error/classroom_error.dart';
 import 'package:politech_manager/domain/error/classroom_error_type.dart';
@@ -29,6 +30,7 @@ import 'package:politech_manager/domain/error/sign_in_error.dart';
 import 'package:politech_manager/domain/error/sign_in_error_type.dart';
 import 'package:politech_manager/domain/error/subject_error.dart';
 import 'package:politech_manager/domain/error/subject_error_type.dart';
+import 'package:politech_manager/domain/model/calendar_bo.dart';
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
@@ -37,10 +39,12 @@ import 'package:politech_manager/domain/model/response_login_bo.dart';
 import 'package:politech_manager/domain/model/response_ok_bo.dart';
 import 'package:politech_manager/domain/model/schedule_bo.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
+import '../../domain/error/calendar_error_type.dart';
 import '../../domain/error/change_password_error_type.dart';
 import '../../domain/error/degree_error_type.dart';
 import '../../domain/error/recover_password_error_type.dart';
 import '../../domain/error/set_new_password_error_type.dart';
+import '../model/calendar_dto.dart';
 import '../model/classroom_dto.dart';
 import '../model/degree_dto.dart';
 import '../model/department_dto.dart';
@@ -273,6 +277,21 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
+  Future<Either<CalendarError, List<CalendarBO>>> getCalendars() async {
+    final response = await client.get(Uri.parse("${endpoint}calendar"),
+        headers: authJsonHeaders);
+    if (response.statusCode != 200) {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
+    } else {
+      final List list = json.decode(utf8.decode(response.bodyBytes));
+      final List<CalendarDto> scheduleList =
+      list.map((item) => CalendarDto.fromJson(item)).toList();
+      final dto = scheduleList.map((item) => item.toBO()).toList();
+      return Right(dto);
+    }
+  }
+
+  @override
   Future<Either<ClassroomError, ResponseOkBO>> postClassroom(
       ClassroomBO classroom) async {
     final classroomJson = classroom.toDto().toJson();
@@ -482,6 +501,19 @@ class NetworkDataSourceImpl extends NetworkDataSource {
         headers: authJsonHeaders);
     if (response.statusCode != 200) {
       return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
+    } else {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    }
+  }
+
+  @override
+  Future<Either<CalendarError, ResponseOkBO>> deleteCalendar(int id) async {
+    final response = await client.post(
+        Uri.parse("${endpoint}calendar/delete/$id"),
+        headers: authJsonHeaders);
+    if (response.statusCode != 200) {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     } else {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
