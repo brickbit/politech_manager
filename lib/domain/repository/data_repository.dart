@@ -33,6 +33,7 @@ abstract class DataRepository {
   Future<Either<SubjectError, ResponseOkBO>> postSubject(SubjectBO subject);
   Future<Either<ExamError, ResponseOkBO>> postExam(ExamBO exam);
   Future<Either<ScheduleError, ResponseOkBO>> postSchedule(ScheduleBO schedule);
+  Future<Either<CalendarError, ResponseOkBO>> postCalendar(CalendarBO calendar);
   Future<Either<ClassroomError, ResponseOkBO>> updateClassroom(
       ClassroomBO classroom);
   Future<Either<DegreeError, ResponseOkBO>> updateDegree(DegreeBO degree);
@@ -49,4 +50,5 @@ abstract class DataRepository {
   Future<Either<ScheduleError, ResponseOkBO>> deleteSchedule(int id);
   Future<Either<CalendarError, ResponseOkBO>> deleteCalendar(int id);
   Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule);
+  Future<Either<CalendarError, Uint8List>> downloadCalendar(CalendarBO calendar);
 }

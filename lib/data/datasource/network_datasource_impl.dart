@@ -284,9 +284,9 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     } else {
       final List list = json.decode(utf8.decode(response.bodyBytes));
-      final List<CalendarDto> scheduleList =
+      final List<CalendarDto> calendarList =
       list.map((item) => CalendarDto.fromJson(item)).toList();
-      final dto = scheduleList.map((item) => item.toBO()).toList();
+      final dto = calendarList.map((item) => item.toBO()).toList();
       return Right(dto);
     }
   }
@@ -544,6 +544,19 @@ class NetworkDataSourceImpl extends NetworkDataSource {
         headers: authJsonHeaders, body: json.encode(scheduleJson));
     if (response.statusCode != 200) {
       return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
+    } else {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    }
+  }
+
+  @override
+  Future<Either<CalendarError, ResponseOkBO>> postCalendar(CalendarBO calendar) async {
+    final calendar = mockCalendar;
+    final response = await client.post(Uri.parse("${endpoint}calendar"),
+        headers: authJsonHeaders, body: calendar);
+    if (response.statusCode != 200) {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     } else {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
@@ -1882,6 +1895,109 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     "fileType": 0,
     "degree": "Grado en Edificación",
     "year": "2021-2022",
+    "id": "1"
+  });
+
+  @override
+  Future<Either<CalendarError, Uint8List>> downloadCalendar(CalendarBO calendar) async{
+    var request = http.Request('GET', Uri.parse("${endpoint}calendar/download"));
+    request.body = mockCalendar;
+    request.headers.addAll(authJsonHeaders);
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      http.ByteStream stream = response.stream;
+      var bytes = await stream.toBytes();
+      return Right(bytes);
+    } else {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
+    }
+  }
+
+  var mockCalendar = json.encode({
+    "exams": [
+      {
+        "subject": {
+          "name": "TOPOGRAFIA",
+          "acronym": "TOP",
+          "classGroup": "lab-2",
+          "seminary": false,
+          "laboratory": false,
+          "english": false,
+          "time": 120,
+          "semester": 4,
+          "days": "0",
+          "hours": "0",
+          "turns": "",
+          "classroom": {
+            "id": 7,
+            "name": "Lab-Materiales",
+            "pavilion": "ARCHITECTURE",
+            "acronym": "LMAT"
+          },
+          "department": {
+            "id": 8,
+            "name": "CONSTRUCCIÓN",
+            "acronym": "C"
+          },
+          "degree": {
+            "id": 10,
+            "name": "Grado en Edificación",
+            "num_semesters": 8,
+            "year": "2021-2022"
+          },
+          "color": 1
+        },
+        "acronym": "TOP",
+        "semester": 4,
+        "date": "03-06-2022",
+        "call": "JANUARY",
+        "turn": "AFTERNOON"
+      },
+      {
+        "subject": {
+          "name": "ALGEBRA",
+          "acronym": "AL",
+          "classGroup": "lab-2",
+          "seminary": false,
+          "laboratory": false,
+          "english": false,
+          "time": 120,
+          "semester": 1,
+          "days": "0",
+          "hours": "0",
+          "turns": "",
+          "classroom": {
+            "id": 7,
+            "name": "Lab-Materiales",
+            "pavilion": "ARCHITECTURE",
+            "acronym": "LMAT"
+          },
+          "department": {
+            "id": 8,
+            "name": "CONSTRUCCIÓN",
+            "acronym": "C"
+          },
+          "degree": {
+            "id": 10,
+            "name": "Grado en Edificación",
+            "num_semesters": 8,
+            "year": "2021-2022"
+          },
+          "color": 1
+        },
+        "acronym": "AL",
+        "semester": 1,
+        "date": "19-05-2022",
+        "call": "JANUARY",
+        "turn": "MORNING"
+      }
+    ],
+    "startDate": "18-05-2022",
+    "endDate": "06-06-2022",
+    "degree": "GIIC",
+    "year": "2021-2022",
+    "call": "MAYO-JUNIO",
     "id": "1"
   });
 }

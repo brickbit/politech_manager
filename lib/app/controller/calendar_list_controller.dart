@@ -1,6 +1,6 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/app/extension/datetime_extension.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/app/model/calendar_filter.dart';
 import '../../domain/error/calendar_error.dart';
@@ -50,7 +50,7 @@ class CalendarListController extends BaseController {
     dataRepository.getCalendars().fold(
           (left) => _onGetCalendarsKo(left),
           (right) => _onGetCalendarsOk(right),
-    );
+        );
   }
 
   void getDegrees() {
@@ -59,7 +59,7 @@ class CalendarListController extends BaseController {
     dataRepository.getDegrees().fold(
           (left) => _onGetDegreesKo(left),
           (right) => _onGetDegreesOk(right),
-    );
+        );
   }
 
   void _onGetDegreesKo(DegreeError degreeError) {
@@ -90,7 +90,7 @@ class CalendarListController extends BaseController {
     dataRepository.getExams().fold(
           (left) => _onGetExamsKo(left),
           (right) => _onGetExamsOk(right),
-    );
+        );
   }
 
   void _onGetExamsKo(ExamError examError) {
@@ -110,7 +110,7 @@ class CalendarListController extends BaseController {
     dataRepository.deleteCalendar(calendar.id).fold(
           (left) => _onDeleteCalendarKo(left),
           (right) => _onDeleteCalendarOk(),
-    );
+        );
   }
 
   void _onDeleteCalendarKo(CalendarError calendarError) {
@@ -125,17 +125,23 @@ class CalendarListController extends BaseController {
   }
 
   void createCalendar(CalendarFilter calendarFilter) {
-    if(calendarFilter.startDate.previousThan(calendarFilter.endDate)) {
-      Get.toNamed(Routes.calendar, arguments: {
-        'exams': calendarFilter.exams,
-        'startDate': calendarFilter.startDate,
-        'endDate': calendarFilter.endDate,
-        'call': calendarFilter.call,
-        'degree': calendarFilter.degree,
-      });
-    } else {
-      showErrorMessage('datesError'.tr);
+    if (calendarFilter.startDate == DateTime.now().dateToString() ||
+        calendarFilter.endDate == DateTime.now().dateToString()) {
+      showErrorMessage('emptyDatesError'.tr);
       showError();
+    } else {
+      if (calendarFilter.startDate.previousThan(calendarFilter.endDate)) {
+        Get.toNamed(Routes.calendar, arguments: {
+          'exams': calendarFilter.exams,
+          'startDate': calendarFilter.startDate,
+          'endDate': calendarFilter.endDate,
+          'call': calendarFilter.call,
+          'degree': calendarFilter.degree,
+        });
+      } else {
+        showErrorMessage('datesError'.tr);
+        showError();
+      }
     }
   }
 

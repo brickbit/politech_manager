@@ -94,6 +94,7 @@ const Map<String, String> esES = {
   //List calendars
   'calendar': 'Calendario de exámenes',
   'datesError': 'La fecha de finalización debe ser mayor que la de inicio',
+  'emptyDatesError': 'Debe seleccionar una fecha de inicio y una fecha de fin para continuar',
   //Degree dialog
   'name': 'Nombre',
   'year': 'Año',
@@ -159,6 +160,8 @@ const Map<String, String> esES = {
   'afternoonShift': 'Turno de tarde',
   'saveSchedule': 'Guardar',
   'downloadSchedule': 'Descargar',
+  //Calendar
+  'editCalendar': 'Editar calendario de exámenes',
   //Filters
   'filter': 'Filtrar',
   'filterSubject': 'Filtrar asignaturas',

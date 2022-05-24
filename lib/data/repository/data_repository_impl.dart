@@ -169,6 +169,16 @@ class DataRepositoryImpl extends DataRepository {
   }
 
   @override
+  Future<Either<CalendarError, ResponseOkBO>> postCalendar(CalendarBO calendar) async {
+    final response = await network.postCalendar(calendar);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
   Future<Either<ClassroomError, ResponseOkBO>> updateClassroom(
       ClassroomBO classroom) async {
     final response = await network.updateClassroom(classroom);
@@ -309,6 +319,16 @@ class DataRepositoryImpl extends DataRepository {
   @override
   Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule) async {
     final response = await network.downloadSchedule(schedule);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<CalendarError, Uint8List>> downloadCalendar(CalendarBO calendar) async {
+    final response = await network.downloadCalendar(calendar);
     if (response.isLeft) {
       return Left(response.left);
     } else {

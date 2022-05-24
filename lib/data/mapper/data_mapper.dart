@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/data/model/classroom_dto.dart';
 import 'package:politech_manager/data/model/degree_dto.dart';
@@ -10,6 +9,7 @@ import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:politech_manager/domain/model/schedule_bo.dart';
+import '../../app/views/custom/exam_box.dart';
 import '../../app/views/custom/subject_box.dart';
 import '../../domain/model/pavilion.dart';
 import '../../domain/model/subject_bo.dart';
@@ -199,8 +199,28 @@ extension ScheduleMapper on ScheduleBO {
   }
 }
 
+extension CalendarMapper on CalendarBO {
+  CalendarDto toDto() {
+    return CalendarDto(
+        exams: exams.map((exam) => exam.toDto()).toList(),
+        degree: degree,
+        year: year,
+        startDate: startDate,
+        endDate: endDate,
+        call: call,
+        id: id);
+  }
+}
+
+
 extension SubjectModelMapper on SubjectBO {
   SubjectBox toSubjectBox() {
     return SubjectBox(subject: this);
+  }
+}
+
+extension ExamModelMapper on ExamBO {
+  ExamBox toExamBox() {
+    return ExamBox(exam: this);
   }
 }

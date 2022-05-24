@@ -94,6 +94,7 @@ const Map<String, String> enUS = {
   //List calendars
   'calendar': 'Exam schedule',
   'datesError': 'The end date must be greater than the start date',
+  'emptyDatesError': 'You must select a start date and an end date to continue',
   //Degree dialog
   'name': 'Name',
   'year': 'Year',
@@ -159,6 +160,8 @@ const Map<String, String> enUS = {
   'afternoonShift': 'Afternoon shift',
   'saveSchedule': 'Save',
   'downloadSchedule': 'Download',
+  //Calendar
+  'editCalendar': 'Edit exam calendar',
   //Filters
   'filter': 'Filter',
   'filterSubject': 'Filter subjects',
