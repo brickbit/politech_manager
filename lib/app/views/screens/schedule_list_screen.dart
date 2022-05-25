@@ -12,18 +12,24 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
-        return Obx(
-          () => controller.loading
-              ? const Center(child: CircularProgressIndicator())
-              : _setScheduleList(context),
-        );
+        if (constraints.maxWidth < 600) {
+          return Obx(
+            () => controller.loading
+                ? const Center(child: CircularProgressIndicator())
+                : _setScheduleList(context, true),
+          );
+        } else {
+          return Obx(
+            () => controller.loading
+                ? const Center(child: CircularProgressIndicator())
+                : _setScheduleList(context, false),
+          );
+        }
       },
     ));
   }
 
-  Widget _setScheduleList(
-    BuildContext context,
-  ) {
+  Widget _setScheduleList(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -43,14 +49,10 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          scheduleDialog(
-              'createSchedule'.tr,
-              context,
-              controller.degrees,
-              controller.subjects,
-              (scheduleFilters) {
-                controller.createSchedule(scheduleFilters);
-              });
+          scheduleDialog('createSchedule'.tr, context, controller.degrees,
+              controller.subjects, (scheduleFilters) {
+            controller.createSchedule(scheduleFilters);
+          });
         },
         backgroundColor: Colors.green,
         child: const Icon(
@@ -59,7 +61,7 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
         ),
       ),
       body: controller.schedules.isEmpty
-          ? emptyView('noSchedule'.tr)
+          ? emptyView('noSchedule'.tr, mobile)
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {
@@ -75,12 +77,16 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              scheduleTile(MediaQuery.of(context).size.width < 600, controller.schedules, index),
+                              scheduleTile(
+                                  MediaQuery.of(context).size.width < 600,
+                                  controller.schedules,
+                                  index),
                               Row(
                                 children: [
                                   IconButton(
                                     onPressed: () async {
-                                      controller.updateSchedule(controller.schedules[index]);
+                                      controller.updateSchedule(
+                                          controller.schedules[index]);
                                     },
                                     icon: const Icon(
                                       Icons.edit,

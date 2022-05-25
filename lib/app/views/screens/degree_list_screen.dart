@@ -12,17 +12,28 @@ class DegreeListScreen extends GetView<DegreeListController> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
+      if (constraints.maxWidth < 600) {
         return Obx(
-          () => controller.loading
+              () =>
+          controller.loading
               ? const Center(child: CircularProgressIndicator())
-              : _setDegreeList(context),
+              : _setDegreeList(context, true),
         );
+      } else {
+        return Obx(
+              () =>
+          controller.loading
+              ? const Center(child: CircularProgressIndicator())
+              : _setDegreeList(context, false),
+        );
+      }
       },
     ));
   }
 
   Widget _setDegreeList(
     BuildContext context,
+      bool mobile
   ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -41,7 +52,7 @@ class DegreeListScreen extends GetView<DegreeListController> {
         title: Text('degree'.tr),
       ),
       body: controller.degrees.isEmpty
-          ? emptyView('noDegree'.tr)
+          ? emptyView('noDegree'.tr, mobile)
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

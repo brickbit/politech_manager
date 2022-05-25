@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Widget emptyView(String text) {
+Widget emptyView(String text, bool mobile) {
   return SafeArea(
     child: Padding(
       padding: const EdgeInsets.all(24.0),
@@ -17,10 +17,10 @@ Widget emptyView(String text) {
                   fit: BoxFit.cover,
                 ),
               ),
-              height: 500,
+              height: mobile ? 400 : 500,
             ),
-            const SizedBox(height: 32,),
-            Text(text, style: const TextStyle(fontSize: 22), textAlign: TextAlign.center,)
+            SizedBox(height: mobile ? 12 : 32,),
+            Text(text, style: TextStyle(fontSize: mobile ? 18 : 22), textAlign: TextAlign.center,)
           ],
         ),
       ),

@@ -68,7 +68,7 @@ class ExamListScreen extends GetView<ExamListController> {
         ],
       ),
       body: controller.exams.isEmpty
-          ? emptyView('noExam'.tr)
+          ? emptyView('noExam'.tr, mobile)
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

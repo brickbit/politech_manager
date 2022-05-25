@@ -28,13 +28,13 @@ class DataScreen extends GetView<DataController> {
             return Obx(
               () => controller.loading
                   ? const Center(child: CircularProgressIndicator())
-                  : _dataViewSmall(context),
+                  : _dataViewSmall(context, true),
             );
           } else {
             return Obx(
               () => controller.loading
                   ? const Center(child: CircularProgressIndicator())
-                  : _dataViewLarge(context),
+                  : _dataViewLarge(context, false),
             );
           }
         },
@@ -42,7 +42,7 @@ class DataScreen extends GetView<DataController> {
     );
   }
 
-  Widget _dataViewSmall(BuildContext context) {
+  Widget _dataViewSmall(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -77,7 +77,7 @@ class DataScreen extends GetView<DataController> {
     );
   }
 
-  Widget _dataViewLarge(BuildContext context) {
+  Widget _dataViewLarge(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -160,7 +160,7 @@ class DataScreen extends GetView<DataController> {
                 ),
               ),
             ),
-            _getListData(context),
+            _getListData(context, mobile),
           ],
         ),
       ),
@@ -292,18 +292,18 @@ class DataScreen extends GetView<DataController> {
     );
   }
 
-  Widget _getListData(BuildContext context) {
+  Widget _getListData(BuildContext context, bool mobile) {
     switch (controller.currentIndex) {
       case 0:
-        return Expanded(child: _setDegreeList(context));
+        return Expanded(child: _setDegreeList(context, mobile));
       case 1:
-        return Expanded(child: _setClassroomList(context));
+        return Expanded(child: _setClassroomList(context, mobile));
       case 2:
-        return Expanded(child: _setDepartmentList(context));
+        return Expanded(child: _setDepartmentList(context, mobile));
       case 3:
-        return Expanded(child: _setSubjectList(context, false));
+        return Expanded(child: _setSubjectList(context, mobile));
       case 4:
-        return Expanded(child: _setExamList(context, false));
+        return Expanded(child: _setExamList(context, mobile));
       default:
         return Expanded(
             child: Container(
@@ -314,6 +314,7 @@ class DataScreen extends GetView<DataController> {
 
   Widget _setDegreeList(
     BuildContext context,
+      bool mobile
   ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -329,7 +330,7 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.degrees.isEmpty
-          ? emptyView('noDegree'.tr)
+          ? emptyView('noDegree'.tr, mobile)
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -391,6 +392,7 @@ class DataScreen extends GetView<DataController> {
 
   Widget _setClassroomList(
     BuildContext context,
+      bool mobile
   ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -406,7 +408,7 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.classrooms.isEmpty
-          ? emptyView('noClassroom'.tr)
+          ? emptyView('noClassroom'.tr, mobile)
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -468,6 +470,7 @@ class DataScreen extends GetView<DataController> {
 
   Widget _setDepartmentList(
     BuildContext context,
+      bool mobile
   ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -483,7 +486,7 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.departments.isEmpty
-          ? emptyView('noDepartment'.tr)
+          ? emptyView('noDepartment'.tr, mobile)
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -560,7 +563,7 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.subjects.isEmpty
-          ? emptyView('noSubject'.tr)
+          ? emptyView('noSubject'.tr, mobile)
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -639,7 +642,7 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.exams.isEmpty
-          ? emptyView('noExam'.tr)
+          ? emptyView('noExam'.tr, mobile)
           : SafeArea(
               child: ListView.separated(
                   primary: false,

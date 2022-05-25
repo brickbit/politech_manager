@@ -1,7 +1,7 @@
 
 import 'package:get/get.dart';
 
-abstract class BaseController extends GetxController {
+abstract class BaseController extends FullLifeCycleController with FullLifeCycleMixin {
   final Rx<bool> _loading = false.obs;
   final Rx<bool> _error = false.obs;
   final Rx<String> _errorMsg = "".obs;
@@ -10,6 +10,29 @@ abstract class BaseController extends GetxController {
 
   bool get error => _error.value;
   String get errorMsg => _errorMsg.value;
+
+  @override
+  void onDetached() {
+    print('Base - onDetached called');
+  }
+
+  // Mandatory
+  @override
+  void onInactive() {
+    print('Base - onInative called');
+  }
+
+  // Mandatory
+  @override
+  void onPaused() {
+    print('Base - onPaused called');
+  }
+
+  // Mandatory
+  @override
+  void onResumed() {
+    print('Base - onResumed called');
+  }
 
   void showProgress() {
     _loading.value = true;

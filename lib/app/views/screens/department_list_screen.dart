@@ -12,17 +12,28 @@ class DepartmentListScreen extends GetView<DepartmentListController> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
+      if (constraints.maxWidth < 600) {
         return Obx(
-          () => controller.loading
+              () =>
+          controller.loading
               ? const Center(child: CircularProgressIndicator())
-              : _setDepartmentList(context),
+              : _setDepartmentList(context, true),
         );
+      } else {
+        return Obx(
+              () =>
+          controller.loading
+              ? const Center(child: CircularProgressIndicator())
+              : _setDepartmentList(context, false),
+        );
+      }
       },
     ));
   }
 
   Widget _setDepartmentList(
     BuildContext context,
+      bool mobile
   ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -41,7 +52,7 @@ class DepartmentListScreen extends GetView<DepartmentListController> {
         title: Text('department'.tr),
       ),
       body: controller.departments.isEmpty
-          ? emptyView('noDepartment'.tr)
+          ? emptyView('noDepartment'.tr, mobile)
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

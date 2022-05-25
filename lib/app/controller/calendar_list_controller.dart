@@ -44,6 +44,14 @@ class CalendarListController extends BaseController {
     super.onInit();
   }
 
+  @override
+  void onResumed() {
+    getCalendars();
+    getExams();
+    getDegrees();
+    super.onResumed();
+  }
+
   void getCalendars() {
     hideError();
     showProgress();

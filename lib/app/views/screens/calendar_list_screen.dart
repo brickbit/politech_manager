@@ -12,18 +12,26 @@ class CalendarListScreen extends GetView<CalendarListController> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
+      if (constraints.maxWidth < 600) {
         return Obx(
-          () => controller.loading
+              () =>
+          controller.loading
               ? const Center(child: CircularProgressIndicator())
-              : _setScheduleList(context),
+              : _setScheduleList(context, true),
         );
+      } else {
+        return Obx(
+              () =>
+          controller.loading
+              ? const Center(child: CircularProgressIndicator())
+              : _setScheduleList(context, false),
+        );
+      }
       },
     ));
   }
 
-  Widget _setScheduleList(
-    BuildContext context,
-  ) {
+  Widget _setScheduleList(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -43,14 +51,10 @@ class CalendarListScreen extends GetView<CalendarListController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          calendarDialog(
-              'createCalendar'.tr,
-              context,
-              controller.degrees,
-              controller.exams,
-              (calendarFilters) {
-                controller.createCalendar(calendarFilters);
-              });
+          calendarDialog('createCalendar'.tr, context, controller.degrees,
+              controller.exams, (calendarFilters) {
+            controller.createCalendar(calendarFilters);
+          });
         },
         backgroundColor: Colors.green,
         child: const Icon(
@@ -59,7 +63,7 @@ class CalendarListScreen extends GetView<CalendarListController> {
         ),
       ),
       body: controller.calendars.isEmpty
-          ? emptyView('noCalendar'.tr)
+          ? emptyView('noCalendar'.tr, mobile)
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {
@@ -74,7 +78,10 @@ class CalendarListScreen extends GetView<CalendarListController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              calendarTile(MediaQuery.of(context).size.width < 600, controller.calendars, index),
+                              calendarTile(
+                                  MediaQuery.of(context).size.width < 600,
+                                  controller.calendars,
+                                  index),
                               Row(
                                 children: [
                                   IconButton(

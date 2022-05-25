@@ -72,7 +72,7 @@ class SubjectListScreen extends GetView<SubjectListController> {
         ],
       ),
       body: controller.subjects.isEmpty
-          ? emptyView('noSubject'.tr)
+          ? emptyView('noSubject'.tr, mobile)
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

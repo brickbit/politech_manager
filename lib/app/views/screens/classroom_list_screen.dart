@@ -12,17 +12,28 @@ class ClassroomListScreen extends GetView<ClassroomListController> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
+      if (constraints.maxWidth < 600) {
         return Obx(
-          () => controller.loading
+              () =>
+          controller.loading
               ? const Center(child: CircularProgressIndicator())
-              : _setClassroomList(context),
+              : _setClassroomList(context, true),
         );
+      } else {
+        return Obx(
+              () =>
+          controller.loading
+              ? const Center(child: CircularProgressIndicator())
+              : _setClassroomList(context, false),
+        );
+      }
       },
     ));
   }
 
   Widget _setClassroomList(
     BuildContext context,
+      bool mobile
   ) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -41,7 +52,7 @@ class ClassroomListScreen extends GetView<ClassroomListController> {
         title: Text('classroom'.tr),
       ),
       body: controller.classrooms.isEmpty
-          ? emptyView('noClassroom'.tr)
+          ? emptyView('noClassroom'.tr, mobile)
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {
