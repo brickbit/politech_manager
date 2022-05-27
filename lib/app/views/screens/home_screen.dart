@@ -11,7 +11,7 @@ class HomeScreen extends GetView<HomeController> {
     return Scaffold(
       body: Navigator(
         key: Get.nestedKey(1),
-        initialRoute: Routes.data,
+        initialRoute: controller.currentRoute,
         onGenerateRoute: AppPages.onGenerateRoute,
       ),
       bottomNavigationBar: Obx(

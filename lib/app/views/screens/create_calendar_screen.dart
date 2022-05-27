@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import '../../controller/create_calendar_controller.dart';
+import '../../navigation/app_routes.dart';
 import '../custom/exam_box.dart';
 import '../dialog/file_dialog.dart';
 
@@ -47,6 +48,10 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
     return Scaffold(
       appBar: AppBar(
         title: Text('editCalendar'.tr),
+        automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Get.offNamed(Routes.home, arguments: {'page': Routes.calendarList});
+        }, icon: const Icon(Icons.arrow_back_ios_outlined)),
         actions: [
           IconButton(
               onPressed: () {

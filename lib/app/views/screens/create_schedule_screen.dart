@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:politech_manager/app/views/custom/subject_box.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import '../../controller/create_schedule_controller.dart';
+import '../../navigation/app_routes.dart';
 import '../dialog/file_dialog.dart';
 
 class CreateScheduleScreen extends GetView<CreateScheduleController> {
@@ -47,6 +48,10 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
     return Scaffold(
       appBar: AppBar(
         title: Text('editSchedule'.tr),
+        automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Get.offNamed(Routes.home, arguments: {'page': Routes.scheduleList});
+        }, icon: const Icon(Icons.arrow_back_ios_outlined)),
         actions: [
           IconButton(
               onPressed: () {

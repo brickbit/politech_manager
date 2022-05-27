@@ -44,7 +44,7 @@ class ScheduleListController extends BaseController {
   }
 
   void createSchedule(ScheduleFilter scheduleFilter) {
-    Get.toNamed(Routes.schedule, arguments: {
+    Get.offNamed(Routes.schedule, arguments: {
       'subjects': scheduleFilter.subjects,
       'scheduleType': scheduleFilter.type,
       'semester': scheduleFilter.semester,

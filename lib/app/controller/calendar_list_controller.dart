@@ -139,7 +139,7 @@ class CalendarListController extends BaseController {
       showError();
     } else {
       if (calendarFilter.startDate.previousThan(calendarFilter.endDate)) {
-        Get.toNamed(Routes.calendar, arguments: {
+        Get.offNamed(Routes.calendar, arguments: {
           'exams': calendarFilter.exams,
           'startDate': calendarFilter.startDate,
           'endDate': calendarFilter.endDate,
