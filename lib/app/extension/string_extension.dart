@@ -57,20 +57,18 @@ extension StringScheduleType on String {
 
 extension StringDateTime on String {
   bool previousThan(String endDate) {
-    final startDateArray = split("-");
     final endDateArray = endDate.split("-");
-    if (int.parse(endDateArray[0]) < int.parse(startDateArray[0])) {
-      return false;
-    } else {
-      if (int.parse(endDateArray[1]) < int.parse(startDateArray[1])) {
-        return false;
-      } else {
-        if (int.parse(endDateArray[2]) < int.parse(startDateArray[2])) {
-          return false;
-        } else {
-          return true;
-        }
-      }
-    }
+    final startDateArray = split("-");
+
+    final start = DateTime(int.parse(startDateArray[0]), int.parse(startDateArray[1]), int.parse(startDateArray[2]));
+    final end = DateTime(int.parse(endDateArray[0]), int.parse(endDateArray[1]), int.parse(endDateArray[2]));
+
+    return end.difference(start).inDays > 0;
+  }
+}
+
+extension StrindDateMapper on DateTime {
+  String getString() {
+    return toString().split(" ")[0];
   }
 }

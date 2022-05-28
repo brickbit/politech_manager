@@ -5,6 +5,7 @@ import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
@@ -55,6 +56,14 @@ class CreateCalendarController extends BaseController {
 
   Rx<ExamBO> selectedExam = ExamBO.mock().obs;
 
+  final _numberOfCells = 0.obs;
+
+  int get numberOfCells => _numberOfCells.value;
+
+  final _dateArray = Rx<List<String>>([]);
+
+  List<String> get dateArray => _dateArray.value;
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -68,8 +77,22 @@ class CreateCalendarController extends BaseController {
     _endDate.value = argumentData['endDate'];
     _call.value = argumentData['call'];
     _degree.value = argumentData['degree'];
-
+    _getNumberOfCells();
     super.onInit();
+  }
+
+  void _getNumberOfCells() {
+    final endDateArray = _endDate.value.split("-");
+    final startDateArray = _startDate.value.split("-");
+
+    final start = DateTime(int.parse(startDateArray[0]), int.parse(startDateArray[1]), int.parse(startDateArray[2]));
+    final end = DateTime(int.parse(endDateArray[0]), int.parse(endDateArray[1]), int.parse(endDateArray[2]));
+    _numberOfCells.value = end.difference(start).inDays;
+    List<String> array = List.filled(_numberOfCells.value, "", growable: false);
+    array.asMap().forEach((index, value) {
+      array[index] = DateTime(start.year, start.month, start.day + index).getString();
+    });
+    _dateArray.value = array;
   }
 
   void saveCalendar() {

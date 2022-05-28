@@ -13,18 +13,24 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
-        return Obx(
-          () => controller.loading
-              ? const Center(child: CircularProgressIndicator())
-              : _setCreateCalendar(context),
-        );
+        if (constraints.maxWidth < 600) {
+          return Obx(
+            () => controller.loading
+                ? const Center(child: CircularProgressIndicator())
+                : _setCreateCalendar(context, true),
+          );
+        } else {
+          return Obx(
+            () => controller.loading
+                ? const Center(child: CircularProgressIndicator())
+                : _setCreateCalendar(context, false),
+          );
+        }
       },
     ));
   }
 
-  Widget _setCreateCalendar(
-    BuildContext context,
-  ) {
+  Widget _setCreateCalendar(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -49,9 +55,12 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
       appBar: AppBar(
         title: Text('editCalendar'.tr),
         automaticallyImplyLeading: false,
-        leading: IconButton(onPressed: (){
-          Get.offNamed(Routes.home, arguments: {'page': Routes.calendarList});
-        }, icon: const Icon(Icons.arrow_back_ios_outlined)),
+        leading: IconButton(
+            onPressed: () {
+              Get.offNamed(Routes.home,
+                  arguments: {'page': Routes.calendarList});
+            },
+            icon: const Icon(Icons.arrow_back_ios_outlined)),
         actions: [
           IconButton(
               onPressed: () {
@@ -69,13 +78,75 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
         child: Column(
           children: [
             Expanded(
-              child: Column(),
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: GridView.builder(
+                    gridDelegate: mobile ?
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4, childAspectRatio: 0.8) :
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 8, childAspectRatio: 1) ,
+                    itemCount: controller.numberOfCells,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        color: Colors.white30,
+                        child: SizedBox(
+                          height: 80,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(controller.dateArray[index]),
+                              const Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: 8, left: 8, right: 8)),
+                              _dragTarget(index, true, mobile),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              _dragTarget(index, false, mobile),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
             ),
             _dragListExams()
           ],
         ),
       ),
     );
+  }
+
+  Widget _dragTarget(int index, bool morning, bool mobile) {
+    return DragTarget<ExamBox>(builder: (
+      BuildContext context,
+      List<dynamic> accepted,
+      List<dynamic> rejected,
+    ) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.black,
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: SizedBox(
+                width: Size.infinite.width,
+                child: Text(morning ? 'morning'.tr : 'afternoon'.tr)),
+          ),
+        ),
+      );
+    });
   }
 
   Widget _dragListExams() {
@@ -93,8 +164,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
         ),
         height: 65,
         child: Container(
-          margin: const EdgeInsets.symmetric(
-              vertical: 8.0, horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
           height: 50.0,
           child: ListView.separated(
             primary: false,
