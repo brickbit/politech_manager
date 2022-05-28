@@ -82,11 +82,11 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                 context: context,
                 removeTop: true,
                 child: GridView.builder(
-                    gridDelegate: mobile ?
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4, childAspectRatio: 0.8) :
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 8, childAspectRatio: 1) ,
+                    gridDelegate: mobile
+                        ? const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4, childAspectRatio: 0.8)
+                        : const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 8, childAspectRatio: 1),
                     itemCount: controller.numberOfCells,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
@@ -150,7 +150,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
   }
 
   Widget _dragListExams() {
-    return Padding(
+    return Obx(() => Padding(
       padding: const EdgeInsets.all(16),
       child: Container(
         decoration: BoxDecoration(
@@ -202,6 +202,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
           ),
         ),
       ),
+    ),
     );
   }
 }

@@ -183,6 +183,7 @@ class CreateCalendarController extends BaseController {
         .obs;
     var pos = _exams.value.indexOf(selectedExam.value);
     _exams.value.removeAt(pos);
+    _exams.refresh();
     update();
   }
 
