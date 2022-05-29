@@ -31,6 +31,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
   }
 
   Widget _setCreateCalendar(BuildContext context, bool mobile) {
+    controller.setMobile(mobile);
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -101,11 +102,11 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                               const Padding(
                                   padding: EdgeInsets.only(
                                       bottom: 8, left: 8, right: 8)),
-                              _dragTarget(index, true, mobile),
+                              _dragTarget(index, true, mobile, controller.dateArray[index]),
                               const SizedBox(
                                 height: 8,
                               ),
-                              _dragTarget(index, false, mobile),
+                              _dragTarget(index, false, mobile, controller.dateArray[index]),
                             ],
                           ),
                         ),
@@ -120,17 +121,20 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
     );
   }
 
-  Widget _dragTarget(int index, bool morning, bool mobile) {
+  Widget _dragTarget(int index, bool morning, bool mobile, String date) {
+    //var acceptedData = getAcceptedData();
+
     return DragTarget<ExamBox>(builder: (
       BuildContext context,
       List<dynamic> accepted,
       List<dynamic> rejected,
     ) {
+      final acceptedData = controller.examsToUpload[index];
       return Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: acceptedData != null ? (morning ? Colors.green : Colors.orange) : Colors.white,
             border: Border.all(
               color: Colors.black,
             ),
@@ -142,11 +146,14 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
             padding: const EdgeInsets.all(8),
             child: SizedBox(
                 width: Size.infinite.width,
-                child: Text(morning ? 'morning'.tr : 'afternoon'.tr)),
+                child: Text(acceptedData != null ? acceptedData.acronym : morning ? 'morning'.tr : 'afternoon'.tr)),
           ),
         ),
       );
-    });
+    }, onAccept: (ExamBox exam) {
+      final item = exam.exam.copyWith(newDate: date, newCall: controller.call, newTurn: morning ? "MORNING" : "AFTERNOON");
+      controller.completeDrag(item, index);
+      },);
   }
 
   Widget _dragListExams() {

@@ -8,13 +8,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
-import 'package:politech_manager/domain/model/subject_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../domain/error/calendar_error.dart';
 import '../../domain/error/error_manager.dart';
-import '../../domain/error/schedule_error.dart';
 import '../../domain/model/calendar_bo.dart';
-import '../../domain/model/schedule_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import 'base_controller.dart';
 
@@ -64,6 +61,12 @@ class CreateCalendarController extends BaseController {
 
   List<String> get dateArray => _dateArray.value;
 
+  final _examsToUpload = Rx<List<ExamBO?>>([]);
+
+  List<ExamBO?> get examsToUpload => _examsToUpload.value;
+
+  final _mobile = false.obs;
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -78,7 +81,12 @@ class CreateCalendarController extends BaseController {
     _call.value = argumentData['call'];
     _degree.value = argumentData['degree'];
     _getNumberOfCells();
+    _examsToUpload.value = List.filled(_numberOfCells.value, null);
     super.onInit();
+  }
+
+  void setMobile(bool mobile) {
+    _mobile.value = mobile;
   }
 
   void _getNumberOfCells() {
@@ -184,7 +192,13 @@ class CreateCalendarController extends BaseController {
     var pos = _exams.value.indexOf(selectedExam.value);
     _exams.value.removeAt(pos);
     _exams.refresh();
+    _examsToUpload.value[index] = selectedExam.value;
+    _examsToUpload.refresh();
     update();
+  }
+
+  void completeDrag(ExamBO item, int index) {
+    _examsToUpload.value[index] = item;
   }
 
 }
