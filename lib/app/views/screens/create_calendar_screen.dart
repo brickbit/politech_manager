@@ -102,11 +102,13 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                               const Padding(
                                   padding: EdgeInsets.only(
                                       bottom: 8, left: 8, right: 8)),
-                              _dragTarget(index, true, mobile, controller.dateArray[index]),
+                              _dragTarget(index, true, mobile,
+                                  controller.dateArray[index]),
                               const SizedBox(
                                 height: 8,
                               ),
-                              _dragTarget(index, false, mobile, controller.dateArray[index]),
+                              _dragTarget(index, false, mobile,
+                                  controller.dateArray[index]),
                             ],
                           ),
                         ),
@@ -124,92 +126,108 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
   Widget _dragTarget(int index, bool morning, bool mobile, String date) {
     //var acceptedData = getAcceptedData();
 
-    return DragTarget<ExamBox>(builder: (
-      BuildContext context,
-      List<dynamic> accepted,
-      List<dynamic> rejected,
-    ) {
-      final acceptedData = controller.examsToUpload[index];
-      return Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: Container(
-          decoration: BoxDecoration(
-            color: acceptedData != null ? (morning ? Colors.green : Colors.orange) : Colors.white,
-            border: Border.all(
-              color: Colors.black,
+    return DragTarget<ExamBox>(
+      builder: (
+        BuildContext context,
+        List<dynamic> accepted,
+        List<dynamic> rejected,
+      ) {
+        final acceptedData = controller.examsToUpload[index];
+        return Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: Container(
+            decoration: BoxDecoration(
+              color: morning
+                  ? (acceptedData.first != null ? Colors.green : Colors.white)
+                  : (acceptedData.last != null ? Colors.orange : Colors.white),
+              border: Border.all(
+                color: Colors.black,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
             ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(8),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: SizedBox(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: SizedBox(
                 width: Size.infinite.width,
-                child: Text(acceptedData != null ? acceptedData.acronym : morning ? 'morning'.tr : 'afternoon'.tr)),
+                child: morning
+                    ? Text(acceptedData.first != null
+                        ? acceptedData.first!.acronym
+                        : 'morning'.tr)
+                    : Text(acceptedData.last != null
+                        ? acceptedData.last!.acronym
+                        : 'afternoon'.tr),
+              ),
+            ),
           ),
-        ),
-      );
-    }, onAccept: (ExamBox exam) {
-      final item = exam.exam.copyWith(newDate: date, newCall: controller.call, newTurn: morning ? "MORNING" : "AFTERNOON");
-      controller.completeDrag(item, index);
-      },);
+        );
+      },
+      onAccept: (ExamBox exam) {
+        final item = exam.exam.copyWith(
+            newDate: date,
+            newCall: controller.call,
+            newTurn: morning ? "MORNING" : "AFTERNOON");
+        controller.completeDrag(item, index, morning);
+      },
+    );
   }
 
   Widget _dragListExams() {
-    return Obx(() => Padding(
-      padding: const EdgeInsets.all(16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          border: Border.all(
-            color: Colors.grey,
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        height: 65,
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.all(16),
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-          height: 50.0,
-          child: ListView.separated(
-            primary: false,
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.exams.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: 70,
-                height: 50,
-                child: Draggable<ExamBox>(
-                  data: controller.exams
-                      .map((data) => data.toExamBox())
-                      .toList()[index],
-                  feedback: controller.exams
-                      .map((data) => data.toExamBox())
-                      .toList()[index],
-                  onDragStarted: () {
-                    controller.startDrag(index);
-                  },
-                  onDragCompleted: () {
-                    controller.dragItemSuccessfully(index);
-                  },
-                  child: controller.exams
-                      .map((data) => data.toExamBox())
-                      .toList()[index],
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(
-                width: 16,
-              );
-            },
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            border: Border.all(
+              color: Colors.grey,
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+          height: 65,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+            height: 50.0,
+            child: ListView.separated(
+              primary: false,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.exams.length,
+              itemBuilder: (context, index) {
+                return SizedBox(
+                  width: 70,
+                  height: 50,
+                  child: Draggable<ExamBox>(
+                    data: controller.exams
+                        .map((data) => data.toExamBox())
+                        .toList()[index],
+                    feedback: controller.exams
+                        .map((data) => data.toExamBox())
+                        .toList()[index],
+                    onDragStarted: () {
+                      controller.startDrag(index);
+                    },
+                    onDragCompleted: () {
+                      controller.dragItemSuccessfully(index);
+                    },
+                    child: controller.exams
+                        .map((data) => data.toExamBox())
+                        .toList()[index],
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(
+                  width: 16,
+                );
+              },
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }

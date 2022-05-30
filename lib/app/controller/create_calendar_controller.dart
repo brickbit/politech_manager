@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../domain/error/calendar_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/model/calendar_bo.dart';
+import '../../domain/model/pair_exam_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import 'base_controller.dart';
 
@@ -61,9 +62,9 @@ class CreateCalendarController extends BaseController {
 
   List<String> get dateArray => _dateArray.value;
 
-  final _examsToUpload = Rx<List<ExamBO?>>([]);
+  final _examsToUpload = Rx<List<PairExamBO>>([]);
 
-  List<ExamBO?> get examsToUpload => _examsToUpload.value;
+  List<PairExamBO> get examsToUpload => _examsToUpload.value;
 
   final _mobile = false.obs;
 
@@ -81,7 +82,7 @@ class CreateCalendarController extends BaseController {
     _call.value = argumentData['call'];
     _degree.value = argumentData['degree'];
     _getNumberOfCells();
-    _examsToUpload.value = List.filled(_numberOfCells.value, null);
+    _examsToUpload.value = List.filled(_numberOfCells.value, PairExamBO(null,null));
     super.onInit();
   }
 
@@ -192,13 +193,18 @@ class CreateCalendarController extends BaseController {
     var pos = _exams.value.indexOf(selectedExam.value);
     _exams.value.removeAt(pos);
     _exams.refresh();
-    _examsToUpload.value[index] = selectedExam.value;
-    _examsToUpload.refresh();
     update();
   }
 
-  void completeDrag(ExamBO item, int index) {
-    _examsToUpload.value[index] = item;
+  void completeDrag(ExamBO item, int index, bool morning) {
+    final PairExamBO cell = _examsToUpload.value[index];
+    if (morning) {
+      _examsToUpload.value[index] = PairExamBO(item, cell.last);
+    } else {
+      _examsToUpload.value[index] = PairExamBO(cell.first, item);
+    }
   }
 
 }
+
+
