@@ -552,9 +552,9 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<CalendarError, ResponseOkBO>> postCalendar(CalendarBO calendar) async {
-    final calendar = mockCalendar;
+    final calendarJson = calendar.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}calendar"),
-        headers: authJsonHeaders, body: calendar);
+        headers: authJsonHeaders, body: json.encode(calendarJson));
     if (response.statusCode != 200) {
       return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     } else {
@@ -1901,7 +1901,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<CalendarError, Uint8List>> downloadCalendar(CalendarBO calendar) async{
     var request = http.Request('GET', Uri.parse("${endpoint}calendar/download"));
-    request.body = mockCalendar;
+    final calendarJson = calendar.toDto().toJson();
+    request.body = json.encode(calendarJson);
     request.headers.addAll(authJsonHeaders);
     http.StreamedResponse response = await request.send();
 
@@ -1913,91 +1914,4 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     }
   }
-
-  var mockCalendar = json.encode({
-    "exams": [
-      {
-        "subject": {
-          "name": "TOPOGRAFIA",
-          "acronym": "TOP",
-          "classGroup": "lab-2",
-          "seminary": false,
-          "laboratory": false,
-          "english": false,
-          "time": 120,
-          "semester": 4,
-          "days": "0",
-          "hours": "0",
-          "turns": "",
-          "classroom": {
-            "id": 7,
-            "name": "Lab-Materiales",
-            "pavilion": "ARCHITECTURE",
-            "acronym": "LMAT"
-          },
-          "department": {
-            "id": 8,
-            "name": "CONSTRUCCIÓN",
-            "acronym": "C"
-          },
-          "degree": {
-            "id": 10,
-            "name": "Grado en Edificación",
-            "num_semesters": 8,
-            "year": "2021-2022"
-          },
-          "color": 1
-        },
-        "acronym": "TOP",
-        "semester": 4,
-        "date": "03-06-2022",
-        "call": "JANUARY",
-        "turn": "AFTERNOON"
-      },
-      {
-        "subject": {
-          "name": "ALGEBRA",
-          "acronym": "AL",
-          "classGroup": "lab-2",
-          "seminary": false,
-          "laboratory": false,
-          "english": false,
-          "time": 120,
-          "semester": 1,
-          "days": "0",
-          "hours": "0",
-          "turns": "",
-          "classroom": {
-            "id": 7,
-            "name": "Lab-Materiales",
-            "pavilion": "ARCHITECTURE",
-            "acronym": "LMAT"
-          },
-          "department": {
-            "id": 8,
-            "name": "CONSTRUCCIÓN",
-            "acronym": "C"
-          },
-          "degree": {
-            "id": 10,
-            "name": "Grado en Edificación",
-            "num_semesters": 8,
-            "year": "2021-2022"
-          },
-          "color": 1
-        },
-        "acronym": "AL",
-        "semester": 1,
-        "date": "19-05-2022",
-        "call": "JANUARY",
-        "turn": "MORNING"
-      }
-    ],
-    "startDate": "18-05-2022",
-    "endDate": "06-06-2022",
-    "degree": "GIIC",
-    "year": "2021-2022",
-    "call": "MAYO-JUNIO",
-    "id": "1"
-  });
 }

@@ -94,8 +94,8 @@ class CreateCalendarController extends BaseController {
     final endDateArray = _endDate.value.split("-");
     final startDateArray = _startDate.value.split("-");
 
-    final start = DateTime(int.parse(startDateArray[0]), int.parse(startDateArray[1]), int.parse(startDateArray[2]));
-    final end = DateTime(int.parse(endDateArray[0]), int.parse(endDateArray[1]), int.parse(endDateArray[2]));
+    final start = DateTime(int.parse(startDateArray[2]), int.parse(startDateArray[1]), int.parse(startDateArray[1]));
+    final end = DateTime(int.parse(endDateArray[2]), int.parse(endDateArray[1]), int.parse(endDateArray[0]));
     _numberOfCells.value = end.difference(start).inDays;
     List<String> array = List.filled(_numberOfCells.value, "", growable: false);
     array.asMap().forEach((index, value) {
@@ -107,7 +107,11 @@ class CreateCalendarController extends BaseController {
   void saveCalendar() {
     hideError();
     showProgress();
-    var calendar = CalendarBO([], "degree", "2022", "2022-5-10", "2022-5-25", "may".tr, 0);
+    final itemMorning = _examsToUpload.value.map((item) => item.first).toList();
+    final itemAfternoon = _examsToUpload.value.map((item) => item.last);
+    itemMorning.addAll(itemAfternoon);
+    itemMorning.removeWhere((element) => element == null);
+    var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value, _endDate.value, _call.value, 0);
     dataRepository.postCalendar(calendar).fold(
           (left) => _onSaveCalendarKo(left),
           (right) => _onSaveCalendarOk(),
@@ -127,7 +131,11 @@ class CreateCalendarController extends BaseController {
   void downloadFile() {
     hideError();
     showProgress();
-    var calendar = CalendarBO([], "degree", "2022", "2022-5-10", "2022-5-25", "may".tr, 0);
+    final itemMorning = _examsToUpload.value.map((item) => item.first).toList();
+    final itemAfternoon = _examsToUpload.value.map((item) => item.last);
+    itemMorning.addAll(itemAfternoon);
+    itemMorning.removeWhere((element) => element == null);
+    var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value, _endDate.value, _call.value, 0);
     dataRepository.downloadCalendar(calendar).fold(
           (left) => _onDownloadCalendarKo(left),
           (right) => _onDownloadCalendarOk(right),

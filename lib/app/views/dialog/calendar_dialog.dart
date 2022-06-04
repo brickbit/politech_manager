@@ -70,7 +70,7 @@ void calendarDialog(String title, BuildContext context, List<DegreeBO> degrees,
                           if (selected != null &&
                               selected != selectedStartDate.value) {
                             selectedStartDate.value = selected;
-                            startDateText.value = selected.dateToString();
+                            startDateText.value = selected.dateToString().parseDate();
                           }
                         });
                       },
@@ -96,7 +96,7 @@ void calendarDialog(String title, BuildContext context, List<DegreeBO> degrees,
                           if (selected != null &&
                               selected != selectedEndDate.value) {
                             selectedEndDate.value = selected;
-                            endDateText.value = selected.dateToString();
+                            endDateText.value = selected.dateToString().parseDate();
                           }
                         });
                       },
@@ -123,8 +123,8 @@ void calendarDialog(String title, BuildContext context, List<DegreeBO> degrees,
             Navigator.pop(context, 'OK');
             filteredExams(CalendarFilter(
                 examsFiltered,
-                selectedStartDate.value.dateToString(),
-                selectedEndDate.value.dateToString(),
+                selectedStartDate.value.dateToString().parseDate(),
+                selectedEndDate.value.dateToString().parseDate(),
                 call.value,
                 degree.value.name));
           },

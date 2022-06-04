@@ -85,7 +85,7 @@ extension ScheduleBOMapper on ScheduleDto {
 extension CalendarBOMapper on CalendarDto {
   CalendarBO toBO() {
     return CalendarBO(
-        exams.map((exam) => exam.toBO()).toList(),
+        exams.map((exam) => exam?.toBO()).toList(),
         degree,
         year,
         startDate,
@@ -202,7 +202,7 @@ extension ScheduleMapper on ScheduleBO {
 extension CalendarMapper on CalendarBO {
   CalendarDto toDto() {
     return CalendarDto(
-        exams: exams.map((exam) => exam.toDto()).toList(),
+        exams: exams.map((exam) => exam?.toDto()).toList(),
         degree: degree,
         year: year,
         startDate: startDate,

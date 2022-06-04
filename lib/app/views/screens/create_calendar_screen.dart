@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/app/extension/datetime_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import '../../controller/create_calendar_controller.dart';
 import '../../navigation/app_routes.dart';
@@ -165,7 +166,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
       },
       onAccept: (ExamBox exam) {
         final item = exam.exam.copyWith(
-            newDate: date,
+            newDate: date.parseDate(),
             newCall: controller.call,
             newTurn: morning ? "MORNING" : "AFTERNOON");
         controller.completeDrag(item, index, morning);
