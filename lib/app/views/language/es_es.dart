@@ -162,6 +162,8 @@ const Map<String, String> esES = {
   'downloadSchedule': 'Descargar',
   //Calendar
   'editCalendar': 'Editar calendario de exámenes',
+  'weekend': 'F. semana',
+  'noExamAllowed': 'No se pueden poner exámenes en fin de semana',
   //Filters
   'filter': 'Filtrar',
   'filterSubject': 'Filtrar asignaturas',

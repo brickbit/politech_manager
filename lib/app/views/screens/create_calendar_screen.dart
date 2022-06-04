@@ -104,12 +104,12 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                                   padding: EdgeInsets.only(
                                       bottom: 8, left: 8, right: 8)),
                               _dragTarget(index, true, mobile,
-                                  controller.dateArray[index]),
+                                  controller.dateArray[index], controller.isWeekend(controller.dateArray[index], true)),
                               const SizedBox(
                                 height: 8,
                               ),
                               _dragTarget(index, false, mobile,
-                                  controller.dateArray[index]),
+                                  controller.dateArray[index], controller.isWeekend(controller.dateArray[index], false)),
                             ],
                           ),
                         ),
@@ -124,9 +124,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
     );
   }
 
-  Widget _dragTarget(int index, bool morning, bool mobile, String date) {
-    //var acceptedData = getAcceptedData();
-
+  Widget _dragTarget(int index, bool morning, bool mobile, String date, bool weekend) {
     return DragTarget<ExamBox>(
       builder: (
         BuildContext context,
@@ -138,7 +136,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
           padding: const EdgeInsets.only(left: 8, right: 8),
           child: Container(
             decoration: BoxDecoration(
-              color: morning
+              color: weekend ? Colors.red : morning
                   ? (acceptedData.first != null ? Colors.green : Colors.white)
                   : (acceptedData.last != null ? Colors.orange : Colors.white),
               border: Border.all(
@@ -153,10 +151,10 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
               child: SizedBox(
                 width: Size.infinite.width,
                 child: morning
-                    ? Text(acceptedData.first != null
+                    ? Text(weekend ? 'weekend'.tr : acceptedData.first != null
                         ? acceptedData.first!.acronym
                         : 'morning'.tr)
-                    : Text(acceptedData.last != null
+                    : Text(weekend ? 'weekend'.tr : acceptedData.last != null
                         ? acceptedData.last!.acronym
                         : 'afternoon'.tr),
               ),
@@ -165,12 +163,19 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
         );
       },
       onAccept: (ExamBox exam) {
-        final item = exam.exam.copyWith(
-            newDate: date.parseDate(),
-            newCall: controller.call,
-            newTurn: morning ? "MORNING" : "AFTERNOON");
-        controller.completeDrag(item, index, morning);
+        if (!weekend) {
+          final item = exam.exam.copyWith(
+              newDate: date.parseDate(),
+              newCall: controller.call,
+              newTurn: morning ? "MORNING" : "AFTERNOON");
+          controller.completeDrag(item, index, morning);
+        } else {
+          controller.showErrorMessage('noExamAllowed'.tr);
+          controller.showError();
+          controller.restoreDraggableItem(exam.exam);
+        }
       },
+
     );
   }
 

@@ -162,6 +162,8 @@ const Map<String, String> enUS = {
   'downloadSchedule': 'Download',
   //Calendar
   'editCalendar': 'Edit exam calendar',
+  'weekend': 'Weekend',
+  'noExamAllowed': 'Exams cannot be held on weekends',
   //Filters
   'filter': 'Filter',
   'filterSubject': 'Filter subjects',

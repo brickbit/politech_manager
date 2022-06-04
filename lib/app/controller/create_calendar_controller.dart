@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
+import 'package:politech_manager/app/views/custom/exam_box.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -178,6 +179,11 @@ class CreateCalendarController extends BaseController {
     _fileDownloaded.value = false;
   }
 
+  bool isWeekend(String date, bool morning) {
+    final weekday = DateTime.parse(date).weekday;
+    return weekday == 7 || (weekday == 6 && !morning);
+  }
+
   void startDrag(int index) {
     selectedExam.value = _exams.value.firstWhere((element) =>
     _exams.value
@@ -200,6 +206,12 @@ class CreateCalendarController extends BaseController {
         .obs;
     var pos = _exams.value.indexOf(selectedExam.value);
     _exams.value.removeAt(pos);
+    _exams.refresh();
+    update();
+  }
+
+  void restoreDraggableItem(ExamBO exam) {
+    _exams.value.add(exam);
     _exams.refresh();
     update();
   }
