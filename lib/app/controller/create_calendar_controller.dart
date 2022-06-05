@@ -99,7 +99,7 @@ class CreateCalendarController extends BaseController {
     _numberOfCells.value = end.difference(start).inDays;
     List<String> array = List.filled(_numberOfCells.value, "", growable: false);
     array.asMap().forEach((index, value) {
-      array[index] = DateTime(start.year, start.month, start.day + index).getString();
+      array[index] = DateTime(start.year, start.month, start.day + index + 1).getString();
     });
     _dateArray.value = array;
   }
