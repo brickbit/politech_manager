@@ -103,13 +103,23 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                               const Padding(
                                   padding: EdgeInsets.only(
                                       bottom: 8, left: 8, right: 8)),
-                              _dragTarget(index, true, mobile,
-                                  controller.dateArray[index], controller.isWeekend(controller.dateArray[index], true)),
+                              _dragTarget(
+                                  index,
+                                  true,
+                                  mobile,
+                                  controller.dateArray[index],
+                                  controller.isWeekend(
+                                      controller.dateArray[index], true)),
                               const SizedBox(
                                 height: 8,
                               ),
-                              _dragTarget(index, false, mobile,
-                                  controller.dateArray[index], controller.isWeekend(controller.dateArray[index], false)),
+                              _dragTarget(
+                                  index,
+                                  false,
+                                  mobile,
+                                  controller.dateArray[index],
+                                  controller.isWeekend(
+                                      controller.dateArray[index], false)),
                             ],
                           ),
                         ),
@@ -124,21 +134,27 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
     );
   }
 
-  Widget _dragTarget(int index, bool morning, bool mobile, String date, bool weekend) {
+  Widget _dragTarget(
+      int index, bool morning, bool mobile, String date, bool weekend) {
     return DragTarget<ExamBox>(
       builder: (
         BuildContext context,
         List<dynamic> accepted,
         List<dynamic> rejected,
       ) {
-        final acceptedData = controller.examsToUpload[index];
         return Padding(
           padding: const EdgeInsets.only(left: 8, right: 8),
           child: Container(
             decoration: BoxDecoration(
-              color: weekend ? Colors.red : morning
-                  ? (acceptedData.first != null ? Colors.green : Colors.white)
-                  : (acceptedData.last != null ? Colors.orange : Colors.white),
+              color: weekend
+                  ? Colors.red
+                  : morning
+                      ? (controller.examsToUpload[index].first != null
+                          ? Colors.green
+                          : Colors.white)
+                      : (controller.examsToUpload[index].last != null
+                          ? Colors.orange
+                          : Colors.white),
               border: Border.all(
                 color: Colors.black,
               ),
@@ -150,13 +166,46 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
               padding: const EdgeInsets.all(8),
               child: SizedBox(
                 width: Size.infinite.width,
-                child: morning
-                    ? Text(weekend ? 'weekend'.tr : acceptedData.first != null
-                        ? acceptedData.first!.acronym
-                        : 'morning'.tr)
-                    : Text(weekend ? 'weekend'.tr : acceptedData.last != null
-                        ? acceptedData.last!.acronym
-                        : 'afternoon'.tr),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    morning
+                        ? Text(weekend
+                            ? 'weekend'.tr
+                            : controller.examsToUpload[index].first != null
+                                ? controller.examsToUpload[index].first!.acronym
+                                : 'morning'.tr)
+                        : Text(weekend
+                            ? 'weekend'.tr
+                            : controller.examsToUpload[index].last != null
+                                ? controller.examsToUpload[index].last!.acronym
+                                : 'afternoon'.tr),
+                    morning
+                        ? (controller.examsToUpload[index].first != null
+                            ? IconButton(
+                                onPressed: () {
+                                  controller.deleteItem(controller.examsToUpload[index].first!, morning);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                ),
+                              )
+                            : const SizedBox(
+                                height: 36, width: 36,
+                              ))
+                        : (controller.examsToUpload[index].last != null
+                            ? IconButton(
+                                onPressed: () {
+                                  controller.deleteItem(controller.examsToUpload[index].last!, morning);
+                                },
+                                icon: const Icon(Icons.delete, size: 20),
+                              )
+                            : const SizedBox(
+                                height: 36, width: 36,
+                              ))
+                  ],
+                ),
               ),
             ),
           ),
@@ -175,7 +224,6 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
           controller.restoreDraggableItem(exam.exam);
         }
       },
-
     );
   }
 

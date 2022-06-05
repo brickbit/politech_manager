@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
-import 'package:politech_manager/app/views/custom/exam_box.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -223,6 +222,22 @@ class CreateCalendarController extends BaseController {
     } else {
       _examsToUpload.value[index] = PairExamBO(cell.first, item);
     }
+  }
+
+  void deleteItem(ExamBO exam, bool morning) {
+    if(morning) {
+      final index = _examsToUpload.value.indexWhere((element) =>
+      element.first?.id == exam.id);
+      _examsToUpload.value[index] = PairExamBO(null, null);
+    } else {
+      final index = _examsToUpload.value.indexWhere((element) =>
+      element.last?.id == exam.id);
+      _examsToUpload.value[index] = PairExamBO(null, null);
+    }
+    _exams.value.add(exam);
+    _examsToUpload.refresh();
+    _exams.refresh();
+    update();
   }
 
 }
