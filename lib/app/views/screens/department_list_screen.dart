@@ -52,7 +52,9 @@ class DepartmentListScreen extends GetView<DepartmentListController> {
         title: Text('department'.tr),
       ),
       body: controller.departments.isEmpty
-          ? emptyView('noDepartment'.tr, mobile)
+          ? emptyView('noDepartment'.tr, mobile, () {
+            controller.getDepartments();
+      })
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

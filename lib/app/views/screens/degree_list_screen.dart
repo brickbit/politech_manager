@@ -52,7 +52,9 @@ class DegreeListScreen extends GetView<DegreeListController> {
         title: Text('degree'.tr),
       ),
       body: controller.degrees.isEmpty
-          ? emptyView('noDegree'.tr, mobile)
+          ? emptyView('noDegree'.tr, mobile, () {
+            controller.getDegrees();
+      })
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

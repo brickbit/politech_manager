@@ -60,10 +60,10 @@ class DataController extends BaseController {
   @override
   void onInit() {
     super.onInit();
-    _getClassrooms();
+    getClassrooms();
   }
 
-  void _getClassrooms() {
+  void getClassrooms() {
     hideError();
     showProgress();
     dataRepository.getClassrooms().fold(
@@ -90,7 +90,7 @@ class DataController extends BaseController {
   void _onGetClassroomsOk(List<ClassroomBO> classrooms) {
     hideProgress();
     _classrooms.value = classrooms;
-    _getDegrees();
+    getDegrees();
   }
 
   void _onPostClassroomKo(ClassroomError classroomError) {
@@ -101,10 +101,10 @@ class DataController extends BaseController {
 
   void _onPostClassroomOk() {
     hideProgress();
-    _getClassrooms();
+    getClassrooms();
   }
 
-  void _getDegrees() {
+  void getDegrees() {
     hideError();
     showProgress();
     dataRepository.getDegrees().fold(
@@ -131,7 +131,7 @@ class DataController extends BaseController {
   void _onGetDegreesOk(List<DegreeBO> degrees) {
     hideProgress();
     _degrees.value = degrees;
-    _getDepartments();
+    getDepartments();
   }
 
   void _onPostDegreeKo(DegreeError degreeError) {
@@ -142,10 +142,10 @@ class DataController extends BaseController {
 
   void _onPostDegreeOk() {
     hideProgress();
-    _getDegrees();
+    getDegrees();
   }
 
-  void _getDepartments() {
+  void getDepartments() {
     hideError();
     showProgress();
     dataRepository.getDepartments().fold(
@@ -172,7 +172,7 @@ class DataController extends BaseController {
   void _onGetDepartmentsOk(List<DepartmentBO> departments) {
     hideProgress();
     _departments.value = departments;
-    _getSubjects();
+    getSubjects();
   }
 
   void _onPostDepartmentKo(DepartmentError departmentError) {
@@ -183,10 +183,10 @@ class DataController extends BaseController {
 
   void _onPostDepartmentOk() {
     hideProgress();
-    _getDepartments();
+    getDepartments();
   }
 
-  void _getSubjects() {
+  void getSubjects() {
     hideError();
     showProgress();
     dataRepository.getSubjects().fold(
@@ -213,7 +213,7 @@ class DataController extends BaseController {
   void _onGetSubjectsOk(List<SubjectBO> subjects) {
     hideProgress();
     _subjects.value = subjects;
-    _getExams();
+    getExams();
   }
 
   void _onPostSubjectKo(SubjectError subjectError) {
@@ -224,10 +224,10 @@ class DataController extends BaseController {
 
   void _onPostSubjectOk() {
     hideProgress();
-    _getSubjects();
+    getSubjects();
   }
 
-  void _getExams() {
+  void getExams() {
     hideError();
     showProgress();
     dataRepository.getExams().fold(
@@ -264,7 +264,7 @@ class DataController extends BaseController {
 
   void _onPostExamOk() {
     hideProgress();
-    _getExams();
+    getExams();
   }
 
   void updateDegree(DegreeBO degree) {
@@ -284,7 +284,7 @@ class DataController extends BaseController {
 
   void _onUpdateDegreeOk() {
     hideProgress();
-    _getDegrees();
+    getDegrees();
   }
 
   void deleteDegree(DegreeBO degree) {
@@ -304,7 +304,7 @@ class DataController extends BaseController {
 
   void _onDeleteDegreeOk() {
     hideProgress();
-    _getDegrees();
+    getDegrees();
   }
 
   void updateClassroom(ClassroomBO classroom) {
@@ -324,7 +324,7 @@ class DataController extends BaseController {
 
   void _onUpdateClassroomOk() {
     hideProgress();
-    _getClassrooms();
+    getClassrooms();
   }
 
   void deleteClassroom(ClassroomBO classroom) {
@@ -344,7 +344,7 @@ class DataController extends BaseController {
 
   void _onDeleteClassroomOk() {
     hideProgress();
-    _getClassrooms();
+    getClassrooms();
   }
 
   void updateDepartment(DepartmentBO department) {
@@ -364,7 +364,7 @@ class DataController extends BaseController {
 
   void _onUpdateDepartmentOk() {
     hideProgress();
-    _getDepartments();
+    getDepartments();
   }
 
   void deleteDepartment(DepartmentBO department) {
@@ -384,7 +384,7 @@ class DataController extends BaseController {
 
   void _onDeleteDepartmentOk() {
     hideProgress();
-    _getDepartments();
+    getDepartments();
   }
 
   void updateSubject(SubjectBO subject) {
@@ -404,7 +404,7 @@ class DataController extends BaseController {
 
   void _onUpdateSubjectOk() {
     hideProgress();
-    _getSubjects();
+    getSubjects();
   }
 
   void deleteSubject(SubjectBO subject) {
@@ -424,7 +424,7 @@ class DataController extends BaseController {
 
   void _onDeleteSubjectOk() {
     hideProgress();
-    _getSubjects();
+    getSubjects();
   }
 
   void updateExam(ExamBO exam) {
@@ -444,7 +444,7 @@ class DataController extends BaseController {
 
   void _onUpdateExamOk() {
     hideProgress();
-    _getExams();
+    getExams();
   }
 
   void deleteExam(ExamBO exam) {
@@ -464,7 +464,7 @@ class DataController extends BaseController {
 
   void _onDeleteExamOk() {
     hideProgress();
-    _getExams();
+    getExams();
   }
 
   void getFilteredSubjects(filters) {
@@ -524,13 +524,13 @@ class DataController extends BaseController {
   }
 
   void eraseSubjectFilters() {
-    _getSubjects();
+    getSubjects();
     _filterActive.value = false;
     update();
   }
 
   void eraseExamFilters() {
-    _getExams();
+    getExams();
     _filterActive.value = false;
     update();
   }

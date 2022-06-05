@@ -51,10 +51,15 @@ class CalendarListScreen extends GetView<CalendarListController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          calendarDialog('createCalendar'.tr, context, controller.degrees,
-              controller.exams, (calendarFilters) {
-            controller.createCalendar(calendarFilters);
-          });
+          if(controller.exams.isNotEmpty) {
+            calendarDialog('createCalendar'.tr, context, controller.degrees,
+                controller.exams, (calendarFilters) {
+                  controller.createCalendar(calendarFilters);
+                });
+          } else {
+            controller.showErrorMessage('canNotCreateCalendar'.tr);
+            controller.showError();
+          }
         },
         backgroundColor: Colors.green,
         child: const Icon(
@@ -63,7 +68,10 @@ class CalendarListScreen extends GetView<CalendarListController> {
         ),
       ),
       body: controller.calendars.isEmpty
-          ? emptyView('noCalendar'.tr, mobile)
+          ? emptyView('noCalendar'.tr, mobile, () {
+            controller.getCalendars();
+            controller.getExams();
+      })
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

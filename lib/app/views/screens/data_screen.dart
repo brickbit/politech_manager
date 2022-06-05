@@ -330,7 +330,9 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.degrees.isEmpty
-          ? emptyView('noDegree'.tr, mobile)
+          ? emptyView('noDegree'.tr, mobile, () {
+            controller.getDegrees();
+      })
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -408,7 +410,9 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.classrooms.isEmpty
-          ? emptyView('noClassroom'.tr, mobile)
+          ? emptyView('noClassroom'.tr, mobile, () {
+            controller.getClassrooms();
+      })
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -486,7 +490,9 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.departments.isEmpty
-          ? emptyView('noDepartment'.tr, mobile)
+          ? emptyView('noDepartment'.tr, mobile, () {
+            controller.getDepartments();
+      })
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -563,7 +569,9 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.subjects.isEmpty
-          ? emptyView('noSubject'.tr, mobile)
+          ? emptyView('noSubject'.tr, mobile, () {
+            controller.getSubjects();
+      })
           : SafeArea(
               child: ListView.separated(
                   primary: false,
@@ -642,7 +650,9 @@ class DataScreen extends GetView<DataController> {
 
     return Scaffold(
       body: controller.exams.isEmpty
-          ? emptyView('noExam'.tr, mobile)
+          ? emptyView('noExam'.tr, mobile, () {
+            controller.getExams();
+      })
           : SafeArea(
               child: ListView.separated(
                   primary: false,

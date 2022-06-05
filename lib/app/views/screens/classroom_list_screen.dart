@@ -52,7 +52,9 @@ class ClassroomListScreen extends GetView<ClassroomListController> {
         title: Text('classroom'.tr),
       ),
       body: controller.classrooms.isEmpty
-          ? emptyView('noClassroom'.tr, mobile)
+          ? emptyView('noClassroom'.tr, mobile, () {
+            controller.getClassrooms();
+      })
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {

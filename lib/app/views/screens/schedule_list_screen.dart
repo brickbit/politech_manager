@@ -61,7 +61,10 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
         ),
       ),
       body: controller.schedules.isEmpty
-          ? emptyView('noSchedule'.tr, mobile)
+          ? emptyView('noSchedule'.tr, mobile, () {
+            controller.getSubjects();
+            controller.getSchedules();
+      })
           : SafeArea(
               child: RefreshIndicator(
                   onRefresh: () async {
