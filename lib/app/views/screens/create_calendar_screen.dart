@@ -142,69 +142,79 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
         List<dynamic> accepted,
         List<dynamic> rejected,
       ) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              color: weekend
-                  ? Colors.red
-                  : morning
-                      ? (controller.examsToUpload[index].first != null
-                          ? Colors.green
-                          : Colors.white)
-                      : (controller.examsToUpload[index].last != null
-                          ? Colors.orange
-                          : Colors.white),
-              border: Border.all(
-                color: Colors.black,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: SizedBox(
-                width: Size.infinite.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    morning
-                        ? Text(weekend
-                            ? 'weekend'.tr
-                            : controller.examsToUpload[index].first != null
-                                ? controller.examsToUpload[index].first!.acronym
-                                : 'morning'.tr)
-                        : Text(weekend
-                            ? 'weekend'.tr
-                            : controller.examsToUpload[index].last != null
-                                ? controller.examsToUpload[index].last!.acronym
-                                : 'afternoon'.tr),
-                    morning
+        return Obx(
+          () => Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: weekend
+                    ? Colors.red
+                    : morning
                         ? (controller.examsToUpload[index].first != null
-                            ? IconButton(
-                                onPressed: () {
-                                  controller.deleteItem(controller.examsToUpload[index].first!, morning);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                ),
-                              )
-                            : const SizedBox(
-                                height: 36, width: 36,
-                              ))
+                            ? Colors.green
+                            : Colors.white)
                         : (controller.examsToUpload[index].last != null
-                            ? IconButton(
-                                onPressed: () {
-                                  controller.deleteItem(controller.examsToUpload[index].last!, morning);
-                                },
-                                icon: const Icon(Icons.delete, size: 20),
-                              )
-                            : const SizedBox(
-                                height: 36, width: 36,
-                              ))
-                  ],
+                            ? Colors.orange
+                            : Colors.white),
+                border: Border.all(
+                  color: Colors.black,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  width: Size.infinite.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      morning
+                          ? Text(weekend
+                              ? 'weekend'.tr
+                              : controller.examsToUpload[index].first != null
+                                  ? controller
+                                      .examsToUpload[index].first!.acronym
+                                  : 'morning'.tr)
+                          : Text(weekend
+                              ? 'weekend'.tr
+                              : controller.examsToUpload[index].last != null
+                                  ? controller
+                                      .examsToUpload[index].last!.acronym
+                                  : 'afternoon'.tr),
+                      morning
+                          ? (controller.examsToUpload[index].first != null
+                              ? IconButton(
+                                  onPressed: () {
+                                    controller.deleteItem(
+                                        controller.examsToUpload[index].first!,
+                                        morning);
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    size: 20,
+                                  ),
+                                )
+                              : const SizedBox(
+                                  height: 36,
+                                  width: 36,
+                                ))
+                          : (controller.examsToUpload[index].last != null
+                              ? IconButton(
+                                  onPressed: () {
+                                    controller.deleteItem(
+                                        controller.examsToUpload[index].last!,
+                                        morning);
+                                  },
+                                  icon: const Icon(Icons.delete, size: 20),
+                                )
+                              : const SizedBox(
+                                  height: 36,
+                                  width: 36,
+                                ))
+                    ],
+                  ),
                 ),
               ),
             ),
