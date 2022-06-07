@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/app/extension/color_extension.dart';
 import 'package:politech_manager/app/views/custom/subject_box.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
+import '../../../domain/constant/constant.dart';
 import '../../controller/create_schedule_controller.dart';
 import '../../navigation/app_routes.dart';
 import '../dialog/file_dialog.dart';
@@ -84,8 +86,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5, childAspectRatio: 1),
-                    itemCount: 125,
+                            crossAxisCount: 5, childAspectRatio: 4/5),
+                    itemCount: maxCellsOneSubjectPerDay,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
                         color: Colors.white30,
@@ -123,27 +125,38 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         List<dynamic> rejected,
       ) {
         return Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
-                ),
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: Container(
+            decoration: BoxDecoration(
+              color: (controller.subjectsToUpload[index] != null)
+                  ? controller.subjectsToUpload[index]!.color.parseColor()
+                  : Colors.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: SizedBox(
-                  width: Size.infinite.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Vacio')
-                    ],
-                  ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: SizedBox(
+                width: Size.infinite.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text((controller.subjectsToUpload[index] != null)
+                        ? controller.subjectsToUpload[index]!.acronym
+                        : 'Vacio'),
+                    Row(
+                      children: [
+                        ((controller.subjectsToUpload[index]?.laboratory  ?? false) == true) ? const Icon(Icons.science_sharp, size: 12,) : Container(),
+                        ((controller.subjectsToUpload[index]?.seminary  ?? false) == true) ? const Icon(Icons.emoji_people_sharp,size: 12,) : Container(),
+                        ((controller.subjectsToUpload[index]?.english  ?? false) == true) ? const Icon(Icons.flag, size: 12,) : Container(),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),
+          ),
         );
       },
       onAccept: (SubjectBox subject) {
@@ -178,7 +191,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
             itemCount: controller.subjects.length,
             itemBuilder: (context, index) {
               return SizedBox(
-                width: 70,
+                width: 80,
                 height: 50,
                 child: Draggable<SubjectBox>(
                   data: controller.subjects

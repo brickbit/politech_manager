@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../domain/constant/constant.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/error/schedule_error.dart';
 import '../../domain/model/schedule_bo.dart';
@@ -53,6 +54,7 @@ class CreateScheduleController extends BaseController {
     _subjects.value = argumentData['subjects'];
     _scheduleType.value = argumentData['scheduleType'];
     _semester.value = argumentData['semester'];
+    _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
     super.onInit();
   }
 
