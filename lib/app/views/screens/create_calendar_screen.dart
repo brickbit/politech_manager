@@ -86,7 +86,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                 child: GridView.builder(
                     gridDelegate: mobile
                         ? const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4, childAspectRatio: 0.8)
+                            crossAxisCount: 4, childAspectRatio: 0.65)
                         : const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 8, childAspectRatio: 1),
                     itemCount: controller.numberOfCells,
@@ -99,10 +99,10 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(controller.dateArray[index]),
+                              Text(controller.dateArray[index], style: const TextStyle(fontSize: 12),),
                               const Padding(
                                   padding: EdgeInsets.only(
-                                      bottom: 8, left: 8, right: 8)),
+                                      bottom: 8, left: 4, right: 4)),
                               _dragTarget(
                                   index,
                                   true,
@@ -144,7 +144,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
       ) {
         return Obx(
           () => Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             child: Container(
               decoration: BoxDecoration(
                 color: weekend
@@ -164,7 +164,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(4),
                 child: SizedBox(
                   width: Size.infinite.width,
                   child: Row(
@@ -176,42 +176,46 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                               : controller.examsToUpload[index].first != null
                                   ? controller
                                       .examsToUpload[index].first!.acronym
-                                  : 'morning'.tr)
+                                  : 'morning'.tr, style: const TextStyle(fontSize: 12),)
                           : Text(weekend
                               ? 'weekend'.tr
                               : controller.examsToUpload[index].last != null
                                   ? controller
                                       .examsToUpload[index].last!.acronym
-                                  : 'afternoon'.tr),
+                                  : 'afternoon'.tr, style: const TextStyle(fontSize: 12),),
                       morning
                           ? (controller.examsToUpload[index].first != null
                               ? IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(
                                         controller.examsToUpload[index].first!,
                                         morning);
                                   },
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.delete,
-                                    size: 20,
+                                    size: mobile ? 10 : 20,
                                   ),
                                 )
-                              : const SizedBox(
-                                  height: 36,
-                                  width: 36,
+                              : SizedBox(
+                                  height: mobile ? 18 : 36,
+                                  width: mobile ? 18 : 36,
                                 ))
                           : (controller.examsToUpload[index].last != null
                               ? IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(
                                         controller.examsToUpload[index].last!,
                                         morning);
                                   },
-                                  icon: const Icon(Icons.delete, size: 20),
+                                  icon: Icon(Icons.delete, size: mobile ? 10 : 20),
                                 )
-                              : const SizedBox(
-                                  height: 36,
-                                  width: 36,
+                              : SizedBox(
+                                  height: mobile ? 18 : 36,
+                                  width: mobile ? 18 : 36,
                                 ))
                     ],
                   ),

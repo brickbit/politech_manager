@@ -144,7 +144,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   children: [
                     Text((controller.subjectsToUpload[index] != null)
                         ? controller.subjectsToUpload[index]!.acronym
-                        : 'Vacio'),
+                        : 'empty'.tr, style: const TextStyle(fontSize: 12),),
                     Row(
                       children: [
                         ((controller.subjectsToUpload[index]?.laboratory  ?? false) == true) ? const Icon(Icons.science_sharp, size: 12,) : Container(),

@@ -160,6 +160,7 @@ const Map<String, String> enUS = {
   'afternoonShift': 'Afternoon shift',
   'saveSchedule': 'Save',
   'downloadSchedule': 'Download',
+  'empty': 'Empty',
   //Calendar
   'editCalendar': 'Edit exam calendar',
   'weekend': 'Weekend',

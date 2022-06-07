@@ -7,7 +7,7 @@ import '../../../domain/model/subject_bo.dart';
 Widget subjectTile(bool mobile, List<SubjectBO> subjects, int index) {
   return Container(
     constraints: mobile
-        ? const BoxConstraints(maxWidth: 250)
+        ? const BoxConstraints(maxWidth: 245)
         : const BoxConstraints(maxWidth: 400),
     child: Row(
       children: [
@@ -24,7 +24,13 @@ Widget subjectTile(bool mobile, List<SubjectBO> subjects, int index) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${subjects[index].name} - ${subjects[index].acronym}',
+            SizedBox(width: 230, child:Text(subjects[index].name,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold)),),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(subjects[index].acronym,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(
               height: 4,
@@ -34,14 +40,14 @@ Widget subjectTile(bool mobile, List<SubjectBO> subjects, int index) {
             ),
             SizedBox(
                 width: 230,
-                child: Text(subjects[index].degree.name.toString())),
+                child: Text(subjects[index].degree.name.toString(), overflow: TextOverflow.ellipsis,)),
             const SizedBox(
               height: 4,
             ),
             Text(
               'departmentAcronym'.trParams({
                 'acronym':
-                subjects[index].department.name.toLowerCase().toString()
+                subjects[index].department.acronym.toString()
               }),
             ),
             const SizedBox(

@@ -108,7 +108,7 @@ class LoginScreen extends GetView<LoginController> {
                                 _passwordController.text);
                           })),
                   const SizedBox(
-                    height: 30.0,
+                    height: 8.0,
                   ),
                   TextButton(
                       onPressed: () {

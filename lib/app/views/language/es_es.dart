@@ -160,9 +160,10 @@ const Map<String, String> esES = {
   'afternoonShift': 'Turno de tarde',
   'saveSchedule': 'Guardar',
   'downloadSchedule': 'Descargar',
+  'empty': 'Vacio',
   //Calendar
   'editCalendar': 'Editar calendario de exámenes',
-  'weekend': 'F. semana',
+  'weekend': 'F.sem',
   'canNotCreateCalendar': 'No se pueden crear calendarios si no hay exámenes',
   'canNotCreateSchedule': 'No se pueden crear horarios si no hay asignaturas',
   'noExamAllowed': 'No se pueden poner exámenes en fin de semana',

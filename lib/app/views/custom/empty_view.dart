@@ -16,7 +16,7 @@ Widget emptyView(String text, bool mobile, Function() action ) {
                   fit: BoxFit.cover,
                 ),
               ),
-              height: mobile ? 400 : 500,
+              height: mobile ? 380 : 500,
             ),
             SizedBox(height: mobile ? 12 : 32,),
             Text(text, style: TextStyle(fontSize: mobile ? 18 : 22), textAlign: TextAlign.center,),
