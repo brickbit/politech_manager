@@ -164,6 +164,7 @@ const Map<String, String> esES = {
   'editCalendar': 'Editar calendario de exámenes',
   'weekend': 'F. semana',
   'canNotCreateCalendar': 'No se pueden crear calendarios si no hay exámenes',
+  'canNotCreateSchedule': 'No se pueden crear horarios si no hay asignaturas',
   'noExamAllowed': 'No se pueden poner exámenes en fin de semana',
   //Filters
   'filter': 'Filtrar',

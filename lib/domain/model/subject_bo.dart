@@ -59,4 +59,11 @@ class SubjectBO {
         1,
         1);
   }
+
+  SubjectBO copyWith(
+      {required String newDay,
+        required String newHour,
+        required String newTurn}) =>
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, newDay, newHour, newTurn, classroom, department, degree, color, id);
+
 }

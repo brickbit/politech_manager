@@ -49,10 +49,15 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          scheduleDialog('createSchedule'.tr, context, controller.degrees,
-              controller.subjects, (scheduleFilters) {
-            controller.createSchedule(scheduleFilters);
-          });
+      if(controller.subjects.isNotEmpty) {
+        scheduleDialog('createSchedule'.tr, context, controller.degrees,
+            controller.subjects, (scheduleFilters) {
+              controller.createSchedule(scheduleFilters);
+            });
+      } else {
+        controller.showErrorMessage('canNotCreateSchedule'.tr);
+        controller.showError();
+      }
         },
         backgroundColor: Colors.green,
         child: const Icon(
@@ -62,8 +67,9 @@ class ScheduleListScreen extends GetView<ScheduleListController> {
       ),
       body: controller.schedules.isEmpty
           ? emptyView('noSchedule'.tr, mobile, () {
-            controller.getSubjects();
+            controller.getDegrees();
             controller.getSchedules();
+            controller.getSubjects();
       })
           : SafeArea(
               child: RefreshIndicator(

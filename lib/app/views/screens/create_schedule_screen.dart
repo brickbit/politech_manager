@@ -13,18 +13,24 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   Widget build(BuildContext context) {
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
-        return Obx(
-          () => controller.loading
-              ? const Center(child: CircularProgressIndicator())
-              : _setCreateSchedule(context),
-        );
+        if (constraints.maxWidth < 600) {
+          return Obx(
+            () => controller.loading
+                ? const Center(child: CircularProgressIndicator())
+                : _setCreateSchedule(context, true),
+          );
+        } else {
+          return Obx(
+            () => controller.loading
+                ? const Center(child: CircularProgressIndicator())
+                : _setCreateSchedule(context, false),
+          );
+        }
       },
     ));
   }
 
-  Widget _setCreateSchedule(
-    BuildContext context,
-  ) {
+  Widget _setCreateSchedule(BuildContext context, bool mobile) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -49,9 +55,12 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       appBar: AppBar(
         title: Text('editSchedule'.tr),
         automaticallyImplyLeading: false,
-        leading: IconButton(onPressed: (){
-          Get.offNamed(Routes.home, arguments: {'page': Routes.scheduleList});
-        }, icon: const Icon(Icons.arrow_back_ios_outlined)),
+        leading: IconButton(
+            onPressed: () {
+              Get.offNamed(Routes.home,
+                  arguments: {'page': Routes.scheduleList});
+            },
+            icon: const Icon(Icons.arrow_back_ios_outlined)),
         actions: [
           IconButton(
               onPressed: () {
@@ -69,12 +78,79 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         child: Column(
           children: [
             Expanded(
-              child: Column(),
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5, childAspectRatio: 1),
+                    itemCount: 125,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        color: Colors.white30,
+                        child: SizedBox(
+                          height: 200,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                  '${controller.calculateDay(index)} ${controller.calculateHour(index)}'),
+                              const Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: 8, left: 8, right: 8)),
+                              _dragTarget(index, mobile),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
             ),
             _dragListSubjects()
           ],
         ),
       ),
+    );
+  }
+
+  Widget _dragTarget(int index, bool mobile) {
+    return DragTarget<SubjectBox>(
+      builder: (
+        BuildContext context,
+        List<dynamic> accepted,
+        List<dynamic> rejected,
+      ) {
+        return Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  width: Size.infinite.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text('Vacio')
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        );
+      },
+      onAccept: (SubjectBox subject) {
+        final item =
+            subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
+        controller.completeDrag(item, index);
+      },
     );
   }
 
@@ -93,8 +169,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         ),
         height: 65,
         child: Container(
-          margin: const EdgeInsets.symmetric(
-              vertical: 8.0, horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
           height: 50.0,
           child: ListView.separated(
             primary: false,

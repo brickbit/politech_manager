@@ -44,6 +44,9 @@ class CreateScheduleController extends BaseController {
 
   Rx<SubjectBO> selectedSubject = SubjectBO.mock().obs;
 
+  final _subjectsToUpload = Rx<List<SubjectBO?>>([]);
+
+  List<SubjectBO?> get subjectsToUpload => _subjectsToUpload.value;
 
   @override
   void onInit() {
@@ -56,11 +59,6 @@ class CreateScheduleController extends BaseController {
   void saveSchedule() {
     hideError();
     showProgress();
-    /*List<List<SubjectBO?>> subjects =  scheduleType.toScheduleTypeInt() == 0 ? morning5Rows.value + afternoon5Rows.value : combineMatrix();
-    List<List<SubjectBO?>> tSubject = _transpose(subjects);
-    List<List<List<SubjectBO?>>> eSubject = _encapsulate(tSubject);
-    var schedule = ScheduleBO(eSubject, scheduleType.toScheduleTypeInt(), fileType, targetDegree!.name!, targetDegree!.year!,0);
-*/
     var schedule = ScheduleBO([], 0, 0, "degree", "year", 0);
     dataRepository.postSchedule(schedule).fold(
           (left) => _onSaveScheduleKo(left),
@@ -82,12 +80,6 @@ class CreateScheduleController extends BaseController {
   void downloadFile() {
     hideError();
     showProgress();
-    /*
-    List<List<SubjectModel?>> subjects =  scheduleType == 0 ? morning5Rows.value + afternoon5Rows.value : combineMatrix();
-    List<List<SubjectModel?>> tSubject = _transpose(subjects);
-    List<List<List<SubjectModel?>>> eSubject = _encapsulate(tSubject);
-    var schedule = ScheduleModel(id: null,subjects: eSubject, scheduleType: scheduleType, fileType: fileType, degree: targetDegree!.name!, year: targetDegree!.year!);
-    */
     var schedule = ScheduleBO([], 0, 0, "degree", "year", 0);
     dataRepository.downloadSchedule(schedule).fold(
           (left) => _onDownloadScheduleKo(left),
@@ -164,31 +156,63 @@ class CreateScheduleController extends BaseController {
     update();
   }
 
-  List<List<SubjectBO?>> _transpose(List<List<SubjectBO?>> colsInRows) {
-    int nRows = colsInRows.length;
-    if (colsInRows.isEmpty) return colsInRows;
-
-    int nCols = colsInRows[0].length;
-    if (nCols == 0) throw StateError('Degenerate matrix');
-
-    // Init the transpose to make sure the size is right
-    List<List<SubjectBO?>> rowsInCols = List.filled(nCols, []);
-    for (int col = 0; col < nCols; col++) {
-      rowsInCols[col] = List.filled(nRows, null);
+  String calculateDay(int index) {
+    final module = index%5;
+    switch (module) {
+      case 0: return 'L';
+      case 1: return 'M';
+      case 2: return 'X';
+      case 3: return 'J';
+      case 4: return 'V';
+      default: return '';
     }
-
-    // Transpose
-    for (int row = 0; row < nRows; row++) {
-      for (int col = 0; col < nCols; col++) {
-        rowsInCols[col][row] = colsInRows[row][col];
-      }
-    }
-    return rowsInCols;
   }
 
-  List<List<List<SubjectBO?>>> _encapsulate(List<List<SubjectBO?>> matrix) {
-    var result = matrix.map((items) => items.map((item) => [item]).toList()).toList();
-    return result;
+  String calculateHour(int index) {
+    final int division = (index/5).truncate();
+    switch (division) {
+      case 0: return '8:30';
+      case 1: return '9:00';
+      case 2: return '9:30';
+      case 3: return '10:00';
+      case 4: return '10:30';
+      case 5: return '11:00';
+      case 6: return '11:30';
+      case 7: return '12:00';
+      case 8: return '12:30';
+      case 9: return '13:00';
+      case 10: return '13:30';
+      case 11: return '14:00';
+      case 12: return '14:30';
+      case 13: return '15:30';
+      case 14: return '16:00';
+      case 15: return '16:30';
+      case 16: return '17:00';
+      case 17: return '17:30';
+      case 18: return '18:00';
+      case 19: return '18:30';
+      case 20: return '19:00';
+      case 21: return '19:30';
+      case 22: return '20:00';
+      case 23: return '20:30';
+      case 24: return '21:00';
+      default: return 'Nan';
+    }
+  }
+
+  void deleteItem(SubjectBO subject) {
+    final index = _subjectsToUpload.value.indexWhere((element) =>
+    element?.id == subject.id);
+    _subjectsToUpload.value[index] = null;
+
+    _subjects.value.add(subject);
+    _subjectsToUpload.refresh();
+    _subjects.refresh();
+    update();
+  }
+
+  void completeDrag(SubjectBO item, int index) {
+    _subjectsToUpload.value[index] = item;
   }
 
 }
