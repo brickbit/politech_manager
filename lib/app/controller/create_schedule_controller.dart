@@ -152,9 +152,11 @@ class CreateScheduleController extends BaseController {
         element.id)
         .obs;
     var pos = _subjects.value.indexOf(selectedSubject.value);
+    _subjects.value[pos] = _subjects.value[pos].reduceTime();
     if (_subjects.value[pos].time == 0) {
       _subjects.value.removeAt(pos);
     }
+    _subjects.refresh();
     update();
   }
 

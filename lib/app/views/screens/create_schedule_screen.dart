@@ -83,31 +83,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
               child: MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
-                child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5, childAspectRatio: 4/5),
-                    itemCount: maxCellsOneSubjectPerDay,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Card(
-                        color: Colors.white30,
-                        child: SizedBox(
-                          height: 200,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                  '${controller.calculateDay(index)} ${controller.calculateHour(index)}'),
-                              const Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: 8, left: 8, right: 8)),
-                              _dragTarget(index, mobile),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
+                child: _simpleSchedule(mobile),
               ),
             ),
             _dragListSubjects()
@@ -115,6 +91,34 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         ),
       ),
     );
+  }
+
+  Widget _simpleSchedule(bool mobile) {
+    return GridView.builder(
+        gridDelegate:
+        const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5, childAspectRatio: 4/5),
+        itemCount: maxCellsOneSubjectPerDay,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+            color: Colors.white30,
+            child: SizedBox(
+              height: 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                      '${controller.calculateDay(index)} ${controller.calculateHour(index)}'),
+                  const Padding(
+                      padding: EdgeInsets.only(
+                          bottom: 8, left: 8, right: 8)),
+                  _dragTarget(index, mobile),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   Widget _dragTarget(int index, bool mobile) {
@@ -168,7 +172,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   }
 
   Widget _dragListSubjects() {
-    return Padding(
+    return Obx(() => Padding(
       padding: const EdgeInsets.all(16),
       child: Container(
         decoration: BoxDecoration(
@@ -193,7 +197,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
               return SizedBox(
                 width: 80,
                 height: 50,
-                child: Draggable<SubjectBox>(
+                child: Obx(() => Draggable<SubjectBox>(
                   data: controller.subjects
                       .map((data) => data.toSubjectBox())
                       .toList()[index],
@@ -210,7 +214,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                       .map((data) => data.toSubjectBox())
                       .toList()[index],
                 ),
-              );
+              ),);
             },
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(
@@ -220,6 +224,6 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
           ),
         ),
       ),
-    );
+    ),);
   }
 }
