@@ -161,6 +161,11 @@ const Map<String, String> enUS = {
   'saveSchedule': 'Save',
   'downloadSchedule': 'Download',
   'empty': 'Empty',
+  'monday': 'Monday',
+  'tuesday': 'Tuesday',
+  'wednesday': 'Wednesday',
+  'thursday': 'Thursday',
+  'friday': 'Friday',
   //Calendar
   'editCalendar': 'Edit exam calendar',
   'weekend': 'Weekend',
