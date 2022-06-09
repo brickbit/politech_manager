@@ -166,6 +166,11 @@ const Map<String, String> enUS = {
   'wednesday': 'Wednesday',
   'thursday': 'Thursday',
   'friday': 'Friday',
+  'L':'M',
+  'M':'T',
+  'X':'W',
+  'J':'Th',
+  'V':'F',
   //Calendar
   'editCalendar': 'Edit exam calendar',
   'weekend': 'Weekend',

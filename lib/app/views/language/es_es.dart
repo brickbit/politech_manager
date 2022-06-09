@@ -166,6 +166,11 @@ const Map<String, String> esES = {
   'wednesday': 'Miércoles',
   'thursday': 'Jueves',
   'friday': 'Viernes',
+  'L':'L',
+  'M':'M',
+  'X':'X',
+  'J':'J',
+  'V':'V',
   //Calendar
   'editCalendar': 'Editar calendario de exámenes',
   'weekend': 'F.sem',

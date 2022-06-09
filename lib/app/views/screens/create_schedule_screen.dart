@@ -112,9 +112,10 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   }
 
   Widget _simpleSchedule(bool mobile) {
+    final ratio = mobile ? 4 / 5 : 3.2;
     return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5, childAspectRatio: 4 / 5),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5, childAspectRatio: ratio ),
         itemCount: maxCellsOneSubjectPerDay,
         itemBuilder: (BuildContext context, int index) {
           return Card(
@@ -126,7 +127,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${controller.calculateDay(index)} ${controller.calculateHour(index)}'),
+                      '${controller.calculateDay(index, mobile)} ${controller.calculateHour(index)}'),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
                   _dragTarget(index, mobile),
@@ -152,9 +153,10 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   }
 
   Widget _daySchedule(bool mobile) {
+    final ratio = mobile ? 4 / 5 : 1.4;
     return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5, childAspectRatio: 1/2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5, childAspectRatio: ratio),
         itemCount: maxCellsOneSubjectPerDay,
         itemBuilder: (BuildContext context, int index) {
           return Card(
@@ -166,7 +168,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${controller.calculateDay(index)} ${controller.calculateHour(index)}'),
+                      '${controller.calculateDay(index, mobile)} ${controller.calculateHour(index)}'),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
                   _dragTarget(index, mobile),
@@ -213,29 +215,31 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                       style: const TextStyle(fontSize: 12),
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ((controller.subjectsToUpload[index]?.laboratory ??
                                     false) ==
                                 true)
-                            ? const Icon(
+                            ? Icon(
                                 Icons.science_sharp,
-                                size: 12,
+                                size: mobile ? 12 : 18,
                               )
                             : Container(),
                         ((controller.subjectsToUpload[index]?.seminary ??
                                     false) ==
                                 true)
-                            ? const Icon(
+                            ? Icon(
                                 Icons.emoji_people_sharp,
-                                size: 12,
+                                size: mobile ? 12 : 18,
                               )
                             : Container(),
                         ((controller.subjectsToUpload[index]?.english ??
                                     false) ==
                                 true)
-                            ? const Icon(
+                            ? Icon(
                                 Icons.flag,
-                                size: 12,
+                                size: mobile ? 12 : 18,
                               )
                             : Container(),
                       ],

@@ -160,14 +160,14 @@ class CreateScheduleController extends BaseController {
     update();
   }
 
-  String calculateDay(int index) {
+  String calculateDay(int index, bool mobile) {
     final module = index%5;
     switch (module) {
-      case 0: return 'L';
-      case 1: return 'M';
-      case 2: return 'X';
-      case 3: return 'J';
-      case 4: return 'V';
+      case 0: return mobile ? 'L'.tr: 'monday'.tr;
+      case 1: return mobile ? 'M'.tr: 'tuesday'.tr;
+      case 2: return mobile ? 'X'.tr: 'wednesday'.tr;
+      case 3: return mobile ? 'J'.tr: 'thursday'.tr;
+      case 4: return mobile ? 'V'.tr: 'friday'.tr;
       default: return '';
     }
   }
