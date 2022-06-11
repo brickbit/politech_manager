@@ -2,7 +2,7 @@
 import 'package:politech_manager/data/model/subject_dto.dart';
 
 class ScheduleDto {
-  List<List<List<SubjectDto?>>> subjects;
+  List<SubjectDto?> subjects;
   int scheduleType;
   int fileType;
   String degree;
@@ -14,7 +14,7 @@ class ScheduleDto {
 
   factory ScheduleDto.fromJson(Map<String, dynamic> json) {
     return ScheduleDto(
-      subjects: listDynamicTo3DMatrixSubject(json["subjects"]),
+      subjects: json["subjects"],
       scheduleType: json['scheduleType'],
       fileType: json['fileType'],
       degree: json['degree'],

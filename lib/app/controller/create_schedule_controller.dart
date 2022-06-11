@@ -61,7 +61,7 @@ class CreateScheduleController extends BaseController {
   void saveSchedule() {
     hideError();
     showProgress();
-    var schedule = ScheduleBO([], 0, 0, "degree", "year", 0);
+    var schedule = ScheduleBO(_subjectsToUpload.value, 0, 0, "degree", "year", 0);
     dataRepository.postSchedule(schedule).fold(
           (left) => _onSaveScheduleKo(left),
           (right) => _onSaveScheduleOk(),

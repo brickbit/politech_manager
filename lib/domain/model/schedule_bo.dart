@@ -1,7 +1,7 @@
 import 'package:politech_manager/domain/model/subject_bo.dart';
 
 class ScheduleBO {
-  final List<List<List<SubjectBO?>>> subjects;
+  final List<SubjectBO?> subjects;
   final int scheduleType;
   final int fileType;
   final String degree;
