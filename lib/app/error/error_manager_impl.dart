@@ -73,6 +73,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case ChangePasswordErrorType.wrongUser:
         return "errorChangingPassword".tr;
+      case ChangePasswordErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -81,6 +83,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case DeleteAccountErrorType.wrongUser:
         return "errorDeletingAccount".tr;
+      case DeleteAccountErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -89,6 +93,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case ClassroomErrorType.wrongUser:
         return "errorGetClassrooms".tr;
+      case ClassroomErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -97,6 +103,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case DegreeErrorType.wrongUser:
         return "errorGetDegrees".tr;
+      case DegreeErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -105,6 +113,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case DepartmentErrorType.wrongUser:
         return "errorGetDepartments".tr;
+      case DepartmentErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -113,6 +123,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case ExamErrorType.wrongUser:
         return "errorGetExams".tr;
+      case ExamErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -121,6 +133,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case SubjectErrorType.wrongUser:
         return "errorGetSubjects".tr;
+      case SubjectErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -129,6 +143,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case ScheduleErrorType.wrongUser:
         return "errorGetSchedules".tr;
+      case ScheduleErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 
@@ -137,6 +153,8 @@ class ErrorManagerImpl extends ErrorManager {
     switch (error.errorType) {
       case CalendarErrorType.wrongUser:
         return "errorGetSchedules".tr;
+      case CalendarErrorType.expiredToken:
+        return '';//Managed, do not show it
     }
   }
 }

@@ -1,7 +1,9 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/model/schedule_filter.dart';
+import 'package:politech_manager/domain/error/degree_error_type.dart';
+import 'package:politech_manager/domain/error/schedule_error_type.dart';
+import 'package:politech_manager/domain/error/subject_error_type.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import '../../domain/error/degree_error.dart';
 import '../../domain/error/error_manager.dart';
@@ -57,13 +59,19 @@ class ScheduleListController extends BaseController {
     dataRepository.getDegrees().fold(
           (left) => _onGetDegreesKo(left),
           (right) => _onGetDegreesOk(right),
-    );
+        );
   }
 
   void _onGetDegreesKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getDegrees());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onGetDegreesOk(List<DegreeBO> degrees) {
@@ -77,13 +85,19 @@ class ScheduleListController extends BaseController {
     dataRepository.getSubjects().fold(
           (left) => _onGetSubjectsKo(left),
           (right) => _onGetSubjectsOk(right),
-    );
+        );
   }
 
   void _onGetSubjectsKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getSubjects());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onGetSubjectsOk(List<SubjectBO> subjects) {
@@ -97,13 +111,19 @@ class ScheduleListController extends BaseController {
     dataRepository.getSchedules().fold(
           (left) => _onGetSchedulesKo(left),
           (right) => _onGetSchedulesOk(right),
-    );
+        );
   }
 
   void _onGetSchedulesKo(ScheduleError scheduleError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSchedule(scheduleError));
+    if (scheduleError.errorType == ScheduleErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getSchedules());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSchedule(scheduleError));
+    }
   }
 
   void _onGetSchedulesOk(List<ScheduleBO> schedules) {
@@ -143,19 +163,30 @@ class ScheduleListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteSchedule(schedule.id).fold(
-          (left) => _onDeleteScheduleKo(left),
+          (left) => _onDeleteScheduleKo(left, schedule),
           (right) => _onDeleteScheduleOk(),
-    );
+        );
   }
 
-  void _onDeleteScheduleKo(ScheduleError scheduleError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSchedule(scheduleError));
+  void _onDeleteScheduleKo(ScheduleError scheduleError, ScheduleBO schedule) {
+    if (scheduleError.errorType == ScheduleErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => deleteSchedule(schedule));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSchedule(scheduleError));
+    }
   }
 
   void _onDeleteScheduleOk() {
     hideProgress();
     getSchedules();
+  }
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
   }
 }

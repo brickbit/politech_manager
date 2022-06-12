@@ -27,6 +27,8 @@ import 'package:politech_manager/domain/model/schedule_bo.dart';
 
 import 'package:politech_manager/domain/model/subject_bo.dart';
 
+import '../../domain/error/login_error.dart';
+import '../../domain/model/response_login_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import '../datasource/network_datasource.dart';
 
@@ -35,6 +37,15 @@ class DataRepositoryImpl extends DataRepository {
 
   DataRepositoryImpl(this.network);
 
+  @override
+  Future<Either<LoginError, ResponseLoginBO>> updateToken() async {
+    final response = await network.updateToken();
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
   @override
   Future<Either<ClassroomError, List<ClassroomBO>>> getClassrooms() async {
     final response = await network.getClassrooms();

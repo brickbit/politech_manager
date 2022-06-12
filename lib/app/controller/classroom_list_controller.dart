@@ -1,6 +1,6 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/domain/error/classroom_error_type.dart';
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 import '../../domain/error/classroom_error.dart';
 import '../../domain/error/error_manager.dart';
@@ -33,13 +33,19 @@ class ClassroomListController extends BaseController {
     dataRepository.getClassrooms().fold(
           (left) => _onGetClassroomsKo(left),
           (right) => _onGetClassroomsOk(right),
-    );
+        );
   }
 
   void _onGetClassroomsKo(ClassroomError classroomError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertClassroom(classroomError));
+    if (classroomError.errorType == ClassroomErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getClassrooms());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertClassroom(classroomError));
+    }
   }
 
   void _onGetClassroomsOk(List<ClassroomBO> classrooms) {
@@ -51,15 +57,21 @@ class ClassroomListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateClassroom(classroom).fold(
-          (left) => _onUpdateClassroomKo(left),
+          (left) => _onUpdateClassroomKo(left, classroom),
           (right) => _onUpdateClassroomOk(),
-    );
+        );
   }
 
-  void _onUpdateClassroomKo(ClassroomError classroomError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertClassroom(classroomError));
+  void _onUpdateClassroomKo(
+      ClassroomError classroomError, ClassroomBO classroom) {
+    if (classroomError.errorType == ClassroomErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => updateClassroom(classroom));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertClassroom(classroomError));
+    }
   }
 
   void _onUpdateClassroomOk() {
@@ -71,19 +83,31 @@ class ClassroomListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteClassroom(classroom.id).fold(
-          (left) => _onDeleteClassroomKo(left),
+          (left) => _onDeleteClassroomKo(left, classroom),
           (right) => _onDeleteClassroomOk(),
-    );
+        );
   }
 
-  void _onDeleteClassroomKo(ClassroomError classroomError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertClassroom(classroomError));
+  void _onDeleteClassroomKo(
+      ClassroomError classroomError, ClassroomBO classroom) {
+    if (classroomError.errorType == ClassroomErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => deleteClassroom(classroom));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertClassroom(classroomError));
+    }
   }
 
   void _onDeleteClassroomOk() {
     hideProgress();
     getClassrooms();
+  }
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
   }
 }

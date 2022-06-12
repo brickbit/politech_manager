@@ -1,7 +1,5 @@
 
 enum CalendarErrorType {
   wrongUser,
-  //passwordNotMatch,
-  //incorrectPassword,
-  //unknownError
+  expiredToken
 }

@@ -1,6 +1,6 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/domain/error/degree_error_type.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import '../../domain/error/degree_error.dart';
 import '../../domain/error/error_manager.dart';
@@ -33,13 +33,19 @@ class DegreeListController extends BaseController {
     dataRepository.getDegrees().fold(
           (left) => _onGetDegreesKo(left),
           (right) => _onGetDegreesOk(right),
-    );
+        );
   }
 
   void _onGetDegreesKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getDegrees());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onGetDegreesOk(List<DegreeBO> degrees) {
@@ -51,15 +57,20 @@ class DegreeListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateDegree(degree).fold(
-          (left) => _onUpdateDegreeKo(left),
+          (left) => _onUpdateDegreeKo(left, degree),
           (right) => _onUpdateDegreeOk(),
-    );
+        );
   }
 
-  void _onUpdateDegreeKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+  void _onUpdateDegreeKo(DegreeError degreeError, DegreeBO degree) {
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => updateDegree(degree));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onUpdateDegreeOk() {
@@ -71,19 +82,29 @@ class DegreeListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteDegree(degree.id).fold(
-          (left) => _onDeleteDegreeKo(left),
+          (left) => _onDeleteDegreeKo(left, degree),
           (right) => _onDeleteDegreeOk(),
-    );
+        );
   }
 
-  void _onDeleteDegreeKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+  void _onDeleteDegreeKo(DegreeError degreeError, DegreeBO degree) {
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(), (right) => deleteDegree(degree));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onDeleteDegreeOk() {
     hideProgress();
     getDegrees();
+  }
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
   }
 }

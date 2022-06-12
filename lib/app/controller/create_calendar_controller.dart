@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:either_dart/either.dart';
@@ -7,6 +6,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
+import 'package:politech_manager/domain/error/calendar_error_type.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../domain/error/calendar_error.dart';
@@ -82,7 +82,8 @@ class CreateCalendarController extends BaseController {
     _call.value = argumentData['call'];
     _degree.value = argumentData['degree'];
     _getNumberOfCells();
-    _examsToUpload.value = List.filled(_numberOfCells.value, PairExamBO(null,null));
+    _examsToUpload.value =
+        List.filled(_numberOfCells.value, PairExamBO(null, null));
     super.onInit();
   }
 
@@ -94,12 +95,15 @@ class CreateCalendarController extends BaseController {
     final endDateArray = _endDate.value.split("-");
     final startDateArray = _startDate.value.split("-");
 
-    final start = DateTime(int.parse(startDateArray[2]), int.parse(startDateArray[1]), int.parse(startDateArray[1]));
-    final end = DateTime(int.parse(endDateArray[2]), int.parse(endDateArray[1]), int.parse(endDateArray[0]));
+    final start = DateTime(int.parse(startDateArray[2]),
+        int.parse(startDateArray[1]), int.parse(startDateArray[1]));
+    final end = DateTime(int.parse(endDateArray[2]), int.parse(endDateArray[1]),
+        int.parse(endDateArray[0]));
     _numberOfCells.value = end.difference(start).inDays;
     List<String> array = List.filled(_numberOfCells.value, "", growable: false);
     array.asMap().forEach((index, value) {
-      array[index] = DateTime(start.year, start.month, start.day + index + 1).getString();
+      array[index] =
+          DateTime(start.year, start.month, start.day + index + 1).getString();
     });
     _dateArray.value = array;
   }
@@ -111,17 +115,24 @@ class CreateCalendarController extends BaseController {
     final itemAfternoon = _examsToUpload.value.map((item) => item.last);
     itemMorning.addAll(itemAfternoon);
     itemMorning.removeWhere((element) => element == null);
-    var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value, _endDate.value, _call.value, 0);
+    var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value,
+        _endDate.value, _call.value, 0);
     dataRepository.postCalendar(calendar).fold(
           (left) => _onSaveCalendarKo(left),
           (right) => _onSaveCalendarOk(),
-    );
+        );
   }
 
   void _onSaveCalendarKo(CalendarError calendarError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertCalendar(calendarError));
+    if (calendarError.errorType == CalendarErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => saveCalendar());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertCalendar(calendarError));
+    }
   }
 
   void _onSaveCalendarOk() {
@@ -135,17 +146,24 @@ class CreateCalendarController extends BaseController {
     final itemAfternoon = _examsToUpload.value.map((item) => item.last);
     itemMorning.addAll(itemAfternoon);
     itemMorning.removeWhere((element) => element == null);
-    var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value, _endDate.value, _call.value, 0);
+    var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value,
+        _endDate.value, _call.value, 0);
     dataRepository.downloadCalendar(calendar).fold(
           (left) => _onDownloadCalendarKo(left),
           (right) => _onDownloadCalendarOk(right),
-    );
+        );
   }
 
   void _onDownloadCalendarKo(CalendarError calendarError) {
-    hideProgress();
-    showErrorMessage(errorManager.convertCalendar(calendarError));
-    showError();
+    if (calendarError.errorType == CalendarErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => downloadFile());
+    } else {
+      hideProgress();
+      showErrorMessage(errorManager.convertCalendar(calendarError));
+      showError();
+    }
   }
 
   void _onDownloadCalendarOk(Uint8List bytes) async {
@@ -158,10 +176,10 @@ class CreateCalendarController extends BaseController {
   }
 
   void openFile() async {
-    if(Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid || Platform.isIOS) {
       OpenFile.open(path);
     } else if (Platform.isWindows) {
-      if (await canLaunchUrl(Uri.file(path,windows: true))) {
+      if (await canLaunchUrl(Uri.file(path, windows: true))) {
         await launchUrl(Uri.file(path, windows: true));
       } else {
         showErrorMessage('canNotOpenDocument'.tr);
@@ -185,23 +203,19 @@ class CreateCalendarController extends BaseController {
 
   void startDrag(int index) {
     selectedExam.value = _exams.value.firstWhere((element) =>
-    _exams.value
-        .map((data) => data.toExamBox())
-        .toList()[index]
-        .exam
-        .id ==
+        _exams.value.map((data) => data.toExamBox()).toList()[index].exam.id ==
         element.id);
   }
 
   void dragItemSuccessfully(int index) {
     selectedExam = _exams.value
         .firstWhere((element) =>
-    _exams.value
-        .map((data) => data.toExamBox())
-        .toList()[index]
-        .exam
-        .id ==
-        element.id)
+            _exams.value
+                .map((data) => data.toExamBox())
+                .toList()[index]
+                .exam
+                .id ==
+            element.id)
         .obs;
     var pos = _exams.value.indexOf(selectedExam.value);
     _exams.value.removeAt(pos);
@@ -225,13 +239,13 @@ class CreateCalendarController extends BaseController {
   }
 
   void deleteItem(ExamBO exam, bool morning) {
-    if(morning) {
-      final index = _examsToUpload.value.indexWhere((element) =>
-      element.first?.id == exam.id);
+    if (morning) {
+      final index = _examsToUpload.value
+          .indexWhere((element) => element.first?.id == exam.id);
       _examsToUpload.value[index] = PairExamBO(null, null);
     } else {
-      final index = _examsToUpload.value.indexWhere((element) =>
-      element.last?.id == exam.id);
+      final index = _examsToUpload.value
+          .indexWhere((element) => element.last?.id == exam.id);
       _examsToUpload.value[index] = PairExamBO(null, null);
     }
     _exams.value.add(exam);
@@ -240,6 +254,9 @@ class CreateCalendarController extends BaseController {
     update();
   }
 
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
+  }
 }
-
-

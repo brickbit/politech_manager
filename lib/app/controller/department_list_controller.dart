@@ -1,6 +1,6 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/domain/error/department_error_type.dart';
 import '../../domain/error/department_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/model/department_bo.dart';
@@ -33,13 +33,19 @@ class DepartmentListController extends BaseController {
     dataRepository.getDepartments().fold(
           (left) => _onGetDepartmentsKo(left),
           (right) => _onGetDepartmentsOk(right),
-    );
+        );
   }
 
   void _onGetDepartmentsKo(DepartmentError departmentError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDepartment(departmentError));
+    if (departmentError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getDepartments());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDepartment(departmentError));
+    }
   }
 
   void _onGetDepartmentsOk(List<DepartmentBO> departments) {
@@ -51,15 +57,21 @@ class DepartmentListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateDepartment(department).fold(
-          (left) => _onUpdateDepartmentKo(left),
+          (left) => _onUpdateDepartmentKo(left, department),
           (right) => _onUpdateDepartmentOk(),
-    );
+        );
   }
 
-  void _onUpdateDepartmentKo(DepartmentError departmentError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDepartment(departmentError));
+  void _onUpdateDepartmentKo(
+      DepartmentError departmentError, DepartmentBO department) {
+    if (departmentError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => updateDepartment(department));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDepartment(departmentError));
+    }
   }
 
   void _onUpdateDepartmentOk() {
@@ -71,19 +83,31 @@ class DepartmentListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteDepartment(department.id).fold(
-          (left) => _onDeleteDepartmentKo(left),
+          (left) => _onDeleteDepartmentKo(left, department),
           (right) => _onDeleteDepartmentOk(),
-    );
+        );
   }
 
-  void _onDeleteDepartmentKo(DepartmentError departmentError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDepartment(departmentError));
+  void _onDeleteDepartmentKo(
+      DepartmentError departmentError, DepartmentBO department) {
+    if (departmentError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => deleteDepartment(department));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDepartment(departmentError));
+    }
   }
 
   void _onDeleteDepartmentOk() {
     hideProgress();
     getDepartments();
+  }
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
   }
 }

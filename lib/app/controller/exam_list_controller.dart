@@ -1,8 +1,8 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/domain/error/exam_error.dart';
+import 'package:politech_manager/domain/error/exam_error_type.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/model/exam_bo.dart';
 import '../../domain/model/subject_bo.dart';
@@ -44,13 +44,19 @@ class ExamListController extends BaseController {
     dataRepository.getExams().fold(
           (left) => _onGetExamsKo(left),
           (right) => _onGetExamsOk(right),
-    );
+        );
   }
 
   void _onGetExamsKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getExams());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onGetExamsOk(List<ExamBO> exams) {
@@ -62,15 +68,21 @@ class ExamListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateExam(exam).fold(
-          (left) => _onUpdateExamKo(left),
+          (left) => _onUpdateExamKo(left, exam),
           (right) => _onUpdateExamOk(),
-    );
+        );
   }
 
-  void _onUpdateExamKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+  void _onUpdateExamKo(ExamError examError, ExamBO exam) {
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => updateExam(exam));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onUpdateExamOk() {
@@ -82,15 +94,21 @@ class ExamListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteExam(exam.id).fold(
-          (left) => _onDeleteExamKo(left),
+          (left) => _onDeleteExamKo(left, exam),
           (right) => _onDeleteExamOk(),
-    );
+        );
   }
 
-  void _onDeleteExamKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+  void _onDeleteExamKo(ExamError examError, ExamBO exam) {
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => deleteExam(exam));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onDeleteExamOk() {
@@ -104,17 +122,25 @@ class ExamListController extends BaseController {
     var turnFilter = filters['turn'] as String?;
     var subjectFilter = filters['subject'] as SubjectBO?;
 
-    if(semesterFilter != null) {
-      _exams.value = _exams.value.where((element) => element.semester == semesterFilter).toList();
+    if (semesterFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.semester == semesterFilter)
+          .toList();
     }
-    if(callFilter != null) {
-      _exams.value = _exams.value.where((element) => element.call == callFilter.getCall()).toList();
+    if (callFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.call == callFilter.getCall())
+          .toList();
     }
-    if(turnFilter != null) {
-      _exams.value = _exams.value.where((element) => element.turn == turnFilter.getTurn()).toList();
+    if (turnFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.turn == turnFilter.getTurn())
+          .toList();
     }
-    if(subjectFilter != null) {
-      _exams.value = _exams.value.where((element) => element.subject.id == subjectFilter.id).toList();
+    if (subjectFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.subject.id == subjectFilter.id)
+          .toList();
     }
     _filterActive.value = true;
     update();
@@ -124,5 +150,11 @@ class ExamListController extends BaseController {
     getExams();
     _filterActive.value = false;
     update();
+  }
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
   }
 }

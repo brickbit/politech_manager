@@ -1,7 +1,11 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
+import 'package:politech_manager/domain/error/classroom_error_type.dart';
+import 'package:politech_manager/domain/error/degree_error_type.dart';
+import 'package:politech_manager/domain/error/department_error_type.dart';
+import 'package:politech_manager/domain/error/exam_error_type.dart';
+import 'package:politech_manager/domain/error/subject_error_type.dart';
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
@@ -67,24 +71,30 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.getClassrooms().fold(
-            (left) => _onGetClassroomsKo(left),
-            (right) => _onGetClassroomsOk(right),
-    );
+          (left) => _onGetClassroomsKo(left),
+          (right) => _onGetClassroomsOk(right),
+        );
   }
 
   void uploadClassroom(ClassroomBO classroom) {
     hideError();
     showProgress();
     dataRepository.postClassroom(classroom).fold(
-          (left) => _onPostClassroomKo(left),
+          (left) => _onPostClassroomKo(left, classroom),
           (right) => _onPostClassroomOk(),
-    );
+        );
   }
 
   void _onGetClassroomsKo(ClassroomError classroomError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertClassroom(classroomError));
+    if (classroomError.errorType == ClassroomErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getClassrooms());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertClassroom(classroomError));
+    }
   }
 
   void _onGetClassroomsOk(List<ClassroomBO> classrooms) {
@@ -93,10 +103,17 @@ class DataController extends BaseController {
     getDegrees();
   }
 
-  void _onPostClassroomKo(ClassroomError classroomError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertClassroom(classroomError));
+  void _onPostClassroomKo(
+      ClassroomError classroomError, ClassroomBO classroom) {
+    if (classroomError.errorType == ClassroomErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => null, (right) => uploadClassroom(classroom));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertClassroom(classroomError));
+    }
   }
 
   void _onPostClassroomOk() {
@@ -110,22 +127,28 @@ class DataController extends BaseController {
     dataRepository.getDegrees().fold(
           (left) => _onGetDegreesKo(left),
           (right) => _onGetDegreesOk(right),
-    );
+        );
   }
 
   void uploadDegree(DegreeBO degree) {
     hideError();
     showProgress();
     dataRepository.postDegree(degree).fold(
-          (left) => _onPostDegreeKo(left),
+          (left) => _onPostDegreeKo(left, degree),
           (right) => _onPostDegreeOk(),
-    );
+        );
   }
 
   void _onGetDegreesKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getDegrees());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onGetDegreesOk(List<DegreeBO> degrees) {
@@ -134,10 +157,15 @@ class DataController extends BaseController {
     getDepartments();
   }
 
-  void _onPostDegreeKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+  void _onPostDegreeKo(DegreeError degreeError, DegreeBO degree) {
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => uploadDegree(degree));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onPostDegreeOk() {
@@ -151,22 +179,28 @@ class DataController extends BaseController {
     dataRepository.getDepartments().fold(
           (left) => _onGetDepartmentsKo(left),
           (right) => _onGetDepartmentsOk(right),
-    );
+        );
   }
 
   void uploadDepartment(DepartmentBO department) {
     hideError();
     showProgress();
     dataRepository.postDepartment(department).fold(
-          (left) => _onPostDepartmentKo(left),
+          (left) => _onPostDepartmentKo(left, department),
           (right) => _onPostDepartmentOk(),
-    );
+        );
   }
 
   void _onGetDepartmentsKo(DepartmentError departmentError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDepartment(departmentError));
+    if (departmentError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getDepartments());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDepartment(departmentError));
+    }
   }
 
   void _onGetDepartmentsOk(List<DepartmentBO> departments) {
@@ -175,10 +209,16 @@ class DataController extends BaseController {
     getSubjects();
   }
 
-  void _onPostDepartmentKo(DepartmentError departmentError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDepartment(departmentError));
+  void _onPostDepartmentKo(
+      DepartmentError departmentError, DepartmentBO department) {
+    if (departmentError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => uploadDepartment(department));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDepartment(departmentError));
+    }
   }
 
   void _onPostDepartmentOk() {
@@ -192,22 +232,28 @@ class DataController extends BaseController {
     dataRepository.getSubjects().fold(
           (left) => _onGetSubjectsKo(left),
           (right) => _onGetSubjectsOk(right),
-    );
+        );
   }
 
   void uploadSubject(SubjectBO subject) {
     hideError();
     showProgress();
     dataRepository.postSubject(subject).fold(
-          (left) => _onPostSubjectKo(left),
+          (left) => _onPostSubjectKo(left, subject),
           (right) => _onPostSubjectOk(),
-    );
+        );
   }
 
   void _onGetSubjectsKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getSubjects());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onGetSubjectsOk(List<SubjectBO> subjects) {
@@ -216,10 +262,15 @@ class DataController extends BaseController {
     getExams();
   }
 
-  void _onPostSubjectKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+  void _onPostSubjectKo(SubjectError subjectError, SubjectBO subject) {
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => uploadSubject(subject));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onPostSubjectOk() {
@@ -233,22 +284,28 @@ class DataController extends BaseController {
     dataRepository.getExams().fold(
           (left) => _onGetExamsKo(left),
           (right) => _onGetExamsOk(right),
-    );
+        );
   }
 
   void uploadExam(ExamBO exam) {
     hideError();
     showProgress();
     dataRepository.postExam(exam).fold(
-          (left) => _onPostExamKo(left),
+          (left) => _onPostExamKo(left, exam),
           (right) => _onPostExamOk(),
-    );
+        );
   }
 
   void _onGetExamsKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getExams());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onGetExamsOk(List<ExamBO> exams) {
@@ -256,10 +313,16 @@ class DataController extends BaseController {
     _exams.value = exams;
   }
 
-  void _onPostExamKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+  void _onPostExamKo(ExamError examError, ExamBO exam) {
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => uploadExam(exam));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onPostExamOk() {
@@ -271,15 +334,20 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateDegree(degree).fold(
-          (left) => _onUpdateDegreeKo(left),
+          (left) => _onUpdateDegreeKo(left, degree),
           (right) => _onUpdateDegreeOk(),
-    );
+        );
   }
 
-  void _onUpdateDegreeKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+  void _onUpdateDegreeKo(DegreeError degreeError, DegreeBO degree) {
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => updateDegree(degree));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onUpdateDegreeOk() {
@@ -291,15 +359,20 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteDegree(degree.id).fold(
-          (left) => _onDeleteDegreeKo(left),
+          (left) => _onDeleteDegreeKo(left, degree),
           (right) => _onDeleteDegreeOk(),
-    );
+        );
   }
 
-  void _onDeleteDegreeKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+  void _onDeleteDegreeKo(DegreeError degreeError, DegreeBO degree) {
+    if (degreeError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => deleteDegree(degree));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onDeleteDegreeOk() {
@@ -311,15 +384,21 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateClassroom(classroom).fold(
-          (left) => _onUpdateClassroomKo(left),
+          (left) => _onUpdateClassroomKo(left, classroom),
           (right) => _onUpdateClassroomOk(),
-    );
+        );
   }
 
-  void _onUpdateClassroomKo(ClassroomError classroomError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertClassroom(classroomError));
+  void _onUpdateClassroomKo(
+      ClassroomError classroomError, ClassroomBO classroom) {
+    if (classroomError.errorType == ClassroomErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => updateClassroom(classroom));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertClassroom(classroomError));
+    }
   }
 
   void _onUpdateClassroomOk() {
@@ -331,15 +410,21 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteClassroom(classroom.id).fold(
-          (left) => _onDeleteClassroomKo(left),
+          (left) => _onDeleteClassroomKo(left, classroom),
           (right) => _onDeleteClassroomOk(),
-    );
+        );
   }
 
-  void _onDeleteClassroomKo(ClassroomError classroomError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertClassroom(classroomError));
+  void _onDeleteClassroomKo(
+      ClassroomError classroomError, ClassroomBO classroom) {
+    if (classroomError.errorType == ClassroomErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => updateClassroom(classroom));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertClassroom(classroomError));
+    }
   }
 
   void _onDeleteClassroomOk() {
@@ -351,15 +436,21 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateDepartment(department).fold(
-          (left) => _onUpdateDepartmentKo(left),
+          (left) => _onUpdateDepartmentKo(left, department),
           (right) => _onUpdateDepartmentOk(),
-    );
+        );
   }
 
-  void _onUpdateDepartmentKo(DepartmentError departmentError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDepartment(departmentError));
+  void _onUpdateDepartmentKo(
+      DepartmentError departmentError, DepartmentBO department) {
+    if (departmentError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => updateDepartment(department));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDepartment(departmentError));
+    }
   }
 
   void _onUpdateDepartmentOk() {
@@ -371,15 +462,21 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteDepartment(department.id).fold(
-          (left) => _onDeleteDepartmentKo(left),
+          (left) => _onDeleteDepartmentKo(left, department),
           (right) => _onDeleteDepartmentOk(),
-    );
+        );
   }
 
-  void _onDeleteDepartmentKo(DepartmentError departmentError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDepartment(departmentError));
+  void _onDeleteDepartmentKo(
+      DepartmentError departmentError, DepartmentBO department) {
+    if (departmentError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+          (right) => deleteDepartment(department));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDepartment(departmentError));
+    }
   }
 
   void _onDeleteDepartmentOk() {
@@ -391,15 +488,20 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateSubject(subject).fold(
-          (left) => _onUpdateSubjectKo(left),
+          (left) => _onUpdateSubjectKo(left, subject),
           (right) => _onUpdateSubjectOk(),
-    );
+        );
   }
 
-  void _onUpdateSubjectKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+  void _onUpdateSubjectKo(SubjectError subjectError, SubjectBO subject) {
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => updateSubject(subject));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onUpdateSubjectOk() {
@@ -411,15 +513,20 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteSubject(subject.id).fold(
-          (left) => _onDeleteSubjectKo(left),
+          (left) => _onDeleteSubjectKo(left, subject),
           (right) => _onDeleteSubjectOk(),
-    );
+        );
   }
 
-  void _onDeleteSubjectKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+  void _onDeleteSubjectKo(SubjectError subjectError, SubjectBO subject) {
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => deleteSubject(subject));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onDeleteSubjectOk() {
@@ -431,15 +538,21 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateExam(exam).fold(
-          (left) => _onUpdateExamKo(left),
+          (left) => _onUpdateExamKo(left, exam),
           (right) => _onUpdateExamOk(),
-    );
+        );
   }
 
-  void _onUpdateExamKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+  void _onUpdateExamKo(ExamError examError, ExamBO exam) {
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => updateExam(exam));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onUpdateExamOk() {
@@ -451,15 +564,21 @@ class DataController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteExam(exam.id).fold(
-          (left) => _onDeleteExamKo(left),
+          (left) => _onDeleteExamKo(left, exam),
           (right) => _onDeleteExamOk(),
-    );
+        );
   }
 
-  void _onDeleteExamKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+  void _onDeleteExamKo(ExamError examError, ExamBO exam) {
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => deleteExam(exam));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onDeleteExamOk() {
@@ -476,26 +595,40 @@ class DataController extends BaseController {
     var departmentFilter = filters['department'] as DepartmentBO?;
     var degreeFilter = filters['degree'] as DegreeBO?;
 
-    if(seminaryFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.seminary == seminaryFilter).toList();
+    if (seminaryFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.seminary == seminaryFilter)
+          .toList();
     }
-    if(laboratoryFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.laboratory == laboratoryFilter).toList();
+    if (laboratoryFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.laboratory == laboratoryFilter)
+          .toList();
     }
-    if(englishFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.english == englishFilter).toList();
+    if (englishFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.english == englishFilter)
+          .toList();
     }
-    if(semesterFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.semester == int.parse(semesterFilter)).toList();
+    if (semesterFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.semester == int.parse(semesterFilter))
+          .toList();
     }
-    if(classroomFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.classroom.id == classroomFilter.id).toList();
+    if (classroomFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.classroom.id == classroomFilter.id)
+          .toList();
     }
-    if(departmentFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.department.id == departmentFilter.id).toList();
+    if (departmentFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.department.id == departmentFilter.id)
+          .toList();
     }
-    if(degreeFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.degree.id == degreeFilter.id).toList();
+    if (degreeFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.degree.id == degreeFilter.id)
+          .toList();
     }
     _filterActive.value = true;
     update();
@@ -507,17 +640,25 @@ class DataController extends BaseController {
     var turnFilter = filters['turn'] as String?;
     var subjectFilter = filters['subject'] as SubjectBO?;
 
-    if(semesterFilter != null) {
-      _exams.value = _exams.value.where((element) => element.semester == semesterFilter).toList();
+    if (semesterFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.semester == semesterFilter)
+          .toList();
     }
-    if(callFilter != null) {
-      _exams.value = _exams.value.where((element) => element.call == callFilter.getCall()).toList();
+    if (callFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.call == callFilter.getCall())
+          .toList();
     }
-    if(turnFilter != null) {
-      _exams.value = _exams.value.where((element) => element.turn == turnFilter.getTurn()).toList();
+    if (turnFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.turn == turnFilter.getTurn())
+          .toList();
     }
-    if(subjectFilter != null) {
-      _exams.value = _exams.value.where((element) => element.subject.id == subjectFilter.id).toList();
+    if (subjectFilter != null) {
+      _exams.value = _exams.value
+          .where((element) => element.subject.id == subjectFilter.id)
+          .toList();
     }
     _filterActive.value = true;
     update();
@@ -533,5 +674,11 @@ class DataController extends BaseController {
     getExams();
     _filterActive.value = false;
     update();
+  }
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
   }
 }

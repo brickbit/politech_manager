@@ -64,6 +64,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   String user = '';
 
+  String password = '';
+
   final Client client;
 
   final headers = {'Content-Type': 'application/x-www-form-urlencoded'};
@@ -81,9 +83,26 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   NetworkDataSourceImpl(this.client);
 
   @override
+  Future<Either<LoginError, ResponseLoginBO>> updateToken() async {
+    final query = QueryLoginDto(email: user, password: password).toJson();
+    final response = await client.post(Uri.parse("${endpoint}user/login"),
+        headers: headers, body: query);
+    if (response.statusCode != 200) {
+      return Left(LoginError(errorType: LoginErrorType.wrongUser));
+    } else {
+      final dto = ResponseLoginDto.fromJson(jsonDecode(response.body));
+      token = dto.token;
+      authHeaders['Authorization'] = token;
+      authJsonHeaders['Authorization'] = token;
+      return Right(dto.toBO());
+    }
+  }
+
+  @override
   Future<Either<LoginError, ResponseLoginBO>> login(
       String username, String password) async {
     user = username;
+    this.password = password;
     final query = QueryLoginDto(email: username, password: password).toJson();
     final response = await client.post(Uri.parse("${endpoint}user/login"),
         headers: headers, body: query);
@@ -175,14 +194,17 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final query = QueryDeleteUserDto(email: user).toJson();
     final response = await client.post(Uri.parse("${endpoint}delete"),
         headers: authHeaders, body: query);
-    if (response.statusCode != 200) {
-      return Left(
-          DeleteAccountError(errorType: DeleteAccountErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       user = '';
       token = '';
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(
+          DeleteAccountError(errorType: DeleteAccountErrorType.expiredToken));
+    } else {
+      return Left(
+          DeleteAccountError(errorType: DeleteAccountErrorType.wrongUser));
     }
   }
 
@@ -190,14 +212,16 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<ClassroomError, List<ClassroomBO>>> getClassrooms() async {
     final response = await client.get(Uri.parse("${endpoint}classroom"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<ClassroomDto> classroomList =
-          list.map((item) => ClassroomDto.fromJson(item)).toList();
+      list.map((item) => ClassroomDto.fromJson(item)).toList();
       final dto = classroomList.map((item) => item.toBO()).toList();
       return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(ClassroomError(errorType: ClassroomErrorType.expiredToken));
+    } else {
+      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
     }
   }
 
@@ -205,14 +229,16 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<DegreeError, List<DegreeBO>>> getDegrees() async {
     final response = await client.get(Uri.parse("${endpoint}degree"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<DegreeDto> degreeList =
-          list.map((item) => DegreeDto.fromJson(item)).toList();
+      list.map((item) => DegreeDto.fromJson(item)).toList();
       final dto = degreeList.map((item) => item.toBO()).toList();
       return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(DegreeError(errorType: DegreeErrorType.expiredToken));
+    } else {
+      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
     }
   }
 
@@ -220,14 +246,16 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<DepartmentError, List<DepartmentBO>>> getDepartments() async {
     final response = await client.get(Uri.parse("${endpoint}department"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<DepartmentDto> departmentList =
-          list.map((item) => DepartmentDto.fromJson(item)).toList();
+      list.map((item) => DepartmentDto.fromJson(item)).toList();
       final dto = departmentList.map((item) => item.toBO()).toList();
       return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(DepartmentError(errorType: DepartmentErrorType.expiredToken));
+    } else {
+      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
     }
   }
 
@@ -235,14 +263,16 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<ExamError, List<ExamBO>>> getExams() async {
     final response = await client.get(Uri.parse("${endpoint}exam"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(ExamError(errorType: ExamErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<ExamDto> examList =
-          list.map((item) => ExamDto.fromJson(item)).toList();
+      list.map((item) => ExamDto.fromJson(item)).toList();
       final dto = examList.map((item) => item.toBO()).toList();
       return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(ExamError(errorType: ExamErrorType.expiredToken));
+    } else {
+      return Left(ExamError(errorType: ExamErrorType.wrongUser));
     }
   }
 
@@ -250,14 +280,16 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<SubjectError, List<SubjectBO>>> getSubjects() async {
     final response = await client.get(Uri.parse("${endpoint}subject"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<SubjectDto> subjectList =
-          list.map((item) => SubjectDto.fromJson(item)).toList();
+      list.map((item) => SubjectDto.fromJson(item)).toList();
       final dto = subjectList.map((item) => item.toBO()).toList();
       return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(SubjectError(errorType: SubjectErrorType.expiredToken));
+    } else {
+      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
     }
   }
 
@@ -265,14 +297,16 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<ScheduleError, List<ScheduleBO>>> getSchedules() async {
     final response = await client.get(Uri.parse("${endpoint}schedule"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<ScheduleDto> scheduleList =
       list.map((item) => ScheduleDto.fromJson(item)).toList();
       final dto = scheduleList.map((item) => item.toBO()).toList();
       return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.expiredToken));
+    } else {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
     }
   }
 
@@ -280,14 +314,16 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<CalendarError, List<CalendarBO>>> getCalendars() async {
     final response = await client.get(Uri.parse("${endpoint}calendar"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<CalendarDto> calendarList =
       list.map((item) => CalendarDto.fromJson(item)).toList();
       final dto = calendarList.map((item) => item.toBO()).toList();
       return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(CalendarError(errorType: CalendarErrorType.expiredToken));
+    } else {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     }
   }
 
@@ -297,11 +333,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final classroomJson = classroom.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}classroom"),
         headers: authJsonHeaders, body: json.encode(classroomJson));
-    if (response.statusCode != 200) {
-      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ClassroomError(errorType: ClassroomErrorType.expiredToken));
+    } else {
+      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
     }
   }
 
@@ -310,11 +348,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final degreeJson = degree.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}degree"),
         headers: authJsonHeaders, body: json.encode(degreeJson));
-    if (response.statusCode != 200) {
-      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(DegreeError(errorType: DegreeErrorType.expiredToken));
+    } else {
+      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
     }
   }
 
@@ -324,11 +364,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final departmentJson = department.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}department"),
         headers: authJsonHeaders, body: json.encode(departmentJson));
-    if (response.statusCode != 200) {
-      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(DepartmentError(errorType: DepartmentErrorType.expiredToken));
+    } else {
+      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
     }
   }
 
@@ -337,11 +379,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final examDto = exam.toDto();
     final response = await client.post(Uri.parse("${endpoint}exam"),
         headers: authJsonHeaders, body: json.encode(examDto.toJson()));
-    if (response.statusCode != 200) {
-      return Left(ExamError(errorType: ExamErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ExamError(errorType: ExamErrorType.expiredToken));
+    } else {
+      return Left(ExamError(errorType: ExamErrorType.wrongUser));
     }
   }
 
@@ -351,11 +395,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final subjectJson = subject.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}subject"),
         headers: authJsonHeaders, body: json.encode(subjectJson));
-    if (response.statusCode != 200) {
-      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(SubjectError(errorType: SubjectErrorType.expiredToken));
+    } else {
+      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
     }
   }
 
@@ -365,11 +411,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final classroomJson = classroom.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}classroom/update"),
         headers: authJsonHeaders, body: json.encode(classroomJson));
-    if (response.statusCode != 200) {
-      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
+    } else {
+      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
     }
   }
 
@@ -379,11 +427,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final degreeJson = degree.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}degree/update"),
         headers: authJsonHeaders, body: json.encode(degreeJson));
-    if (response.statusCode != 200) {
-      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(DegreeError(errorType: DegreeErrorType.expiredToken));
+    } else {
+      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
     }
   }
 
@@ -395,11 +445,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
         Uri.parse("${endpoint}department/update"),
         headers: authJsonHeaders,
         body: json.encode(departmentJson));
-    if (response.statusCode != 200) {
-      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(DepartmentError(errorType: DepartmentErrorType.expiredToken));
+    } else {
+      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
     }
   }
 
@@ -408,11 +460,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final examDto = exam.toDto();
     final response = await client.post(Uri.parse("${endpoint}exam/update"),
         headers: authJsonHeaders, body: json.encode(examDto.toJson()));
-    if (response.statusCode != 200) {
-      return Left(ExamError(errorType: ExamErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ExamError(errorType: ExamErrorType.expiredToken));
+    } else {
+      return Left(ExamError(errorType: ExamErrorType.wrongUser));
     }
   }
 
@@ -422,11 +476,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final subjectJson = subject.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}subject/update"),
         headers: authJsonHeaders, body: json.encode(subjectJson));
-    if (response.statusCode != 200) {
-      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(SubjectError(errorType: SubjectErrorType.expiredToken));
+    } else {
+      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
     }
   }
 
@@ -435,11 +491,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final response = await client.post(
         Uri.parse("${endpoint}classroom/delete/$id"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ClassroomError(errorType: ClassroomErrorType.expiredToken));
+    } else {
+      return Left(ClassroomError(errorType: ClassroomErrorType.wrongUser));
     }
   }
 
@@ -448,11 +506,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final response = await client.post(
         Uri.parse("${endpoint}degree/delete/$id"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(DegreeError(errorType: DegreeErrorType.expiredToken));
+    } else {
+      return Left(DegreeError(errorType: DegreeErrorType.wrongUser));
     }
   }
 
@@ -461,11 +521,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final response = await client.post(
         Uri.parse("${endpoint}department/delete/$id"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(DepartmentError(errorType: DepartmentErrorType.expiredToken));
+    } else {
+      return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
     }
   }
 
@@ -473,11 +535,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   Future<Either<ExamError, ResponseOkBO>> deleteExam(int id) async {
     final response = await client.post(Uri.parse("${endpoint}exam/delete/$id"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(ExamError(errorType: ExamErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ExamError(errorType: ExamErrorType.expiredToken));
+    } else {
+      return Left(ExamError(errorType: ExamErrorType.wrongUser));
     }
   }
 
@@ -486,11 +550,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final response = await client.post(
         Uri.parse("${endpoint}subject/delete/$id"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(SubjectError(errorType: SubjectErrorType.expiredToken));
+    } else {
+      return Left(SubjectError(errorType: SubjectErrorType.wrongUser));
     }
   }
 
@@ -499,11 +565,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final response = await client.post(
         Uri.parse("${endpoint}schedule/delete/$id"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.expiredToken));
+    } else {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
     }
   }
 
@@ -512,11 +580,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final response = await client.post(
         Uri.parse("${endpoint}calendar/delete/$id"),
         headers: authJsonHeaders);
-    if (response.statusCode != 200) {
-      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(CalendarError(errorType: CalendarErrorType.expiredToken));
+    } else {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     }
   }
 
@@ -528,12 +598,15 @@ class NetworkDataSourceImpl extends NetworkDataSource {
         .toJson();
     final response = await client.post(Uri.parse("${endpoint}update"),
         headers: authHeaders, body: query);
-    if (response.statusCode != 200) {
-      return Left(
-          ChangePasswordError(errorType: ChangePasswordErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(
+          ChangePasswordError(errorType: ChangePasswordErrorType.expiredToken));
+    } else {
+      return Left(
+          ChangePasswordError(errorType: ChangePasswordErrorType.wrongUser));
     }
   }
 
@@ -542,11 +615,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final scheduleJson = schedule.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}schedule"),
         headers: authJsonHeaders, body: json.encode(scheduleJson));
-    if (response.statusCode != 200) {
-      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.expiredToken));
+    } else {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
     }
   }
 
@@ -555,11 +630,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final calendarJson = calendar.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}calendar"),
         headers: authJsonHeaders, body: json.encode(calendarJson));
-    if (response.statusCode != 200) {
-      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(CalendarError(errorType: CalendarErrorType.expiredToken));
+    } else {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     }
   }
 
@@ -568,11 +645,13 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     final subjectJson = schedule.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}schedule/update"),
         headers: authJsonHeaders, body: json.encode(subjectJson));
-    if (response.statusCode != 200) {
-      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
-    } else {
+    if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.expiredToken));
+    } else {
+      return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
     }
   }
 
@@ -587,6 +666,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       http.ByteStream stream = response.stream;
       var bytes = await stream.toBytes();
       return Right(bytes);
+    } else if (response.statusCode == 403) {
+      return Left(ScheduleError(errorType: ScheduleErrorType.expiredToken));
     } else {
       return Left(ScheduleError(errorType: ScheduleErrorType.wrongUser));
     }
@@ -1910,6 +1991,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       http.ByteStream stream = response.stream;
       var bytes = await stream.toBytes();
       return Right(bytes);
+    } else if (response.statusCode == 403) {
+      return Left(CalendarError(errorType: CalendarErrorType.expiredToken));
     } else {
       return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
     }

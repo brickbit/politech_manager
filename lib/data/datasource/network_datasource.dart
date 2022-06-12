@@ -25,6 +25,7 @@ import '../../domain/model/schedule_bo.dart';
 import '../../domain/model/subject_bo.dart';
 
 abstract class NetworkDataSource {
+  Future<Either<LoginError, ResponseLoginBO>> updateToken();
   Future<Either<LoginError, ResponseLoginBO>> login(
       String username, String password);
   Future<Either<RecoverPasswordError, ResponseOkBO>> recoverPassword(

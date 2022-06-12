@@ -9,6 +9,7 @@ import '../model/response_login_bo.dart';
 import '../model/response_ok_bo.dart';
 
 abstract class UserRepository {
+  Future<Either<LoginError, ResponseLoginBO>> updateToken();
   Future<Either<LoginError, ResponseLoginBO>> login(
       String username, String password);
   Future<Either<RecoverPasswordError, ResponseOkBO>>

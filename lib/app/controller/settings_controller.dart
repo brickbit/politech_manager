@@ -2,6 +2,7 @@
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:politech_manager/domain/error/delete_account_error_type.dart';
 import '../../domain/error/change_password_error.dart';
 import '../../domain/error/delete_account_error.dart';
 import '../../domain/error/error_manager.dart';
@@ -73,8 +74,20 @@ class SettingsController extends BaseController {
   }
 
   void _onDeleteAccountKo(DeleteAccountError deleteAccountError) {
+    if (deleteAccountError.errorType == DeleteAccountErrorType.expiredToken) {
+      userRepository.updateToken().fold(
+              (left) => _onUpdateTokenError(),
+              (right) => deleteAccount());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDeleteAccount(deleteAccountError));
+    }
+  }
+
+  void _onUpdateTokenError() {
     hideProgress();
     showError();
-    showErrorMessage(errorManager.convertDeleteAccount(deleteAccountError));
+    showErrorMessage('Unable to update token');
   }
 }

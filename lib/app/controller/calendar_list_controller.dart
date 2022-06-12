@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:politech_manager/app/extension/datetime_extension.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/app/model/calendar_filter.dart';
+import 'package:politech_manager/domain/error/calendar_error_type.dart';
+import 'package:politech_manager/domain/error/degree_error_type.dart';
+import 'package:politech_manager/domain/error/exam_error_type.dart';
 import '../../domain/error/calendar_error.dart';
 import '../../domain/error/degree_error.dart';
 import '../../domain/error/error_manager.dart';
@@ -71,9 +74,15 @@ class CalendarListController extends BaseController {
   }
 
   void _onGetDegreesKo(DegreeError degreeError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertDegree(degreeError));
+    if (degreeError.errorType == DegreeErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getDegrees());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertDegree(degreeError));
+    }
   }
 
   void _onGetDegreesOk(List<DegreeBO> degrees) {
@@ -82,9 +91,15 @@ class CalendarListController extends BaseController {
   }
 
   void _onGetCalendarsKo(CalendarError calendarError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertCalendar(calendarError));
+    if (calendarError.errorType == CalendarErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getCalendars());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertCalendar(calendarError));
+    }
   }
 
   void _onGetCalendarsOk(List<CalendarBO> calendars) {
@@ -102,9 +117,15 @@ class CalendarListController extends BaseController {
   }
 
   void _onGetExamsKo(ExamError examError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertExam(examError));
+    if (examError.errorType == ExamErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getExams());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertExam(examError));
+    }
   }
 
   void _onGetExamsOk(List<ExamBO> exams) {
@@ -116,15 +137,20 @@ class CalendarListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteCalendar(calendar.id).fold(
-          (left) => _onDeleteCalendarKo(left),
+          (left) => _onDeleteCalendarKo(left, calendar),
           (right) => _onDeleteCalendarOk(),
         );
   }
 
-  void _onDeleteCalendarKo(CalendarError calendarError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertCalendar(calendarError));
+  void _onDeleteCalendarKo(CalendarError calendarError, CalendarBO calendar) {
+    if (calendarError.errorType == CalendarErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => deleteCalendar(calendar));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertCalendar(calendarError));
+    }
   }
 
   void _onDeleteCalendarOk() {
@@ -180,4 +206,10 @@ class CalendarListController extends BaseController {
     hideProgress();
     getSchedules();
   }*/
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
+  }
 }

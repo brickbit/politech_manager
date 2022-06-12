@@ -1,6 +1,6 @@
-
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
+import 'package:politech_manager/domain/error/subject_error_type.dart';
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
@@ -55,13 +55,19 @@ class SubjectListController extends BaseController {
     dataRepository.getSubjects().fold(
           (left) => _onGetSubjectsKo(left),
           (right) => _onGetSubjectsOk(right),
-    );
+        );
   }
 
   void _onGetSubjectsKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getSubjects());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onGetSubjectsOk(List<SubjectBO> subjects) {
@@ -73,15 +79,20 @@ class SubjectListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.updateSubject(subject).fold(
-          (left) => _onUpdateSubjectKo(left),
+          (left) => _onUpdateSubjectKo(left, subject),
           (right) => _onUpdateSubjectOk(),
-    );
+        );
   }
 
-  void _onUpdateSubjectKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+  void _onUpdateSubjectKo(SubjectError subjectError, SubjectBO subject) {
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => updateSubject(subject));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onUpdateSubjectOk() {
@@ -93,15 +104,20 @@ class SubjectListController extends BaseController {
     hideError();
     showProgress();
     dataRepository.deleteSubject(subject.id).fold(
-          (left) => _onDeleteSubjectKo(left),
+          (left) => _onDeleteSubjectKo(left, subject),
           (right) => _onDeleteSubjectOk(),
-    );
+        );
   }
 
-  void _onDeleteSubjectKo(SubjectError subjectError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSubject(subjectError));
+  void _onDeleteSubjectKo(SubjectError subjectError, SubjectBO subject) {
+    if (subjectError.errorType == SubjectErrorType.expiredToken) {
+      dataRepository.updateToken().fold(
+          (left) => _onUpdateTokenError(), (right) => deleteSubject(subject));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSubject(subjectError));
+    }
   }
 
   void _onDeleteSubjectOk() {
@@ -118,26 +134,40 @@ class SubjectListController extends BaseController {
     var departmentFilter = filters['department'] as DepartmentBO?;
     var degreeFilter = filters['degree'] as DegreeBO?;
 
-    if(seminaryFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.seminary == seminaryFilter).toList();
+    if (seminaryFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.seminary == seminaryFilter)
+          .toList();
     }
-    if(laboratoryFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.laboratory == laboratoryFilter).toList();
+    if (laboratoryFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.laboratory == laboratoryFilter)
+          .toList();
     }
-    if(englishFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.english == englishFilter).toList();
+    if (englishFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.english == englishFilter)
+          .toList();
     }
-    if(semesterFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.semester == int.parse(semesterFilter)).toList();
+    if (semesterFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.semester == int.parse(semesterFilter))
+          .toList();
     }
-    if(classroomFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.classroom.id == classroomFilter.id).toList();
+    if (classroomFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.classroom.id == classroomFilter.id)
+          .toList();
     }
-    if(departmentFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.department.id == departmentFilter.id).toList();
+    if (departmentFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.department.id == departmentFilter.id)
+          .toList();
     }
-    if(degreeFilter != null) {
-      _subjects.value = _subjects.value.where((element) => element.degree.id == degreeFilter.id).toList();
+    if (degreeFilter != null) {
+      _subjects.value = _subjects.value
+          .where((element) => element.degree.id == degreeFilter.id)
+          .toList();
     }
     _filterActive.value = true;
     update();
@@ -147,5 +177,11 @@ class SubjectListController extends BaseController {
     getSubjects();
     _filterActive.value = false;
     update();
+  }
+
+  void _onUpdateTokenError() {
+    hideProgress();
+    showError();
+    showErrorMessage('Unable to update token');
   }
 }

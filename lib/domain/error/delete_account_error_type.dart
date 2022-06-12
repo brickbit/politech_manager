@@ -1,7 +1,5 @@
 
 enum DeleteAccountErrorType {
   wrongUser,
-  //passwordNotMatch,
-  //incorrectPassword,
-  //unknownError
+  expiredToken
 }

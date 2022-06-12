@@ -16,6 +16,16 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this.network);
 
   @override
+  Future<Either<LoginError, ResponseLoginBO>> updateToken() async {
+    final response = await network.updateToken();
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
   Future<Either<LoginError, ResponseLoginBO>> login(
       String username, String password) async {
     final response = await network.login(username, password);

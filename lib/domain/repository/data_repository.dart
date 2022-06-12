@@ -8,16 +8,19 @@ import 'package:politech_manager/domain/error/exam_error.dart';
 import 'package:politech_manager/domain/error/subject_error.dart';
 import 'package:politech_manager/domain/model/response_ok_bo.dart';
 import '../error/calendar_error.dart';
+import '../error/login_error.dart';
 import '../error/schedule_error.dart';
 import '../model/calendar_bo.dart';
 import '../model/classroom_bo.dart';
 import '../model/degree_bo.dart';
 import '../model/department_bo.dart';
 import '../model/exam_bo.dart';
+import '../model/response_login_bo.dart';
 import '../model/schedule_bo.dart';
 import '../model/subject_bo.dart';
 
 abstract class DataRepository {
+  Future<Either<LoginError, ResponseLoginBO>> updateToken();
   Future<Either<ClassroomError, List<ClassroomBO>>> getClassrooms();
   Future<Either<DegreeError, List<DegreeBO>>> getDegrees();
   Future<Either<DepartmentError, List<DepartmentBO>>> getDepartments();
