@@ -69,4 +69,7 @@ class SubjectBO {
   SubjectBO reduceTime() =>
       SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, days, hours, turns, classroom, department, degree, color, id);
 
+  SubjectBO addTime() =>
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id);
+
 }

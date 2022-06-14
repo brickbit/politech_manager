@@ -52,49 +52,52 @@ class RecoverPasswordScreen extends GetView<RecoverPasswordController> {
         title: Text('recoverPassword'.tr),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Center(
-            child: Column(
-              children: [
-                ColorFiltered(
-                  colorFilter:
-                      ColorFilter.mode((Colors.grey[400])!, BlendMode.modulate),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                      image: AssetImage('assets/images/mural_epcc.png'),
-                      fit: BoxFit.cover,
-                    )),
-                    height: 350,
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: Column(
+                children: [
+                  ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                        (Colors.grey[400])!, BlendMode.modulate),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                        image: AssetImage('assets/images/mural_epcc.png'),
+                        fit: BoxFit.cover,
+                      )),
+                      height: 350,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: instructionsWidth,
-                  child: Text('passwordInstructions'.tr),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: mailTextFieldWidth,
-                  child: TextField(
-                    controller: _mailController,
-                    decoration: InputDecoration(labelText: 'putEmail'.tr),
+                  SizedBox(
+                    width: instructionsWidth,
+                    child: Text('passwordInstructions'.tr),
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                    width: buttonWidth,
-                    height: 45,
-                    child: ElevatedButton(
-                        child: Text('recoverPassword'.tr),
-                        onPressed: () {
-                          controller.recoverPassword(_mailController.text);
-                        })),
-              ],
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: mailTextFieldWidth,
+                    child: TextField(
+                      controller: _mailController,
+                      decoration: InputDecoration(labelText: 'putEmail'.tr),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                      width: buttonWidth,
+                      height: 45,
+                      child: ElevatedButton(
+                          child: Text('recoverPassword'.tr),
+                          onPressed: () {
+                            controller.recoverPassword(_mailController.text);
+                          })),
+                ],
+              ),
             ),
           ),
         ),

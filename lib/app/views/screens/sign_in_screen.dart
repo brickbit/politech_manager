@@ -56,61 +56,74 @@ class SignInScreen extends GetView<SignInController> {
         title: Text('signIn'.tr),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  width: mailTextFieldWidth,
-                  child: TextField(
-                    controller: _userController,
-                    decoration: InputDecoration(labelText: 'putUser'.tr),
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: mailTextFieldWidth,
+                    child: TextField(
+                      controller: _userController,
+                      decoration: InputDecoration(labelText: 'putUser'.tr),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: mailTextFieldWidth,
-                  child: TextField(
-                    controller: _mailController,
-                    decoration: InputDecoration(labelText: 'putEmail'.tr),
+                  const SizedBox(
+                    height: 16,
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: instructionsWidth,
-                  child: Text('signInInstructions'.tr),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: instructionsWidth,
-                  child: PasswordTextField(title: 'putPassword'.tr, passwordController: _passwordController,),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: instructionsWidth,
-                  child: PasswordTextField(title: 'putRepeatPassword'.tr, passwordController: _repeatPasswordController,),
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                SizedBox(
-                    width: buttonWidth,
-                    height: 45,
-                    child: ElevatedButton(
-                        child: Text('signInButton'.tr),
-                        onPressed: () {
-                          controller.signIn(_userController.text,_mailController.text,_passwordController.text,_repeatPasswordController.text);
-                        })),
-              ],
+                  SizedBox(
+                    width: mailTextFieldWidth,
+                    child: TextField(
+                      controller: _mailController,
+                      decoration: InputDecoration(labelText: 'putEmail'.tr),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: instructionsWidth,
+                    child: Text('signInInstructions'.tr),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: instructionsWidth,
+                    child: PasswordTextField(
+                      title: 'putPassword'.tr,
+                      passwordController: _passwordController,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: instructionsWidth,
+                    child: PasswordTextField(
+                      title: 'putRepeatPassword'.tr,
+                      passwordController: _repeatPasswordController,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  SizedBox(
+                      width: buttonWidth,
+                      height: 45,
+                      child: ElevatedButton(
+                          child: Text('signInButton'.tr),
+                          onPressed: () {
+                            controller.signIn(
+                                _userController.text,
+                                _mailController.text,
+                                _passwordController.text,
+                                _repeatPasswordController.text);
+                          })),
+                ],
+              ),
             ),
           ),
         ),

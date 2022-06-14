@@ -253,7 +253,10 @@ class CreateScheduleController extends BaseController {
         .indexWhere((element) => element?.id == subject.id);
     _subjectsToUpload.value[index] = null;
 
-    _subjects.value.add(subject);
+    final indexDraggeable = _subjects.value
+        .indexWhere((element) => element.id == subject.id);
+    _subjects.value[indexDraggeable] = _subjects.value[indexDraggeable].addTime();
+
     _subjectsToUpload.refresh();
     _subjects.refresh();
     update();

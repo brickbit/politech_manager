@@ -88,13 +88,14 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       body: SafeArea(
         child: Column(
           children: [
-            Obx(() => controller.scheduleType == 'oneSubjectPerHour'.tr
-                ? Container()
-                : Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: materialDropdown(day, days),
+            Obx(
+              () => controller.scheduleType == 'oneSubjectPerHour'.tr
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: materialDropdown(day, days),
+                    ),
             ),
-                  ),
             Expanded(
               child: MediaQuery.removePadding(
                 context: context,
@@ -112,16 +113,16 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   }
 
   Widget _simpleSchedule(bool mobile) {
-    final ratio = mobile ? 4 / 5 : 3.2;
+    final ratio = mobile ? 0.7 : 3.2;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5, childAspectRatio: ratio ),
+            crossAxisCount: 5, childAspectRatio: ratio),
         itemCount: maxCellsOneSubjectPerDay,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             color: Colors.white30,
             child: SizedBox(
-              height: 200,
+              height: 280,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -129,7 +130,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   Text(
                       '${controller.calculateDay(index, mobile)} ${controller.calculateHour(index)}'),
                   const Padding(
-                      padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
+                      padding: EdgeInsets.only(bottom: 4, left: 8, right: 8)),
                   _dragTarget(index, mobile),
                 ],
               ),
@@ -145,15 +146,15 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       return _daySchedule(mobile);
     } else if (day == 'wednesday'.tr) {
       return _daySchedule(mobile);
-    }else if (day == 'thursday'.tr) {
+    } else if (day == 'thursday'.tr) {
       return _daySchedule(mobile);
-    }else {
+    } else {
       return _daySchedule(mobile);
     }
   }
 
   Widget _daySchedule(bool mobile) {
-    final ratio = mobile ? 4 / 5 : 1.4;
+    final ratio = mobile ? 0.7 : 1.4;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5, childAspectRatio: ratio),
@@ -190,61 +191,83 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         List<dynamic> accepted,
         List<dynamic> rejected,
       ) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              color: (controller.subjectsToUpload[index] != null)
-                  ? controller.subjectsToUpload[index]!.color.parseColor()
-                  : Colors.white,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
+        return Obx(
+          () => Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: (controller.subjectsToUpload[index] != null)
+                    ? controller.subjectsToUpload[index]!.color.parseColor()
+                    : Colors.white,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: SizedBox(
-                width: Size.infinite.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      (controller.subjectsToUpload[index] != null)
-                          ? controller.subjectsToUpload[index]!.acronym
-                          : 'empty'.tr,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ((controller.subjectsToUpload[index]?.laboratory ??
-                                    false) ==
-                                true)
-                            ? Icon(
-                                Icons.science_sharp,
-                                size: mobile ? 12 : 18,
-                              )
-                            : Container(),
-                        ((controller.subjectsToUpload[index]?.seminary ??
-                                    false) ==
-                                true)
-                            ? Icon(
-                                Icons.emoji_people_sharp,
-                                size: mobile ? 12 : 18,
-                              )
-                            : Container(),
-                        ((controller.subjectsToUpload[index]?.english ??
-                                    false) ==
-                                true)
-                            ? Icon(
-                                Icons.flag,
-                                size: mobile ? 12 : 18,
-                              )
-                            : Container(),
-                      ],
-                    )
-                  ],
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: SizedBox(
+                  width: Size.infinite.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            (controller.subjectsToUpload[index] != null)
+                                ? controller.subjectsToUpload[index]!.acronym
+                                : 'empty'.tr,
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                          (controller.subjectsToUpload[index] != null
+                              ? IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {
+                                    controller.deleteItem(
+                                        controller.subjectsToUpload[index]!);
+                                  },
+                                  icon: Icon(Icons.delete,
+                                      size: mobile ? 10 : 20),
+                                )
+                              : SizedBox(
+                                  height: mobile ? 10 : 36,
+                                  width: mobile ? 10 : 36,
+                                ))
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ((controller.subjectsToUpload[index]?.laboratory ??
+                                      false) ==
+                                  true)
+                              ? Icon(
+                                  Icons.science_sharp,
+                                  size: mobile ? 10 : 18,
+                                )
+                              : Container(),
+                          ((controller.subjectsToUpload[index]?.seminary ??
+                                      false) ==
+                                  true)
+                              ? Icon(
+                                  Icons.emoji_people_sharp,
+                                  size: mobile ? 10 : 18,
+                                )
+                              : Container(),
+                          ((controller.subjectsToUpload[index]?.english ??
+                                      false) ==
+                                  true)
+                              ? Icon(
+                                  Icons.flag,
+                                  size: mobile ? 10 : 18,
+                                )
+                              : Container(),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
