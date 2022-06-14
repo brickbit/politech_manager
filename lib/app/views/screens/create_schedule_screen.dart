@@ -154,7 +154,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   }
 
   Widget _daySchedule(bool mobile) {
-    final ratio = mobile ? 0.7 : 1.4;
+    final ratio = mobile ? 0.4 : 1.4;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5, childAspectRatio: ratio),
@@ -163,7 +163,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
           return Card(
             color: Colors.white30,
             child: SizedBox(
-              height: 200,
+              height: 250,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
