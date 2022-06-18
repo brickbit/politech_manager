@@ -54,7 +54,11 @@ class CreateScheduleController extends BaseController {
     _subjects.value = argumentData['subjects'];
     _scheduleType.value = argumentData['scheduleType'];
     _semester.value = argumentData['semester'];
-    _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
+    if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+      _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
+    } else {
+      _subjectsToUpload.value = List.filled(maxCellsSeveralSubjectPerDay, null);
+    }
     super.onInit();
   }
 

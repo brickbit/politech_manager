@@ -172,11 +172,11 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                       '${controller.calculateDay(index, mobile)} ${controller.calculateHour(index)}'),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
-                  _dragTarget(index, mobile),
+                  _dragTargetLayered(index, mobile, 0),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  _dragTarget(index, mobile),
+                  _dragTargetLayered(index, mobile, 1),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  _dragTarget(index, mobile),
+                  _dragTargetLayered(index, mobile, 2),
                 ],
               ),
             ),
@@ -277,6 +277,104 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       onAccept: (SubjectBox subject) {
         final item =
             subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
+        controller.completeDrag(item, index);
+      },
+    );
+  }
+
+  Widget _dragTargetLayered(int index, bool mobile, int layer) {
+    return DragTarget<SubjectBox>(
+      builder: (
+          BuildContext context,
+          List<dynamic> accepted,
+          List<dynamic> rejected,
+          ) {
+        return Obx(
+              () => Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: (controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer] != null)
+                    ? controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]!.color.parseColor()
+                    : Colors.white,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: SizedBox(
+                  width: Size.infinite.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            (controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer] != null)
+                                ? controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]!.acronym
+                                : 'empty'.tr,
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                          (controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer] != null
+                              ? IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () {
+                              controller.deleteItem(
+                                  controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]!);
+                            },
+                            icon: Icon(Icons.delete,
+                                size: mobile ? 10 : 20),
+                          )
+                              : SizedBox(
+                            height: mobile ? 10 : 36,
+                            width: mobile ? 10 : 36,
+                          ))
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ((controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]?.laboratory ??
+                              false) ==
+                              true)
+                              ? Icon(
+                            Icons.science_sharp,
+                            size: mobile ? 10 : 18,
+                          )
+                              : Container(),
+                          ((controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]?.seminary ??
+                              false) ==
+                              true)
+                              ? Icon(
+                            Icons.emoji_people_sharp,
+                            size: mobile ? 10 : 18,
+                          )
+                              : Container(),
+                          ((controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]?.english ??
+                              false) ==
+                              true)
+                              ? Icon(
+                            Icons.flag,
+                            size: mobile ? 10 : 18,
+                          )
+                              : Container(),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      onAccept: (SubjectBox subject) {
+        final item =
+        subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
         controller.completeDrag(item, index);
       },
     );
