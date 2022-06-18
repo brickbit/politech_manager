@@ -4,6 +4,7 @@ import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/error/schedule_error_type.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
@@ -33,7 +34,15 @@ class CreateScheduleController extends BaseController {
 
   String get scheduleType => _scheduleType.value;
 
+  final _fileType = "".obs;
+
+  String get fileType => _fileType.value;
+
   final _semester = 1.obs;
+
+  final _degree = ''.obs;
+
+  final _year = ''.obs;
 
   int get semester => _semester.value;
 
@@ -53,7 +62,10 @@ class CreateScheduleController extends BaseController {
   void onInit() {
     _subjects.value = argumentData['subjects'];
     _scheduleType.value = argumentData['scheduleType'];
+    _fileType.value = argumentData['fileType'];
     _semester.value = argumentData['semester'];
+    _degree.value = argumentData['degree'];
+    _year.value = argumentData['year'];
     if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
       _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
     } else {
@@ -65,8 +77,13 @@ class CreateScheduleController extends BaseController {
   void saveSchedule() {
     hideError();
     showProgress();
-    var schedule =
-        ScheduleBO(_subjectsToUpload.value, 0, 0, "degree", "year", 0);
+    var schedule = ScheduleBO(
+        _subjectsToUpload.value,
+        _scheduleType.value.toScheduleTypeInt(),
+        _fileType.value.toFileTypeInt(),
+        _degree.value,
+        _year.value,
+        0);
     dataRepository.postSchedule(schedule).fold(
           (left) => _onSaveScheduleKo(left),
           (right) => _onSaveScheduleOk(),
@@ -92,7 +109,8 @@ class CreateScheduleController extends BaseController {
   void downloadFile() {
     hideError();
     showProgress();
-    var schedule = ScheduleBO([], 0, 0, "degree", "year", 0);
+    var schedule = ScheduleBO([], _scheduleType.value.toScheduleTypeInt(),
+        _fileType.value.toFileTypeInt(), _degree.value, _year.value, 0);
     dataRepository.downloadSchedule(schedule).fold(
           (left) => _onDownloadScheduleKo(left),
           (right) => _onDownloadScheduleOk(right),
@@ -257,9 +275,10 @@ class CreateScheduleController extends BaseController {
         .indexWhere((element) => element?.id == subject.id);
     _subjectsToUpload.value[index] = null;
 
-    final indexDraggeable = _subjects.value
-        .indexWhere((element) => element.id == subject.id);
-    _subjects.value[indexDraggeable] = _subjects.value[indexDraggeable].addTime();
+    final indexDraggeable =
+        _subjects.value.indexWhere((element) => element.id == subject.id);
+    _subjects.value[indexDraggeable] =
+        _subjects.value[indexDraggeable].addTime();
 
     _subjectsToUpload.refresh();
     _subjects.refresh();

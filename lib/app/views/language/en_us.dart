@@ -125,6 +125,7 @@ const Map<String, String> enUS = {
   'turn':'Turn',
   //Schedule dialog
   'scheduleType':'Schedule type',
+  'fileType':'File type',
   //Calendar dialog
   'createCalendar': 'Create exam calendar',
   'startDate': 'Start date',

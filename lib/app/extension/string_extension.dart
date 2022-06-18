@@ -55,6 +55,18 @@ extension StringScheduleType on String {
   }
 }
 
+extension StringFileType on String {
+  int toFileTypeInt() {
+    if (this == 'subject'.tr) {
+      return 0;
+    } else  if (this == 'department'.tr){
+      return 1;
+    } else {
+      return 2;
+    }
+  }
+}
+
 extension StringDateTime on String {
   bool previousThan(String endDate) {
     final endDateArray = endDate.split("-");

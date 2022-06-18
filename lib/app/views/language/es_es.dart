@@ -125,6 +125,7 @@ const Map<String, String> esES = {
   'turn':'Turno',
   //Schedule dialog
   'scheduleType':'Tipo de horario',
+  'fileType':'Tipo de archivo',
   //Calendar dialog
   'createCalendar': 'Crear calendario de exámenes',
   'startDate': 'Fecha de inicio',
