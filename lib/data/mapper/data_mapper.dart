@@ -203,7 +203,7 @@ extension ScheduleMapper on ScheduleBO {
     return ScheduleDto(
         subjects: subjects.map((subject) {
           if (subject != null) {
-            subject.toDto();
+            return subject.toDto();
           } else {
             return null;
           }
