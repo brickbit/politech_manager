@@ -658,7 +658,8 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   @override
   Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule) async {
     var request = http.Request('GET', Uri.parse("${endpoint}schedule/download"));
-    final body = json.encode(schedule.toDto().toJson());
+    final dto = schedule.toDto();
+    final body = json.encode(dto.toJson());
     request.body = body;
     request.headers.addAll(authJsonHeaders);
     http.StreamedResponse response = await request.send();

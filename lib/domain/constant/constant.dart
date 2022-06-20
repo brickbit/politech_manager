@@ -1,3 +1,3 @@
 
-const int maxCellsOneSubjectPerDay = 125;
-const int maxCellsSeveralSubjectPerDay = 1875;
+const int maxCellsOneSubjectPerDay = 120;
+const int maxCellsSeveralSubjectPerDay = 1800;
