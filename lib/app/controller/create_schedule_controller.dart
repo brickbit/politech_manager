@@ -109,8 +109,13 @@ class CreateScheduleController extends BaseController {
   void downloadFile() {
     hideError();
     showProgress();
-    var schedule = ScheduleBO([], _scheduleType.value.toScheduleTypeInt(),
-        _fileType.value.toFileTypeInt(), _degree.value, _year.value, 0);
+    var schedule = ScheduleBO(
+        _subjectsToUpload.value,
+        _scheduleType.value.toScheduleTypeInt(),
+        _fileType.value.toFileTypeInt(),
+        _degree.value,
+        _year.value,
+        0);
     dataRepository.downloadSchedule(schedule).fold(
           (left) => _onDownloadScheduleKo(left),
           (right) => _onDownloadScheduleOk(right),
@@ -240,30 +245,28 @@ class CreateScheduleController extends BaseController {
       case 11:
         return '14:00';
       case 12:
-        return '14:30';
-      case 13:
         return '15:30';
-      case 14:
+      case 13:
         return '16:00';
-      case 15:
+      case 14:
         return '16:30';
-      case 16:
+      case 15:
         return '17:00';
-      case 17:
+      case 16:
         return '17:30';
-      case 18:
+      case 17:
         return '18:00';
-      case 19:
+      case 18:
         return '18:30';
-      case 20:
+      case 19:
         return '19:00';
-      case 21:
+      case 20:
         return '19:30';
-      case 22:
+      case 21:
         return '20:00';
-      case 23:
+      case 22:
         return '20:30';
-      case 24:
+      case 23:
         return '21:00';
       default:
         return 'Nan';
