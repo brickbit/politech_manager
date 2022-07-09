@@ -102,7 +102,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 removeTop: true,
                 child: controller.scheduleType == 'oneSubjectPerHour'.tr
                     ? _simpleSchedule(mobile)
-                    : Obx(() => _severalSchedule(mobile, day.value)),
+                    : Obx(() => _severalSchedule(mobile, day.value, context)),
               ),
             ),
             _dragListSubjects()
@@ -139,18 +139,52 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         });
   }
 
-  Widget _severalSchedule(bool mobile, String day) {
-    if (day == 'monday'.tr) {
-      return _daySchedule(mobile);
-    } else if (day == 'tuesday'.tr) {
-      return _daySchedule(mobile);
-    } else if (day == 'wednesday'.tr) {
-      return _daySchedule(mobile);
-    } else if (day == 'thursday'.tr) {
-      return _daySchedule(mobile);
-    } else {
-      return _daySchedule(mobile);
-    }
+  Widget _severalSchedule(bool mobile, String day, BuildContext context) {
+    return CustomScrollView(
+      scrollDirection: Axis.horizontal,
+      slivers: <Widget>[
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverToBoxAdapter(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _daySchedule(mobile)),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverToBoxAdapter(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _daySchedule(mobile)),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverToBoxAdapter(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _daySchedule(mobile)),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverToBoxAdapter(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _daySchedule(mobile)),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverToBoxAdapter(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _daySchedule(mobile)),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _daySchedule(bool mobile) {
@@ -285,17 +319,25 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   Widget _dragTargetLayered(int index, bool mobile, int layer) {
     return DragTarget<SubjectBox>(
       builder: (
-          BuildContext context,
-          List<dynamic> accepted,
-          List<dynamic> rejected,
-          ) {
+        BuildContext context,
+        List<dynamic> accepted,
+        List<dynamic> rejected,
+      ) {
         return Obx(
-              () => Padding(
+          () => Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: Container(
               decoration: BoxDecoration(
-                color: (controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer] != null)
-                    ? controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]!.color.parseColor()
+                color: (controller.subjectsToUpload[index +
+                            (controller.subjectsToUpload.length / 3).round() *
+                                layer] !=
+                        null)
+                    ? controller
+                        .subjectsToUpload[index +
+                            (controller.subjectsToUpload.length / 3).round() *
+                                layer]!
+                        .color
+                        .parseColor()
                     : Colors.white,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
@@ -312,55 +354,94 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            (controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer] != null)
-                                ? controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]!.acronym
+                            (controller.subjectsToUpload[index +
+                                        (controller.subjectsToUpload.length / 3)
+                                                .round() *
+                                            layer] !=
+                                    null)
+                                ? controller
+                                    .subjectsToUpload[index +
+                                        (controller.subjectsToUpload.length / 3)
+                                                .round() *
+                                            layer]!
+                                    .acronym
                                 : 'empty'.tr,
                             style: const TextStyle(fontSize: 10),
                           ),
-                          (controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer] != null
+                          (controller.subjectsToUpload[index +
+                                      (controller.subjectsToUpload.length / 3)
+                                              .round() *
+                                          layer] !=
+                                  null
                               ? IconButton(
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            onPressed: () {
-                              controller.deleteItem(
-                                  controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]!);
-                            },
-                            icon: Icon(Icons.delete,
-                                size: mobile ? 10 : 20),
-                          )
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {
+                                    controller.deleteItem(
+                                        controller.subjectsToUpload[index +
+                                            (controller.subjectsToUpload
+                                                            .length /
+                                                        3)
+                                                    .round() *
+                                                layer]!);
+                                  },
+                                  icon: Icon(Icons.delete,
+                                      size: mobile ? 10 : 20),
+                                )
                               : SizedBox(
-                            height: mobile ? 10 : 36,
-                            width: mobile ? 10 : 36,
-                          ))
+                                  height: mobile ? 10 : 36,
+                                  width: mobile ? 10 : 36,
+                                ))
                         ],
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ((controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]?.laboratory ??
-                              false) ==
-                              true)
+                          ((controller
+                                          .subjectsToUpload[index +
+                                              (controller.subjectsToUpload
+                                                              .length /
+                                                          3)
+                                                      .round() *
+                                                  layer]
+                                          ?.laboratory ??
+                                      false) ==
+                                  true)
                               ? Icon(
-                            Icons.science_sharp,
-                            size: mobile ? 10 : 18,
-                          )
+                                  Icons.science_sharp,
+                                  size: mobile ? 10 : 18,
+                                )
                               : Container(),
-                          ((controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]?.seminary ??
-                              false) ==
-                              true)
+                          ((controller
+                                          .subjectsToUpload[index +
+                                              (controller.subjectsToUpload
+                                                              .length /
+                                                          3)
+                                                      .round() *
+                                                  layer]
+                                          ?.seminary ??
+                                      false) ==
+                                  true)
                               ? Icon(
-                            Icons.emoji_people_sharp,
-                            size: mobile ? 10 : 18,
-                          )
+                                  Icons.emoji_people_sharp,
+                                  size: mobile ? 10 : 18,
+                                )
                               : Container(),
-                          ((controller.subjectsToUpload[index + (controller.subjectsToUpload.length/3).round() * layer]?.english ??
-                              false) ==
-                              true)
+                          ((controller
+                                          .subjectsToUpload[index +
+                                              (controller.subjectsToUpload
+                                                              .length /
+                                                          3)
+                                                      .round() *
+                                                  layer]
+                                          ?.english ??
+                                      false) ==
+                                  true)
                               ? Icon(
-                            Icons.flag,
-                            size: mobile ? 10 : 18,
-                          )
+                                  Icons.flag,
+                                  size: mobile ? 10 : 18,
+                                )
                               : Container(),
                         ],
                       )
@@ -374,7 +455,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       },
       onAccept: (SubjectBox subject) {
         final item =
-        subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
+            subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
         controller.completeDrag(item, index);
       },
     );
