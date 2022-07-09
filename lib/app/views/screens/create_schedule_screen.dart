@@ -6,7 +6,6 @@ import 'package:politech_manager/data/mapper/data_mapper.dart';
 import '../../../domain/constant/constant.dart';
 import '../../controller/create_schedule_controller.dart';
 import '../../navigation/app_routes.dart';
-import '../custom/material_dropdown.dart';
 import '../dialog/file_dialog.dart';
 
 class CreateScheduleScreen extends GetView<CreateScheduleController> {
@@ -34,14 +33,6 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   }
 
   Widget _setCreateSchedule(BuildContext context, bool mobile) {
-    var days = [
-      'monday'.tr,
-      'tuesday'.tr,
-      'wednesday'.tr,
-      'thursday'.tr,
-      'friday'.tr
-    ];
-    var day = 'monday'.tr.obs;
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.redAccent,
@@ -88,23 +79,14 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       body: SafeArea(
         child: Column(
           children: [
-            Obx(
-              () => controller.scheduleType == 'oneSubjectPerHour'.tr
-                  ? Container()
-                  : Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: materialDropdown(day, days),
-                    ),
-            ),
             Expanded(
               child: MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
                 child: controller.scheduleType == 'oneSubjectPerHour'.tr
                     ? _simpleSchedule(mobile)
-                    : Obx(() => _severalSchedule(mobile, day.value, context)),
+                    : _severalSchedule(mobile, context)),
               ),
-            ),
             _dragListSubjects()
           ],
         ),
@@ -139,7 +121,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         });
   }
 
-  Widget _severalSchedule(bool mobile, String day, BuildContext context) {
+  Widget _severalSchedule(bool mobile, BuildContext context) {
     return CustomScrollView(
       scrollDirection: Axis.horizontal,
       slivers: <Widget>[
