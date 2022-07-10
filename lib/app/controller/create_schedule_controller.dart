@@ -325,8 +325,10 @@ class CreateScheduleController extends BaseController {
   void completeDrag(SubjectBO item, int index, bool severalSubjects) {
     if (severalSubjects) {
       List<String> columnSubject = subjects.where((element) => !element.seminary && !element.laboratory).map((e) => e.acronym).toSet().toList();
-
-      _subjectsToUpload.value[index] = item;
+      var module = index % 5;
+      if (columnSubject.indexOf(item.acronym) == module) {
+        _subjectsToUpload.value[index] = item;
+      }
     } else {
       _subjectsToUpload.value[index] = item;
     }
