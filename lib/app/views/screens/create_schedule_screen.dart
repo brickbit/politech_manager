@@ -162,7 +162,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
             Expanded(
               child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: _daySchedule(mobile, controller.calculateIndexOfDay(day))),
+                  child: _daySchedule(
+                      mobile, controller.calculateIndexOfDay(day))),
             ),
           ],
         ),
@@ -189,11 +190,11 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                       '${controller.calculateSubjects(index)}\n${controller.calculateHour(index)}'),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
-                  _dragTargetLayered(index + day*120, mobile, 0),
+                  _dragTargetLayered(index + day * 120, mobile, 0),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  _dragTargetLayered(index + day*120 + 600, mobile, 1),
+                  _dragTargetLayered(index + day * 120 + 600, mobile, 1),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  _dragTargetLayered(index + day*120 + 1200, mobile, 2),
+                  _dragTargetLayered(index + day * 120 + 1200, mobile, 2),
                 ],
               ),
             ),
@@ -311,16 +312,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: Container(
               decoration: BoxDecoration(
-                color: (controller.subjectsToUpload[index +
-                            (controller.subjectsToUpload.length / 3).round() *
-                                layer] !=
-                        null)
-                    ? controller
-                        .subjectsToUpload[index +
-                            (controller.subjectsToUpload.length / 3).round() *
-                                layer]!
-                        .color
-                        .parseColor()
+                color: (controller.subjectsToUpload[index] != null)
+                    ? controller.subjectsToUpload[index]!.color.parseColor()
                     : Colors.white,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
@@ -337,36 +330,18 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            (controller.subjectsToUpload[index +
-                                        (controller.subjectsToUpload.length / 3)
-                                                .round() *
-                                            layer] !=
-                                    null)
-                                ? controller
-                                    .subjectsToUpload[index +
-                                        (controller.subjectsToUpload.length / 3)
-                                                .round() *
-                                            layer]!
-                                    .acronym
+                            (controller.subjectsToUpload[index] != null)
+                                ? controller.subjectsToUpload[index]!.acronym
                                 : 'empty'.tr,
                             style: const TextStyle(fontSize: 10),
                           ),
-                          (controller.subjectsToUpload[index +
-                                      (controller.subjectsToUpload.length / 3)
-                                              .round() *
-                                          layer] !=
-                                  null
+                          (controller.subjectsToUpload[index] != null
                               ? IconButton(
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(
-                                        controller.subjectsToUpload[index +
-                                            (controller.subjectsToUpload
-                                                            .length /
-                                                        3)
-                                                    .round() *
-                                                layer]!);
+                                        controller.subjectsToUpload[index]!);
                                   },
                                   icon: Icon(Icons.delete,
                                       size: mobile ? 10 : 20),
@@ -381,14 +356,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ((controller
-                                          .subjectsToUpload[index +
-                                              (controller.subjectsToUpload
-                                                              .length /
-                                                          3)
-                                                      .round() *
-                                                  layer]
-                                          ?.laboratory ??
+                          ((controller.subjectsToUpload[index]?.laboratory ??
                                       false) ==
                                   true)
                               ? Icon(
@@ -396,14 +364,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                   size: mobile ? 10 : 18,
                                 )
                               : Container(),
-                          ((controller
-                                          .subjectsToUpload[index +
-                                              (controller.subjectsToUpload
-                                                              .length /
-                                                          3)
-                                                      .round() *
-                                                  layer]
-                                          ?.seminary ??
+                          ((controller.subjectsToUpload[index]?.seminary ??
                                       false) ==
                                   true)
                               ? Icon(
@@ -411,14 +372,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                   size: mobile ? 10 : 18,
                                 )
                               : Container(),
-                          ((controller
-                                          .subjectsToUpload[index +
-                                              (controller.subjectsToUpload
-                                                              .length /
-                                                          3)
-                                                      .round() *
-                                                  layer]
-                                          ?.english ??
+                          ((controller.subjectsToUpload[index]?.english ??
                                       false) ==
                                   true)
                               ? Icon(
