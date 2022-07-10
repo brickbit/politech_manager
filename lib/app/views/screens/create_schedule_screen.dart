@@ -81,12 +81,12 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
           children: [
             Expanded(
               child: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: controller.scheduleType == 'oneSubjectPerHour'.tr
-                    ? _simpleSchedule(mobile)
-                    : _severalSchedule(mobile, context)),
-              ),
+                  context: context,
+                  removeTop: true,
+                  child: controller.scheduleType == 'oneSubjectPerHour'.tr
+                      ? _simpleSchedule(mobile)
+                      : _severalSchedule(mobile, context)),
+            ),
             _dragListSubjects()
           ],
         ),
@@ -125,47 +125,48 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
     return CustomScrollView(
       scrollDirection: Axis.horizontal,
       slivers: <Widget>[
-        SliverPadding(
-          padding: const EdgeInsets.all(16.0),
-          sliver: SliverToBoxAdapter(
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: _daySchedule(mobile)),
-          ),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16.0),
-          sliver: SliverToBoxAdapter(
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: _daySchedule(mobile)),
-          ),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16.0),
-          sliver: SliverToBoxAdapter(
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: _daySchedule(mobile)),
-          ),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16.0),
-          sliver: SliverToBoxAdapter(
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: _daySchedule(mobile)),
-          ),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16.0),
-          sliver: SliverToBoxAdapter(
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: _daySchedule(mobile)),
-          ),
-        ),
+        _dayBlock(mobile, context, 'monday'.tr),
+        _dayBlock(mobile, context, 'tuesday'.tr),
+        _dayBlock(mobile, context, 'wednesday'.tr),
+        _dayBlock(mobile, context, 'thursday'.tr),
+        _dayBlock(mobile, context, 'friday'.tr),
       ],
+    );
+  }
+
+  Widget _dayBlock(bool mobile, BuildContext context, String day) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(16.0),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 12.0, bottom: 12.0, left: 60.0, right: 60.0),
+                  child: Text(
+                    day,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: _daySchedule(mobile)),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -185,7 +186,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${controller.calculateDay(index, mobile)} ${controller.calculateHour(index)}'),
+                      '${controller.calculateSubjects(index)}\n${controller.calculateHour(index)}'),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
                   _dragTargetLayered(index, mobile, 0),

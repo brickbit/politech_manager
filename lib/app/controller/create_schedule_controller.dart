@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/error/schedule_error_type.dart';
+import 'package:politech_manager/domain/extension/extension.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../domain/constant/constant.dart';
@@ -212,6 +213,25 @@ class CreateScheduleController extends BaseController {
         return mobile ? 'J'.tr : 'thursday'.tr;
       case 4:
         return mobile ? 'V'.tr : 'friday'.tr;
+      default:
+        return '';
+    }
+  }
+
+  String calculateSubjects(int index) {
+    List<String> items = subjects.where((element) => !element.seminary && !element.laboratory).map((e) => e.acronym).toSet().toList();
+    final module = index % 5;
+    switch (module) {
+      case 0:
+        return items.tryGet(0) ?? '';
+      case 1:
+        return items.tryGet(1) ?? '';
+      case 2:
+        return items.tryGet(2) ?? '';
+      case 3:
+        return items.tryGet(3) ?? '';
+      case 4:
+        return items.tryGet(4) ?? '';
       default:
         return '';
     }
