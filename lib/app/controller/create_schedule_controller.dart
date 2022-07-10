@@ -218,6 +218,20 @@ class CreateScheduleController extends BaseController {
     }
   }
 
+  int calculateIndexOfDay(String day) {
+    if(day == 'L'.tr || day == 'monday'.tr) {
+      return 0;
+    } else if(day == 'M'.tr || day == 'tuesday'.tr) {
+      return 1;
+    } else if(day == 'X'.tr || day == 'wednesday'.tr) {
+      return 2;
+    } else if(day == 'J'.tr || day == 'thursday'.tr) {
+      return 3;
+    } else {
+      return 4;
+    }
+  }
+
   String calculateSubjects(int index) {
     List<String> items = subjects.where((element) => !element.seminary && !element.laboratory).map((e) => e.acronym).toSet().toList();
     final module = index % 5;
@@ -308,8 +322,14 @@ class CreateScheduleController extends BaseController {
     update();
   }
 
-  void completeDrag(SubjectBO item, int index) {
-    _subjectsToUpload.value[index] = item;
+  void completeDrag(SubjectBO item, int index, bool severalSubjects) {
+    if (severalSubjects) {
+      List<String> columnSubject = subjects.where((element) => !element.seminary && !element.laboratory).map((e) => e.acronym).toSet().toList();
+
+      _subjectsToUpload.value[index] = item;
+    } else {
+      _subjectsToUpload.value[index] = item;
+    }
   }
 
   void _onUpdateTokenError() {

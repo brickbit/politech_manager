@@ -162,7 +162,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
             Expanded(
               child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: _daySchedule(mobile)),
+                  child: _daySchedule(mobile, controller.calculateIndexOfDay(day))),
             ),
           ],
         ),
@@ -170,7 +170,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
     );
   }
 
-  Widget _daySchedule(bool mobile) {
+  Widget _daySchedule(bool mobile, int day) {
     final ratio = mobile ? 0.4 : 1.4;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -189,11 +189,11 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                       '${controller.calculateSubjects(index)}\n${controller.calculateHour(index)}'),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
-                  _dragTargetLayered(index, mobile, 0),
+                  _dragTargetLayered(index + day*120, mobile, 0),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  _dragTargetLayered(index, mobile, 1),
+                  _dragTargetLayered(index + day*120 + 600, mobile, 1),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  _dragTargetLayered(index, mobile, 2),
+                  _dragTargetLayered(index + day*120 + 1200, mobile, 2),
                 ],
               ),
             ),
@@ -294,7 +294,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       onAccept: (SubjectBox subject) {
         final item =
             subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
-        controller.completeDrag(item, index);
+        controller.completeDrag(item, index, false);
       },
     );
   }
@@ -439,7 +439,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       onAccept: (SubjectBox subject) {
         final item =
             subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
-        controller.completeDrag(item, index);
+        controller.completeDrag(item, index, true);
       },
     );
   }
