@@ -234,6 +234,7 @@ class CreateScheduleController extends BaseController {
 
   String calculateSubjects(int index) {
     List<String> items = subjects.where((element) => !element.seminary && !element.laboratory).map((e) => e.acronym).toSet().toList();
+    items.sort();
     final module = index % 5;
     switch (module) {
       case 0:
@@ -325,6 +326,7 @@ class CreateScheduleController extends BaseController {
   void completeDrag(SubjectBO item, int index, bool severalSubjects) {
     if (severalSubjects) {
       List<String> columnSubject = subjects.where((element) => !element.seminary && !element.laboratory).map((e) => e.acronym).toSet().toList();
+      columnSubject.sort();
       var module = index % 5;
       if (columnSubject.indexOf(item.acronym) == module) {
         _subjectsToUpload.value[index] = item;

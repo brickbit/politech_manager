@@ -187,7 +187,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${controller.calculateSubjects(index)}\n${controller.calculateHour(index)}'),
+                      '${controller.calculateSubjects(index)} ${controller.calculateHour(index)}'),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
                   _dragTargetLayered(index + day * 120, mobile, 0),
@@ -326,17 +326,51 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            (controller.subjectsToUpload[index] != null)
-                                ? controller.subjectsToUpload[index]!.acronym
-                                : 'empty'.tr,
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                          (controller.subjectsToUpload[index] != null
-                              ? IconButton(
+                      (controller.subjectsToUpload[index] == null)
+                          ? SizedBox(
+                              height: 36,
+                              child: Text('empty'.tr),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(children: [
+                                  Text(
+                                    controller.subjectsToUpload[index]!.classGroup,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      ((controller.subjectsToUpload[index]?.laboratory ??
+                                          false) ==
+                                          true)
+                                          ? Icon(
+                                        Icons.science_sharp,
+                                        size: mobile ? 14 : 18,
+                                      )
+                                          : Container(),
+                                      ((controller.subjectsToUpload[index]?.seminary ??
+                                          false) ==
+                                          true)
+                                          ? Icon(
+                                        Icons.emoji_people_sharp,
+                                        size: mobile ? 14 : 18,
+                                      )
+                                          : Container(),
+                                      ((controller.subjectsToUpload[index]?.english ??
+                                          false) ==
+                                          true)
+                                          ? Icon(
+                                        Icons.flag,
+                                        size: mobile ? 14 : 18,
+                                      )
+                                          : Container(),
+                                    ],
+                                  )
+                                ],),
+                                IconButton(
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
                                   onPressed: () {
@@ -344,44 +378,10 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                         controller.subjectsToUpload[index]!);
                                   },
                                   icon: Icon(Icons.delete,
-                                      size: mobile ? 10 : 20),
+                                      size: mobile ? 18 : 20),
                                 )
-                              : SizedBox(
-                                  height: mobile ? 10 : 36,
-                                  width: mobile ? 10 : 36,
-                                ))
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ((controller.subjectsToUpload[index]?.laboratory ??
-                                      false) ==
-                                  true)
-                              ? Icon(
-                                  Icons.science_sharp,
-                                  size: mobile ? 10 : 18,
-                                )
-                              : Container(),
-                          ((controller.subjectsToUpload[index]?.seminary ??
-                                      false) ==
-                                  true)
-                              ? Icon(
-                                  Icons.emoji_people_sharp,
-                                  size: mobile ? 10 : 18,
-                                )
-                              : Container(),
-                          ((controller.subjectsToUpload[index]?.english ??
-                                      false) ==
-                                  true)
-                              ? Icon(
-                                  Icons.flag,
-                                  size: mobile ? 10 : 18,
-                                )
-                              : Container(),
-                        ],
-                      )
+                              ],
+                            ),
                     ],
                   ),
                 ),

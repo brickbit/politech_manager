@@ -61,7 +61,7 @@ class SubjectBox extends StatelessWidget {
                         height: 0,
                       ),
                 Text(
-                  subject.acronym,
+                  "${subject.acronym} - ${subject.classGroup}",
                   style: const TextStyle(fontSize: 12, color: Colors.black),
                 ),
               ],
