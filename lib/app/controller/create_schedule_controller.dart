@@ -311,12 +311,35 @@ class CreateScheduleController extends BaseController {
   void deleteItem(SubjectBO subject) {
     final index = _subjectsToUpload.value
         .indexWhere((element) => element?.id == subject.id);
+    var targetSubject = _subjectsToUpload.value
+        .firstWhere((element) => element?.id == subject.id);
     _subjectsToUpload.value[index] = null;
 
     final indexDraggeable =
         _subjects.value.indexWhere((element) => element.id == subject.id);
-    _subjects.value[indexDraggeable] =
-        _subjects.value[indexDraggeable].addTime();
+    if (indexDraggeable >= 0) {
+      _subjects.value[indexDraggeable] =
+          _subjects.value[indexDraggeable].addTime();
+    } else {
+      _subjects.value.insert(0,
+          SubjectBO(
+              targetSubject!.name,
+              targetSubject.acronym,
+              targetSubject.classGroup,
+              targetSubject.seminary,
+              targetSubject.laboratory,
+              targetSubject.english,
+              30,
+              targetSubject.semester,
+              targetSubject.days,
+              targetSubject.hours,
+              targetSubject.turns,
+              targetSubject.classroom,
+              targetSubject.department,
+              targetSubject.degree,
+              targetSubject.color,
+              targetSubject.id));
+    }
 
     _subjectsToUpload.refresh();
     _subjects.refresh();
