@@ -329,7 +329,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                       (controller.subjectsToUpload[index] == null)
                           ? SizedBox(
                               height: 36,
-                              child: Text('empty'.tr),
+                              child: Text('empty'.tr, style: const TextStyle(fontSize: 12),),
                             )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -337,7 +337,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                 Column(children: [
                                   Text(
                                     controller.subjectsToUpload[index]!.classGroup,
-                                    style: const TextStyle(fontSize: 14),
+                                    style: const TextStyle(fontSize: 11),
                                   ),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
