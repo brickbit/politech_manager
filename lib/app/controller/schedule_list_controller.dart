@@ -52,7 +52,8 @@ class ScheduleListController extends BaseController {
       'fileType': scheduleFilter.fileType,
       'semester': scheduleFilter.semester,
       'degree': scheduleFilter.degree,
-      'year': scheduleFilter.year
+      'year': scheduleFilter.year,
+      'update': false
     });
   }
 
@@ -135,6 +136,15 @@ class ScheduleListController extends BaseController {
   }
 
   void updateSchedule(ScheduleBO schedule) {
+    Get.offNamed(Routes.schedule, arguments: {
+      'subjects': schedule.subjects,
+      'scheduleType': schedule.scheduleType,
+      'fileType': schedule.fileType,
+      'semester': schedule.semester,
+      'degree': schedule.degree,
+      'year': schedule.year,
+      'update': true
+    });
     //TODO: fix server model
     /*var candidateSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.id == schedule.degree.id).toList();
     Get.toNamed(Routes.schedule, arguments: {

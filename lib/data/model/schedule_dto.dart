@@ -6,11 +6,12 @@ class ScheduleDto {
   int scheduleType;
   int fileType;
   String degree;
+  String semester;
   String year;
   int id;
 
   ScheduleDto({required this.subjects, required this.scheduleType, required this.fileType, required this.degree,
-      required this.year, required this.id});
+      required this.semester, required this.year, required this.id});
 
   factory ScheduleDto.fromJson(Map<String, dynamic> json) {
     return ScheduleDto(
@@ -18,6 +19,7 @@ class ScheduleDto {
       scheduleType: json['scheduleType'],
       fileType: json['fileType'],
       degree: json['degree'],
+      semester: json['semester'],
       year: json['year'],
       id: json['id'],
     );
@@ -35,6 +37,7 @@ class ScheduleDto {
     data['scheduleType'] = scheduleType;
     data['fileType'] = fileType;
     data['degree'] = degree;
+    data['semester'] = semester;
     data['year'] = year;
     data['id'] = id;
     return data;

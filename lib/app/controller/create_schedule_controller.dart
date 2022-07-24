@@ -45,6 +45,8 @@ class CreateScheduleController extends BaseController {
 
   final _year = ''.obs;
 
+  final _update = false.obs;
+
   int get semester => _semester.value;
 
   final Rx<bool> _fileDownloaded = false.obs;
@@ -64,9 +66,10 @@ class CreateScheduleController extends BaseController {
     _subjects.value = argumentData['subjects'];
     _scheduleType.value = argumentData['scheduleType'];
     _fileType.value = argumentData['fileType'];
-    _semester.value = argumentData['semester'];
+    _semester.value = int.parse(argumentData['semester']);
     _degree.value = argumentData['degree'];
     _year.value = argumentData['year'];
+    _update.value = argumentData['update'];
     if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
       _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
     } else {
@@ -83,6 +86,7 @@ class CreateScheduleController extends BaseController {
         _scheduleType.value.toScheduleTypeInt(),
         _fileType.value.toFileTypeInt(),
         _degree.value,
+        _semester.value.toString(),
         _year.value,
         0);
     dataRepository.postSchedule(schedule).fold(
@@ -115,6 +119,7 @@ class CreateScheduleController extends BaseController {
         _scheduleType.value.toScheduleTypeInt(),
         _fileType.value.toFileTypeInt(),
         _degree.value,
+        _semester.value.toString(),
         _year.value,
         0);
     dataRepository.downloadSchedule(schedule).fold(

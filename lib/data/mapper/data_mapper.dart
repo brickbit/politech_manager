@@ -76,7 +76,7 @@ extension ClassroomDtoMapper on ClassroomBO {
 extension ScheduleBOMapper on ScheduleDto {
   ScheduleBO toBO() {
     return ScheduleBO(subjects.map((subject) => subject?.toBO()).toList(),
-        scheduleType, fileType, degree, year, id);
+        scheduleType, fileType, degree, semester, year, id);
   }
 }
 
@@ -211,6 +211,7 @@ extension ScheduleMapper on ScheduleBO {
         scheduleType: scheduleType,
         fileType: fileType,
         degree: degree,
+        semester: semester,
         year: year,
         id: id);
   }

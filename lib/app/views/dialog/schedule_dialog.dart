@@ -68,7 +68,7 @@ void scheduleDialog(String title, BuildContext context, List<DegreeBO> degrees, 
           onPressed: () {
             final subjectsFiltered = subjects.where((element) => element.semester == int.parse(semester.value) && element.degree.id == degree.value.id).toList();
             Navigator.pop(context, 'OK');
-            filteredSubjects(ScheduleFilter(subjectsFiltered,int.parse(semester.value), scheduleType.value, fileType.value, degree.value.name, degree.value.year));
+            filteredSubjects(ScheduleFilter(subjectsFiltered, semester.value.toString(), scheduleType.value, fileType.value, degree.value.name, degree.value.year));
           },
           child: Text('ok'.tr),
         ),

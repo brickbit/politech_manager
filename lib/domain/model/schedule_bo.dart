@@ -5,9 +5,10 @@ class ScheduleBO {
   final int scheduleType;
   final int fileType;
   final String degree;
+  final String semester;
   final String year;
   final int id;
 
   ScheduleBO(this.subjects, this.scheduleType, this.fileType, this.degree,
-      this.year, this.id);
+      this.semester, this.year, this.id);
 }
