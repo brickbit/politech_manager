@@ -301,8 +301,7 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       final List list = json.decode(utf8.decode(response.bodyBytes));
       final List<ScheduleDto> scheduleList =
       list.map((item) => ScheduleDto.fromJson(item)).toList();
-      final dto = scheduleList.map((item) => item.toBO()).toList();
-      return Right(dto);
+      return Right(scheduleList.map((e) => e.toBO()).toList());
     } else if (response.statusCode == 403) {
       return Left(ScheduleError(errorType: ScheduleErrorType.expiredToken));
     } else {

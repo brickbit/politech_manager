@@ -14,13 +14,19 @@ class ScheduleDto {
 
   factory ScheduleDto.fromJson(Map<String, dynamic> json) {
     return ScheduleDto(
-      subjects: json["subjects"],
+      subjects: _subjectFromJson(json["subjects"]),
       scheduleType: json['scheduleType'],
       fileType: json['fileType'],
       degree: json['degree'],
       year: json['year'],
       id: json['id'],
     );
+  }
+
+  static T? cast<T>(x) => x is T ? x : null;
+
+  static List<SubjectDto?> _subjectFromJson(List<dynamic> json) {
+    return json.map((e) => cast<SubjectDto?>(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
