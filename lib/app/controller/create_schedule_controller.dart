@@ -75,6 +75,10 @@ class CreateScheduleController extends BaseController {
     } else {
       _subjectsToUpload.value = List.filled(maxCellsSeveralSubjectPerDay, null);
     }
+    if (_update.value) {
+      _subjects;
+      _subjectsToUpload;
+    }
     super.onInit();
   }
 

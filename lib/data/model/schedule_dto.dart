@@ -15,7 +15,7 @@ class ScheduleDto {
 
   factory ScheduleDto.fromJson(Map<String, dynamic> json) {
     return ScheduleDto(
-      subjects: _subjectFromJson(json["subjects"]),
+      subjects: convertToSubject(json['subjects']),
       scheduleType: json['scheduleType'],
       fileType: json['fileType'],
       degree: json['degree'],
@@ -25,10 +25,8 @@ class ScheduleDto {
     );
   }
 
-  static T? cast<T>(x) => x is T ? x : null;
-
-  static List<SubjectDto?> _subjectFromJson(List<dynamic> json) {
-    return json.map((e) => cast<SubjectDto?>(e)).toList();
+  static List<SubjectDto?> convertToSubject(List<dynamic> json) {
+    return json.map((e) => e != null ? SubjectDto.fromJson(e as Map<String,dynamic>) : null ).toList();
   }
 
   Map<String, dynamic> toJson() {

@@ -47,6 +47,7 @@ class ScheduleListController extends BaseController {
 
   void createSchedule(ScheduleFilter scheduleFilter) {
     Get.offNamed(Routes.schedule, arguments: {
+      'subjectsToUpload': [],
       'subjects': scheduleFilter.subjects,
       'scheduleType': scheduleFilter.scheduleType,
       'fileType': scheduleFilter.fileType,
@@ -137,7 +138,8 @@ class ScheduleListController extends BaseController {
 
   void updateSchedule(ScheduleBO schedule) {
     Get.offNamed(Routes.schedule, arguments: {
-      'subjects': schedule.subjects,
+      'subjectsToUpload': schedule.subjects,
+      'subjects': _calculateSubjectToUpload(schedule),
       'scheduleType': schedule.scheduleType,
       'fileType': schedule.fileType,
       'semester': schedule.semester,
@@ -145,31 +147,19 @@ class ScheduleListController extends BaseController {
       'year': schedule.year,
       'update': true
     });
-    //TODO: fix server model
-    /*var candidateSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.id == schedule.degree.id).toList();
-    Get.toNamed(Routes.schedule, arguments: {
-      'subjects': candidateSubjects,
-      'savedSubjects': schedule.subjects
-      'scheduleType': schedule.type,
-      'semester': scheduleFilter.semester,
-    });*/
-    /*hideError();
-    showProgress();
-    dataRepository.updateSchedule(schedule).fold(
-          (left) => _onUpdateScheduleKo(left),
-          (right) => _onUpdateScheduleOk(),
-    );*/
   }
 
-  void _onUpdateScheduleKo(ScheduleError scheduleError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSchedule(scheduleError));
-  }
-
-  void _onUpdateScheduleOk() {
-    hideProgress();
-    getSchedules();
+  List<SubjectBO> _calculateSubjectToUpload(ScheduleBO schedule) {
+    final List<SubjectBO> filteredSubjects = [];
+    final initialSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.name == schedule.degree).toList();
+    initialSubjects.map((initial) {
+      final subjectFound = schedule.subjects.where((network) => network?.id == initial.id).first;
+      if(subjectFound != null) {
+        final subjectTarget = SubjectBO(initial.name, initial.acronym, initial.classGroup, initial.seminary, initial.laboratory, initial.english, initial.time - subjectFound.time, initial.semester, initial.days, initial.hours, initial.turns, initial.classroom, initial.department, initial.degree, initial.color, initial.id);
+        filteredSubjects.add(subjectTarget);
+      }
+    });
+    return filteredSubjects;
   }
 
   void deleteSchedule(ScheduleBO schedule) {
