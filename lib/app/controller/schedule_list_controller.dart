@@ -50,7 +50,6 @@ class ScheduleListController extends BaseController {
       'subjectsToUpload': [],
       'subjects': scheduleFilter.subjects,
       'scheduleType': scheduleFilter.scheduleType,
-      'fileType': scheduleFilter.fileType,
       'semester': scheduleFilter.semester,
       'degree': scheduleFilter.degree,
       'year': scheduleFilter.year,
@@ -140,8 +139,7 @@ class ScheduleListController extends BaseController {
     Get.offNamed(Routes.schedule, arguments: {
       'subjectsToUpload': schedule.subjects,
       'subjects': _calculateSubjectToUpload(schedule),
-      'scheduleType': schedule.scheduleType,
-      'fileType': schedule.fileType,
+      'scheduleType': schedule.scheduleType == 0 ? 'oneSubjectPerHour'.tr :  'severalSubjectsPerHour'.tr,
       'semester': schedule.semester,
       'degree': schedule.degree,
       'year': schedule.year,
@@ -152,13 +150,38 @@ class ScheduleListController extends BaseController {
   List<SubjectBO> _calculateSubjectToUpload(ScheduleBO schedule) {
     final List<SubjectBO> filteredSubjects = [];
     final initialSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.name == schedule.degree).toList();
-    initialSubjects.map((initial) {
-      final subjectFound = schedule.subjects.where((network) => network?.id == initial.id).first;
-      if(subjectFound != null) {
-        final subjectTarget = SubjectBO(initial.name, initial.acronym, initial.classGroup, initial.seminary, initial.laboratory, initial.english, initial.time - subjectFound.time, initial.semester, initial.days, initial.hours, initial.turns, initial.classroom, initial.department, initial.degree, initial.color, initial.id);
-        filteredSubjects.add(subjectTarget);
+    for(final itemInit in initialSubjects){
+      int cont = 0;
+      SubjectBO? target = null;
+      for(final itemNet in schedule.subjects){
+        if(itemNet != null) {
+          if (itemInit.id == itemNet.id) {
+            cont++;
+          }
+          target = SubjectBO(
+              itemInit.name,
+              itemInit.acronym,
+              itemInit.classGroup,
+              itemInit.seminary,
+              itemInit.laboratory,
+              itemInit.english,
+              30 * cont,
+              itemInit.semester,
+              itemInit.days,
+              itemInit.hours,
+              itemInit.turns,
+              itemInit.classroom,
+              itemInit.department,
+              itemInit.degree,
+              itemInit.color,
+              itemInit.id
+          );
+        }
+        if(target != null) {
+          filteredSubjects.add(target);
+        }
       }
-    });
+    }
     return filteredSubjects;
   }
 

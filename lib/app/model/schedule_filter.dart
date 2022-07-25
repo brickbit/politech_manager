@@ -5,10 +5,9 @@ class ScheduleFilter {
   final List<SubjectBO> subjects;
   final String semester;
   final String scheduleType;
-  final String fileType;
   final String degree;
   final String year;
 
-  ScheduleFilter(this.subjects, this.semester, this.scheduleType, this.fileType, this.degree, this.year);
+  ScheduleFilter(this.subjects, this.semester, this.scheduleType, this.degree, this.year);
 
 }

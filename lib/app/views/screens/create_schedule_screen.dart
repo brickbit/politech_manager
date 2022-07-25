@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/extension/color_extension.dart';
 import 'package:politech_manager/app/views/custom/subject_box.dart';
+import 'package:politech_manager/app/views/dialog/file_type_dialog.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import '../../../domain/constant/constant.dart';
 import '../../controller/create_schedule_controller.dart';
@@ -70,8 +71,11 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
               },
               icon: const Icon(Icons.save_sharp)),
           IconButton(
-              onPressed: () {
-                controller.downloadFile();
+              onPressed: () async{
+                fileTypeDialog(context, (fileType) {
+                  controller.fileType.value = fileType;
+                  controller.downloadFile();
+                });
               },
               icon: const Icon(Icons.download))
         ],

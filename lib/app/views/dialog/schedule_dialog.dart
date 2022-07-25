@@ -12,8 +12,6 @@ void scheduleDialog(String title, BuildContext context, List<DegreeBO> degrees, 
   var semester = '1'.obs;
   var degreeItems = degrees;
   var degree = degreeItems[0].obs;
-  var fileTypes = ['subject'.tr, 'department'.tr, 'classroom'.tr];
-  var fileType = 'subject'.tr.obs;
   var scheduleTypes = ['oneSubjectPerHour'.tr, 'severalSubjectsPerHour'.tr];
   var scheduleType = 'oneSubjectPerHour'.tr.obs;
 
@@ -46,14 +44,6 @@ void scheduleDialog(String title, BuildContext context, List<DegreeBO> degrees, 
                 ],
               ),
               const SizedBox(height: 24),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('fileType'.tr),
-                  materialDropdown(fileType, fileTypes),
-                ],
-              ),
-              const SizedBox(height: 24),
 
             ],
           ),
@@ -68,7 +58,7 @@ void scheduleDialog(String title, BuildContext context, List<DegreeBO> degrees, 
           onPressed: () {
             final subjectsFiltered = subjects.where((element) => element.semester == int.parse(semester.value) && element.degree.id == degree.value.id).toList();
             Navigator.pop(context, 'OK');
-            filteredSubjects(ScheduleFilter(subjectsFiltered, semester.value.toString(), scheduleType.value, fileType.value, degree.value.name, degree.value.year));
+            filteredSubjects(ScheduleFilter(subjectsFiltered, semester.value.toString(), scheduleType.value, degree.value.name, degree.value.year));
           },
           child: Text('ok'.tr),
         ),

@@ -35,9 +35,7 @@ class CreateScheduleController extends BaseController {
 
   String get scheduleType => _scheduleType.value;
 
-  final _fileType = "".obs;
-
-  String get fileType => _fileType.value;
+  final fileType = "".obs;
 
   final _semester = 1.obs;
 
@@ -65,7 +63,6 @@ class CreateScheduleController extends BaseController {
   void onInit() {
     _subjects.value = argumentData['subjects'];
     _scheduleType.value = argumentData['scheduleType'];
-    _fileType.value = argumentData['fileType'];
     _semester.value = int.parse(argumentData['semester']);
     _degree.value = argumentData['degree'];
     _year.value = argumentData['year'];
@@ -88,7 +85,7 @@ class CreateScheduleController extends BaseController {
     var schedule = ScheduleBO(
         _subjectsToUpload.value,
         _scheduleType.value.toScheduleTypeInt(),
-        _fileType.value.toFileTypeInt(),
+        fileType.value.toFileTypeInt(),
         _degree.value,
         _semester.value.toString(),
         _year.value,
@@ -121,7 +118,7 @@ class CreateScheduleController extends BaseController {
     var schedule = ScheduleBO(
         _subjectsToUpload.value,
         _scheduleType.value.toScheduleTypeInt(),
-        _fileType.value.toFileTypeInt(),
+        fileType.value.toFileTypeInt(),
         _degree.value,
         _semester.value.toString(),
         _year.value,
