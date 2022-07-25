@@ -110,6 +110,7 @@ class CreateScheduleController extends BaseController {
 
   void _onSaveScheduleOk() {
     hideProgress();
+    Get.back();
   }
 
   void downloadFile() {
