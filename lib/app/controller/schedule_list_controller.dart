@@ -148,41 +148,21 @@ class ScheduleListController extends BaseController {
   }
 
   List<SubjectBO> _calculateSubjectToUpload(ScheduleBO schedule) {
-    final List<SubjectBO> filteredSubjects = [];
-    final initialSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.name == schedule.degree).toList();
-    for(final itemInit in initialSubjects){
-      int cont = 0;
-      SubjectBO? target = null;
-      for(final itemNet in schedule.subjects){
-        if(itemNet != null) {
-          if (itemInit.id == itemNet.id) {
-            cont++;
-          }
-          target = SubjectBO(
-              itemInit.name,
-              itemInit.acronym,
-              itemInit.classGroup,
-              itemInit.seminary,
-              itemInit.laboratory,
-              itemInit.english,
-              30 * cont,
-              itemInit.semester,
-              itemInit.days,
-              itemInit.hours,
-              itemInit.turns,
-              itemInit.classroom,
-              itemInit.department,
-              itemInit.degree,
-              itemInit.color,
-              itemInit.id
-          );
-        }
-        if(target != null) {
-          filteredSubjects.add(target);
-        }
+    List<SubjectBO> initialSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.name == schedule.degree).toList();
+    schedule.subjects.removeWhere((value) => value == null);
+    List<SubjectBO> subjectsToAdd = List.empty(growable: true);
+    for (var itemA in schedule.subjects) {
+      if (initialSubjects.any((element) => element.id == itemA?.id)) {
+        var subject = initialSubjects.where((element) => element.id == itemA?.id).toList().first;
+        var count = schedule.subjects.where((c) => c?.id == subject.id).toList().length;
+        initialSubjects.remove(subject);
+        subjectsToAdd.add(SubjectBO(subject.name, subject.acronym, subject.classGroup, subject.seminary, subject.laboratory, subject.english, subject.time - 30 * count, subject.semester, subject.days, subject.hours, subject.turns, subject.classroom, subject.department, subject.degree, subject.color, subject.id));
       }
     }
-    return filteredSubjects;
+    for (var itemA in subjectsToAdd) {
+      initialSubjects.add(itemA);
+    }
+    return initialSubjects;
   }
 
   void deleteSchedule(ScheduleBO schedule) {
