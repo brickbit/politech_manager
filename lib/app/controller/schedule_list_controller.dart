@@ -47,7 +47,6 @@ class ScheduleListController extends BaseController {
 
   void createSchedule(ScheduleFilter scheduleFilter) {
     Get.offNamed(Routes.schedule, arguments: {
-      'subjectsToUpload': [],
       'subjects': scheduleFilter.subjects,
       'scheduleType': scheduleFilter.scheduleType,
       'semester': scheduleFilter.semester,
@@ -137,7 +136,7 @@ class ScheduleListController extends BaseController {
 
   void updateSchedule(ScheduleBO schedule) {
     Get.offNamed(Routes.schedule, arguments: {
-      'subjectsToUpload': schedule.subjects,
+      'scheduleId': schedule.id,
       'subjects': _calculateSubjectToUpload(schedule),
       'scheduleType': schedule.scheduleType == 0 ? 'oneSubjectPerHour'.tr :  'severalSubjectsPerHour'.tr,
       'semester': schedule.semester,

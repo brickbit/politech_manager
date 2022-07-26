@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:politech_manager/app/extension/string_extension.dart';
+import 'package:politech_manager/app/navigation/app_routes.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/error/schedule_error_type.dart';
 import 'package:politech_manager/domain/extension/extension.dart';
@@ -59,6 +60,8 @@ class CreateScheduleController extends BaseController {
 
   List<SubjectBO?> get subjectsToUpload => _subjectsToUpload.value;
 
+  final _schedules = Rx<List<ScheduleBO>>([]);
+
   @override
   void onInit() {
     _subjects.value = argumentData['subjects'];
@@ -72,12 +75,38 @@ class CreateScheduleController extends BaseController {
     } else {
       _subjectsToUpload.value = List.filled(maxCellsSeveralSubjectPerDay, null);
     }
-    if (_update.value) {
-      _subjects;
-      _subjectsToUpload;
-    }
+    _getSchedules();
+
     super.onInit();
   }
+
+  void _getSchedules() {
+    dataRepository.getSchedules().fold(
+          (left) => _onGetSchedulesKo(left),
+          (right) => _onGetSchedulesOk(right),
+    );
+  }
+
+  void _onGetSchedulesKo(ScheduleError scheduleError) {
+    if (scheduleError.errorType == ScheduleErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => saveSchedule());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertSchedule(scheduleError));
+    }
+  }
+
+  void _onGetSchedulesOk(List<ScheduleBO> schedules) {
+    hideProgress();
+    _schedules.value = schedules;
+    if (_update.value) {
+      _subjectsToUpload.value = _schedules.value.where((element) => element.id == argumentData['scheduleId']).first.subjects;
+    }
+  }
+
 
   void saveSchedule() {
     hideError();
@@ -110,7 +139,7 @@ class CreateScheduleController extends BaseController {
 
   void _onSaveScheduleOk() {
     hideProgress();
-    Get.back();
+    Get.offNamed(Routes.home);
   }
 
   void downloadFile() {
