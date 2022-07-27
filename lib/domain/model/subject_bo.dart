@@ -22,7 +22,6 @@ class SubjectBO {
   final DegreeBO degree;
   final int color;
   final int id;
-  final SubjectState state;
 
 
   SubjectBO(
@@ -41,8 +40,7 @@ class SubjectBO {
       this.department,
       this.degree,
       this.color,
-      this.id,
-      this.state);
+      this.id);
 
   static SubjectBO mock() {
     return SubjectBO(
@@ -61,23 +59,22 @@ class SubjectBO {
         DepartmentBO("Mock", "M", 1),
         DegreeBO("Mock", 8, "2021-2022", 1),
         1,
-        1,
-        SubjectState.free);
+        1);
   }
 
   SubjectBO copyWith(
       {required String newDay,
         required String newHour,
         required String newTurn}) =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, newDay, newHour, newTurn, classroom, department, degree, color, id, state);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, newDay, newHour, newTurn, classroom, department, degree, color, id);
 
   SubjectBO reduceTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, days, hours, turns, classroom, department, degree, color, id, state);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, days, hours, turns, classroom, department, degree, color, id);
 
   SubjectBO addTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id, state);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id);
 
   SubjectBO updateState(SubjectState newState) =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id, newState);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id);
 
 }

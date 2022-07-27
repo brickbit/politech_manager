@@ -190,8 +190,7 @@ void subjectDialog(
                 _department.value,
                 _degree.value,
                 _color.value.getColorNumber(),
-                id ?? uuid.v4().hashCode,
-                SubjectState.free);
+                id ?? uuid.v4().hashCode);
             manageSubject(subject);
             Navigator.pop(context, 'OK');
           },

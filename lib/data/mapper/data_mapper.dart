@@ -60,8 +60,7 @@ extension SubjectBOMapper on SubjectDto {
         department.toBO(),
         degree.toBO(),
         color,
-        id,
-        SubjectState.free);
+        id);
   }
 }
 

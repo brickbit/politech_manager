@@ -209,7 +209,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
 
   Color _getCellColor(int index) {
     if (controller.subjectsToUpload[index] != null) {
-      return controller.subjectsToUpload[index]!.color.parseColor();
+      return controller.subjectsToUpload[index]!.subject != null ? controller.subjectsToUpload[index]!.subject!.color.parseColor() : Colors.white;
     } else {
       return Colors.white;
     }
@@ -275,7 +275,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      (controller.subjectsToUpload[index] == null)
+                      (controller.subjectsToUpload[index]?.subject == null)
                           ? SizedBox(
                               height: 36,
                               child: _setEmptyCell(index)
@@ -286,7 +286,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                 Column(
                                   children: [
                                     Text(
-                                      controller.subjectsToUpload[index]!.acronym,
+                                      controller.subjectsToUpload[index]!.subject!.acronym,
                                       style: const TextStyle(fontSize: 11),
                                     ),
                                     Row(
@@ -295,7 +295,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        ((controller.subjectsToUpload[index]?.laboratory ??
+                                        ((controller.subjectsToUpload[index]?.subject?.laboratory ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -303,7 +303,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.seminary ??
+                                        ((controller.subjectsToUpload[index]?.subject?.seminary ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -311,7 +311,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.english ??
+                                        ((controller.subjectsToUpload[index]?.subject?.english ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -328,7 +328,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                   constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(controller
-                                        .subjectsToUpload[index]!);
+                                        .subjectsToUpload[index]!.subject!);
                                   },
                                   icon: Icon(Icons.delete,
                                       size: mobile ? 18 : 20),
@@ -393,7 +393,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                 Column(
                                   children: [
                                     Text(
-                                      controller.subjectsToUpload[index]!.classGroup,
+                                      controller.subjectsToUpload[index]!.subject!.classGroup,
                                       style: const TextStyle(fontSize: 11),
                                     ),
                                     Row(
@@ -402,7 +402,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        ((controller.subjectsToUpload[index]?.laboratory ??
+                                        ((controller.subjectsToUpload[index]?.subject?.laboratory ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -410,7 +410,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.seminary ??
+                                        ((controller.subjectsToUpload[index]?.subject?.seminary ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -418,7 +418,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.english ??
+                                        ((controller.subjectsToUpload[index]?.subject?.english ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -435,7 +435,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                   constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(controller
-                                        .subjectsToUpload[index]!);
+                                        .subjectsToUpload[index]!.subject!);
                                   },
                                   icon: Icon(Icons.delete,
                                       size: mobile ? 18 : 20),
