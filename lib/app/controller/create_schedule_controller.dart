@@ -10,7 +10,6 @@ import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/error/schedule_error_type.dart';
 import 'package:politech_manager/domain/extension/extension.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
-import 'package:politech_manager/domain/model/pair_exam_bo.dart';
 import 'package:politech_manager/domain/model/pair_subject_state.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,9 +59,9 @@ class CreateScheduleController extends BaseController {
 
   Rx<SubjectBO> selectedSubject = SubjectBO.mock().obs;
 
-  final _subjectsToUpload = Rx<List<PairSubjectStateBO>>([]);
+  final _subjectsToUpload = Rx<List<SubjectBO?>>([]);
 
-  List<PairSubjectStateBO> get subjectsToUpload => _subjectsToUpload.value;
+  List<SubjectBO?> get subjectsToUpload => _subjectsToUpload.value;
 
   final _departmentsInCell = Rx<List<List<DepartmentBO?>>>([]);
 
@@ -79,9 +78,9 @@ class CreateScheduleController extends BaseController {
     _year.value = argumentData['year'];
     _update.value = argumentData['update'];
     if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
-      _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, PairSubjectStateBO(null, SubjectState.free));
+      _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
     } else {
-      _subjectsToUpload.value = List.filled(maxCellsSeveralSubjectPerDay, PairSubjectStateBO(null, SubjectState.free));
+      _subjectsToUpload.value = List.filled(maxCellsSeveralSubjectPerDay, null);
     }
     _getSchedules();
     super.onInit();
@@ -112,16 +111,8 @@ class CreateScheduleController extends BaseController {
     if (_update.value) {
       var subjectsObtained = _schedules.value.where((element) => element.id == argumentData['scheduleId']).first.subjects;
       for (var i = 0; i < _subjectsToUpload.value.length; i++) {
-        _subjectsToUpload.value[i] = PairSubjectStateBO(subjectsObtained[i],SubjectState.free);
+        _subjectsToUpload.value[i] = subjectsObtained[i];
       }
-    }
-  }
-
-  Iterable<List<T>> zip<T>(Iterable<Iterable<T>> iterables) sync* {
-    if (iterables.isEmpty) return;
-    final iterators = iterables.map((e) => e.iterator).toList(growable: false);
-    while (iterators.every((e) => e.moveNext())) {
-      yield iterators.map((e) => e.current).toList(growable: false);
     }
   }
 
@@ -131,33 +122,38 @@ class CreateScheduleController extends BaseController {
     } else {
       _departmentsInCell.value = List.generate(maxCellsSeveralSubjectPerDay, (i) => List<DepartmentBO?>.filled(_schedules.value.length, null, growable: false), growable: false);
     }
-    for (var i = 0; i < _subjectsToUpload.value.length; i++) {
-      _subjectsToUpload.value[i].state = SubjectState.free;
-    }
-    List<int> iList = [];
-    List<int> jList = [];
-    List<DepartmentBO> dList = [];
 
     for(var i = 0; i < _schedules.value.length; i++) {
       for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
         if(_schedules.value[i].subjects[j]?.department.id == department.id) {
-          jList.add(j);
+          _subjectsToUpload.value[j]?.updateState(SubjectState.departmentCollision);
         }
       }
     }
-
-    for(var i = 0; i < jList.length; i++) {
-      var pos = jList[i];
-      _subjectsToUpload.value[pos] = PairSubjectStateBO(_subjectsToUpload.value[pos].subject, SubjectState.departmentCollision);
-    }
   }
 
+  void showClassroomConflicts(ClassroomBO classroom) {
+    if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+      _classroomsInCell.value = List.generate(maxCellsOneSubjectPerDay, (i) => List<ClassroomBO?>.filled(_schedules.value.length, null, growable: false), growable: false);
+    } else {
+      _classroomsInCell.value = List.generate(maxCellsSeveralSubjectPerDay, (i) => List<ClassroomBO?>.filled(_schedules.value.length, null, growable: false), growable: false);
+    }
+
+    for(var i = 0; i < _schedules.value.length; i++) {
+      for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
+        if(_schedules.value[i].subjects[j]?.department.id == classroom.id) {
+          _subjectsToUpload.value[j]?.updateState(SubjectState.classroomCollision);
+        }
+      }
+    }
+    update();
+  }
 
   void saveSchedule() {
     hideError();
     showProgress();
     var schedule = ScheduleBO(
-        _subjectsToUpload.value.map((e) => e.subject).toList(),
+        _subjectsToUpload.value,
         _scheduleType.value.toScheduleTypeInt(),
         fileType.value.toFileTypeInt(),
         _degree.value,
@@ -191,7 +187,7 @@ class CreateScheduleController extends BaseController {
     hideError();
     showProgress();
     var schedule = ScheduleBO(
-        _subjectsToUpload.value.map((e) => e.subject).toList(),
+        _subjectsToUpload.value,
         _scheduleType.value.toScheduleTypeInt(),
         fileType.value.toFileTypeInt(),
         _degree.value,
@@ -391,10 +387,10 @@ class CreateScheduleController extends BaseController {
 
   void deleteItem(SubjectBO subject) {
     final index = _subjectsToUpload.value
-        .indexWhere((element) => element.subject?.id == subject.id);
+        .indexWhere((element) => element?.id == subject.id);
     var targetSubject = _subjectsToUpload.value
-        .firstWhere((element) => element.subject?.id == subject.id);
-    _subjectsToUpload.value[index].subject = null;
+        .firstWhere((element) => element?.id == subject.id);
+    _subjectsToUpload.value[index] = null;
 
     final indexDraggeable =
         _subjects.value.indexWhere((element) => element.id == subject.id);
@@ -404,22 +400,23 @@ class CreateScheduleController extends BaseController {
     } else {
       _subjects.value.insert(0,
           SubjectBO(
-              targetSubject.subject!.name,
-              targetSubject.subject!.acronym,
-              targetSubject.subject!.classGroup,
-              targetSubject.subject!.seminary,
-              targetSubject.subject!.laboratory,
-              targetSubject.subject!.english,
+              targetSubject!.name,
+              targetSubject.acronym,
+              targetSubject.classGroup,
+              targetSubject.seminary,
+              targetSubject.laboratory,
+              targetSubject.english,
               30,
-              targetSubject.subject!.semester,
-              targetSubject.subject!.days,
-              targetSubject.subject!.hours,
-              targetSubject.subject!.turns,
-              targetSubject.subject!.classroom,
-              targetSubject.subject!.department,
-              targetSubject.subject!.degree,
-              targetSubject.subject!.color,
-              targetSubject.subject!.id));
+              targetSubject.semester,
+              targetSubject.days,
+              targetSubject.hours,
+              targetSubject.turns,
+              targetSubject.classroom,
+              targetSubject.department,
+              targetSubject.degree,
+              targetSubject.color,
+              targetSubject.id,
+              SubjectState.free));
     }
 
     _subjectsToUpload.refresh();
@@ -433,10 +430,10 @@ class CreateScheduleController extends BaseController {
       columnSubject.sort();
       var module = index % 5;
       if (columnSubject.indexOf(item.acronym) == module) {
-        _subjectsToUpload.value[index].subject = item;
+        _subjectsToUpload.value[index] = item;
       }
     } else {
-      _subjectsToUpload.value[index].subject = item;
+      _subjectsToUpload.value[index] = item;
     }
   }
 

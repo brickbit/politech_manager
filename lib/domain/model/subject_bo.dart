@@ -1,3 +1,4 @@
+import 'package:politech_manager/domain/model/pair_subject_state.dart';
 import 'package:politech_manager/domain/model/pavilion.dart';
 
 import 'classroom_bo.dart';
@@ -21,6 +22,8 @@ class SubjectBO {
   final DegreeBO degree;
   final int color;
   final int id;
+  final SubjectState state;
+
 
   SubjectBO(
       this.name,
@@ -38,7 +41,8 @@ class SubjectBO {
       this.department,
       this.degree,
       this.color,
-      this.id);
+      this.id,
+      this.state);
 
   static SubjectBO mock() {
     return SubjectBO(
@@ -57,19 +61,23 @@ class SubjectBO {
         DepartmentBO("Mock", "M", 1),
         DegreeBO("Mock", 8, "2021-2022", 1),
         1,
-        1);
+        1,
+        SubjectState.free);
   }
 
   SubjectBO copyWith(
       {required String newDay,
         required String newHour,
         required String newTurn}) =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, newDay, newHour, newTurn, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, newDay, newHour, newTurn, classroom, department, degree, color, id, state);
 
   SubjectBO reduceTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, days, hours, turns, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, days, hours, turns, classroom, department, degree, color, id, state);
 
   SubjectBO addTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id, state);
+
+  SubjectBO updateState(SubjectState newState) =>
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id, newState);
 
 }

@@ -155,7 +155,7 @@ class ScheduleListController extends BaseController {
         var subject = initialSubjects.where((element) => element.id == itemA?.id).toList().first;
         var count = schedule.subjects.where((c) => c?.id == subject.id).toList().length;
         initialSubjects.remove(subject);
-        subjectsToAdd.add(SubjectBO(subject.name, subject.acronym, subject.classGroup, subject.seminary, subject.laboratory, subject.english, subject.time - 30 * count, subject.semester, subject.days, subject.hours, subject.turns, subject.classroom, subject.department, subject.degree, subject.color, subject.id));
+        subjectsToAdd.add(SubjectBO(subject.name, subject.acronym, subject.classGroup, subject.seminary, subject.laboratory, subject.english, subject.time - 30 * count, subject.semester, subject.days, subject.hours, subject.turns, subject.classroom, subject.department, subject.degree, subject.color, subject.id, subject.state));
       }
     }
     for (var itemA in subjectsToAdd) {

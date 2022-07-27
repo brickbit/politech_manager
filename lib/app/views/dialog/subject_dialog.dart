@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/extension/color_extension.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
+import 'package:politech_manager/domain/model/pair_subject_state.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../domain/model/classroom_bo.dart';
@@ -189,7 +190,8 @@ void subjectDialog(
                 _department.value,
                 _degree.value,
                 _color.value.getColorNumber(),
-                id ?? uuid.v4().hashCode);
+                id ?? uuid.v4().hashCode,
+                SubjectState.free);
             manageSubject(subject);
             Navigator.pop(context, 'OK');
           },
