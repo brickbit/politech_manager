@@ -5,7 +5,7 @@ import 'package:politech_manager/app/views/custom/subject_box.dart';
 import 'package:politech_manager/app/views/dialog/file_type_dialog.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import '../../../domain/constant/constant.dart';
-import '../../../domain/model/pair_subject_state.dart';
+import '../../../domain/model/subject_state.dart';
 import '../../controller/create_schedule_controller.dart';
 import '../../navigation/app_routes.dart';
 import '../dialog/file_dialog.dart';

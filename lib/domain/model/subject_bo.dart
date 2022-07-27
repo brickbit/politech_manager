@@ -1,4 +1,4 @@
-import 'package:politech_manager/domain/model/pair_subject_state.dart';
+import 'package:politech_manager/domain/model/subject_state.dart';
 import 'package:politech_manager/domain/model/pavilion.dart';
 
 import 'classroom_bo.dart';

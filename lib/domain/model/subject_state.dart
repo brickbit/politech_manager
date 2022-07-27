@@ -1,5 +1,4 @@
 
-import 'package:politech_manager/domain/model/subject_bo.dart';
 /*
 class PairSubjectStateBO {
   SubjectBO? subject;

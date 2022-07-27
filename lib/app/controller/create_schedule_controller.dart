@@ -10,7 +10,7 @@ import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/error/schedule_error_type.dart';
 import 'package:politech_manager/domain/extension/extension.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
-import 'package:politech_manager/domain/model/pair_subject_state.dart';
+import 'package:politech_manager/domain/model/subject_state.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../domain/constant/constant.dart';
