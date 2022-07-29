@@ -177,7 +177,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
   }
 
   Widget _daySchedule(bool mobile, int day) {
-    final ratio = mobile ? 0.4 : 1.4;
+    final ratio = mobile ? 0.41 : 1.4;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5, childAspectRatio: ratio),
@@ -192,7 +192,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${controller.calculateSubjects(index)} ${controller.calculateHour(index)}'),
+                      '${controller.calculateSubjects(index)} ${controller.calculateHour(index)}', style: const TextStyle(fontSize: 10),),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
                   _dragTargetLayered(index + day * 120, mobile, 0),
@@ -259,7 +259,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       ) {
         return Obx(
           () => Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             child: Container(
               decoration: BoxDecoration(
                 color: _getCellColor(index),
@@ -331,7 +331,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                         .subjectsToUpload[index]!.subject!);
                                   },
                                   icon: Icon(Icons.delete,
-                                      size: mobile ? 18 : 20),
+                                      size: mobile ? 16 : 20),
                                 )
                               ],
                             ),
@@ -394,7 +394,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                   children: [
                                     Text(
                                       controller.subjectsToUpload[index]!.subject!.classGroup,
-                                      style: const TextStyle(fontSize: 11),
+                                      style: const TextStyle(fontSize: 10),
                                     ),
                                     Row(
                                       crossAxisAlignment:
@@ -438,7 +438,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                         .subjectsToUpload[index]!.subject!);
                                   },
                                   icon: Icon(Icons.delete,
-                                      size: mobile ? 18 : 20),
+                                      size: mobile ? 16 : 20),
                                 )
                               ],
                             ),

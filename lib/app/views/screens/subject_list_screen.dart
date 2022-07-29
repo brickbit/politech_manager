@@ -92,7 +92,7 @@ class SubjectListScreen extends GetView<SubjectListController> {
                                   MediaQuery.of(context).size.width < 600,
                                   controller.subjects,
                                   index),
-                              Row(
+                              Column(
                                 children: [
                                   IconButton(
                                     onPressed: () async {

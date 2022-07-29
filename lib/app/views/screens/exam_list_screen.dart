@@ -86,7 +86,7 @@ class ExamListScreen extends GetView<ExamListController> {
                             children: [
                               examTile(MediaQuery.of(context).size.width < 600,
                                   controller.exams, index),
-                              Row(
+                              Column(
                                 children: [
                                   IconButton(
                                     onPressed: () async {
