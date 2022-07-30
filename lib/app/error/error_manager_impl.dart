@@ -28,6 +28,8 @@ import '../../domain/error/calendar_error_type.dart';
 import '../../domain/error/delete_account_error_type.dart';
 import '../../domain/error/schedule_error_type.dart';
 import '../../domain/error/set_new_password_error_type.dart';
+import '../../domain/error/teacher_error.dart';
+import '../../domain/error/teacher_error_type.dart';
 
 class ErrorManagerImpl extends ErrorManager {
   @override
@@ -114,6 +116,16 @@ class ErrorManagerImpl extends ErrorManager {
       case DepartmentErrorType.wrongUser:
         return "errorGetDepartments".tr;
       case DepartmentErrorType.expiredToken:
+        return '';//Managed, do not show it
+    }
+  }
+
+  @override
+  String convertTeacher(TeacherError error) {
+    switch (error.errorType) {
+      case TeacherErrorType.wrongUser:
+        return "errorGetTeachers".tr;
+      case TeacherErrorType.expiredToken:
         return '';//Managed, do not show it
     }
   }

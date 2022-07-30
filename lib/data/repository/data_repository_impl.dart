@@ -28,7 +28,9 @@ import 'package:politech_manager/domain/model/schedule_bo.dart';
 import 'package:politech_manager/domain/model/subject_bo.dart';
 
 import '../../domain/error/login_error.dart';
+import '../../domain/error/teacher_error.dart';
 import '../../domain/model/response_login_bo.dart';
+import '../../domain/model/teacher_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import '../datasource/network_datasource.dart';
 
@@ -69,6 +71,16 @@ class DataRepositoryImpl extends DataRepository {
   @override
   Future<Either<DepartmentError, List<DepartmentBO>>> getDepartments() async {
     final response = await network.getDepartments();
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<TeacherError, List<TeacherBO>>> getTeachers() async {
+    final response = await network.getTeachers();
     if (response.isLeft) {
       return Left(response.left);
     } else {
@@ -141,6 +153,17 @@ class DataRepositoryImpl extends DataRepository {
   Future<Either<DepartmentError, ResponseOkBO>> postDepartment(
       DepartmentBO department) async {
     final response = await network.postDepartment(department);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<TeacherError, ResponseOkBO>> postTeacher(
+      TeacherBO teacher) async {
+    final response = await network.postTeacher(teacher);
     if (response.isLeft) {
       return Left(response.left);
     } else {
@@ -223,6 +246,17 @@ class DataRepositoryImpl extends DataRepository {
   }
 
   @override
+  Future<Either<TeacherError, ResponseOkBO>> updateTeacher(
+      TeacherBO teacher) async {
+    final response = await network.updateTeacher(teacher);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
   Future<Either<ExamError, ResponseOkBO>> updateExam(ExamBO exam) async {
     final response = await network.updateExam(exam);
     if (response.isLeft) {
@@ -279,6 +313,17 @@ class DataRepositoryImpl extends DataRepository {
   Future<Either<DepartmentError, ResponseOkBO>> deleteDepartment(
       int id) async {
     final response = await network.deleteDepartment(id);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
+  Future<Either<TeacherError, ResponseOkBO>> deleteTeacher(
+      int id) async {
+    final response = await network.deleteTeacher(id);
     if (response.isLeft) {
       return Left(response.left);
     } else {

@@ -44,6 +44,9 @@ import '../../domain/error/change_password_error_type.dart';
 import '../../domain/error/degree_error_type.dart';
 import '../../domain/error/recover_password_error_type.dart';
 import '../../domain/error/set_new_password_error_type.dart';
+import '../../domain/error/teacher_error.dart';
+import '../../domain/error/teacher_error_type.dart';
+import '../../domain/model/teacher_bo.dart';
 import '../model/calendar_dto.dart';
 import '../model/classroom_dto.dart';
 import '../model/degree_dto.dart';
@@ -55,6 +58,7 @@ import '../model/response_login_dto.dart';
 import '../model/response_ok_dto.dart';
 import '../model/schedule_dto.dart';
 import '../model/subject_dto.dart';
+import '../model/teacher_dto.dart';
 import 'network_datasource.dart';
 
 class NetworkDataSourceImpl extends NetworkDataSource {
@@ -260,6 +264,23 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
+  Future<Either<TeacherError, List<TeacherBO>>> getTeachers() async {
+    final response = await client.get(Uri.parse("${endpoint}teacher"),
+        headers: authJsonHeaders);
+    if (response.statusCode == 200) {
+      final List list = json.decode(utf8.decode(response.bodyBytes));
+      final List<TeacherDto> teacherList =
+      list.map((item) => TeacherDto.fromJson(item)).toList();
+      final dto = teacherList.map((item) => item.toBO()).toList();
+      return Right(dto);
+    } else if (response.statusCode == 403) {
+      return Left(TeacherError(errorType: TeacherErrorType.expiredToken));
+    } else {
+      return Left(TeacherError(errorType: TeacherErrorType.wrongUser));
+    }
+  }
+
+  @override
   Future<Either<ExamError, List<ExamBO>>> getExams() async {
     final response = await client.get(Uri.parse("${endpoint}exam"),
         headers: authJsonHeaders);
@@ -374,6 +395,22 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
+  Future<Either<TeacherError, ResponseOkBO>> postTeacher(
+      TeacherBO teacher) async {
+    final teacherJson = teacher.toDto().toJson();
+    final response = await client.post(Uri.parse("${endpoint}teacher"),
+        headers: authJsonHeaders, body: json.encode(teacherJson));
+    if (response.statusCode == 200) {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(TeacherError(errorType: TeacherErrorType.expiredToken));
+    } else {
+      return Left(TeacherError(errorType: TeacherErrorType.wrongUser));
+    }
+  }
+
+  @override
   Future<Either<ExamError, ResponseOkBO>> postExam(ExamBO exam) async {
     final examDto = exam.toDto();
     final response = await client.post(Uri.parse("${endpoint}exam"),
@@ -455,6 +492,24 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
+  Future<Either<TeacherError, ResponseOkBO>> updateTeacher(
+      TeacherBO teacher) async {
+    final teacherJson = teacher.toDto().toJson();
+    final response = await client.post(
+        Uri.parse("${endpoint}teacher/update"),
+        headers: authJsonHeaders,
+        body: json.encode(teacherJson));
+    if (response.statusCode == 200) {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(TeacherError(errorType: TeacherErrorType.expiredToken));
+    } else {
+      return Left(TeacherError(errorType: TeacherErrorType.wrongUser));
+    }
+  }
+
+  @override
   Future<Either<ExamError, ResponseOkBO>> updateExam(ExamBO exam) async {
     final examDto = exam.toDto();
     final response = await client.post(Uri.parse("${endpoint}exam/update"),
@@ -527,6 +582,21 @@ class NetworkDataSourceImpl extends NetworkDataSource {
       return Left(DepartmentError(errorType: DepartmentErrorType.expiredToken));
     } else {
       return Left(DepartmentError(errorType: DepartmentErrorType.wrongUser));
+    }
+  }
+
+  @override
+  Future<Either<TeacherError, ResponseOkBO>> deleteTeacher(int id) async {
+    final response = await client.post(
+        Uri.parse("${endpoint}teacher/delete/$id"),
+        headers: authJsonHeaders);
+    if (response.statusCode == 200) {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(TeacherError(errorType: TeacherErrorType.expiredToken));
+    } else {
+      return Left(TeacherError(errorType: TeacherErrorType.wrongUser));
     }
   }
 

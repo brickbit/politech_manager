@@ -14,9 +14,11 @@ import '../../app/views/custom/exam_box.dart';
 import '../../app/views/custom/subject_box.dart';
 import '../../domain/model/pavilion.dart';
 import '../../domain/model/subject_bo.dart';
+import '../../domain/model/teacher_bo.dart';
 import '../model/calendar_dto.dart';
 import '../model/schedule_dto.dart';
 import '../model/subject_dto.dart';
+import '../model/teacher_dto.dart';
 
 extension ClassroomBOMapper on ClassroomDto {
   ClassroomBO toBO() {
@@ -33,6 +35,15 @@ extension DegreeBOMapper on DegreeDto {
 extension DepartmentBOMapper on DepartmentDto {
   DepartmentBO toBO() {
     return DepartmentBO(name, acronym, id);
+  }
+}
+
+extension TeacherBOMapper on TeacherDto {
+  TeacherBO toBO() {
+    return TeacherBO(
+        name,
+        department.toBO(),
+        id);
   }
 }
 
@@ -158,6 +169,15 @@ extension DegreeDtoMapper on DegreeBO {
 extension DepartmentDtoMapper on DepartmentBO {
   DepartmentDto toDto() {
     return DepartmentDto(name: name, acronym: acronym, id: id);
+  }
+}
+
+extension TeacherDtoMapper on TeacherBO {
+  TeacherDto toDto() {
+    return TeacherDto(
+        name: name,
+        department: department.toDto(),
+        id: id);
   }
 }
 

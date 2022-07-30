@@ -29,6 +29,7 @@ import '../binding/set_new_password_binding.dart';
 import '../binding/settings_binding.dart';
 import '../binding/sign_in_binding.dart';
 import '../binding/splash_binding.dart';
+import '../binding/teacher_list_binding.dart';
 import '../views/screens/calendar_list_screen.dart';
 import '../views/screens/data_screen.dart';
 import '../views/screens/degree_list_screen.dart';
@@ -37,6 +38,7 @@ import '../views/screens/set_new_password_screen.dart';
 import '../views/screens/settings_screen.dart';
 import '../views/screens/sign_in_screen.dart';
 import '../views/screens/subject_list_screen.dart';
+import '../views/screens/teacher_list_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -87,6 +89,11 @@ class AppPages {
       name: Routes.departmentList,
       page: () => const DepartmentListScreen(),
       binding: DepartmentListBinding(),
+    ),
+    GetPage(
+      name: Routes.teacherList,
+      page: () => const TeacherListScreen(),
+      binding: TeacherListBinding(),
     ),
     GetPage(
       name: Routes.subjectList,

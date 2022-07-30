@@ -16,7 +16,10 @@ import '../../domain/error/department_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/error/exam_error.dart';
 import '../../domain/error/subject_error.dart';
+import '../../domain/error/teacher_error.dart';
+import '../../domain/error/teacher_error_type.dart';
 import '../../domain/model/exam_bo.dart';
+import '../../domain/model/teacher_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import 'base_controller.dart';
 
@@ -42,6 +45,10 @@ class DataController extends BaseController {
   final _departments = Rx<List<DepartmentBO>>([]);
 
   List<DepartmentBO> get departments => _departments.value;
+
+  final _teachers = Rx<List<TeacherBO>>([]);
+
+  List<TeacherBO> get teachers => _teachers.value;
 
   final _subjects = Rx<List<SubjectBO>>([]);
 
@@ -206,7 +213,7 @@ class DataController extends BaseController {
   void _onGetDepartmentsOk(List<DepartmentBO> departments) {
     hideProgress();
     _departments.value = departments;
-    getSubjects();
+    getTeachers();
   }
 
   void _onPostDepartmentKo(
@@ -224,6 +231,112 @@ class DataController extends BaseController {
   void _onPostDepartmentOk() {
     hideProgress();
     getDepartments();
+  }
+
+  void getTeachers() {
+    hideError();
+    showProgress();
+    dataRepository.getTeachers().fold(
+          (left) => _onGetTeachersKo(left),
+          (right) => _onGetTeachersOk(right),
+    );
+  }
+
+  void _onGetTeachersKo(TeacherError teacherError) {
+    if (teacherError.errorType == DepartmentErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => getTeachers());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertTeacher(teacherError));
+    }
+  }
+
+  void _onGetTeachersOk(List<TeacherBO> teachers) {
+    hideProgress();
+    _teachers.value = teachers;
+    getSubjects();
+  }
+
+
+  void uploadTeacher(TeacherBO teacher) {
+    hideError();
+    showProgress();
+    dataRepository.postTeacher(teacher).fold(
+          (left) => _onPostTeacherKo(left, teacher),
+          (right) => _onPostTeacherOk(),
+    );
+  }
+
+  void _onPostTeacherKo(
+      TeacherError teacherError, TeacherBO teacher) {
+    if (teacherError.errorType == TeacherErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+              (right) => uploadTeacher(teacher));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertTeacher(teacherError));
+    }
+  }
+
+  void _onPostTeacherOk() {
+    hideProgress();
+    getTeachers();
+  }
+
+  void updateTeacher(TeacherBO teacher) {
+    hideError();
+    showProgress();
+    dataRepository.updateTeacher(teacher).fold(
+          (left) => _onUpdateTeacherKo(left, teacher),
+          (right) => _onUpdateTeacherOk(),
+    );
+  }
+
+  void _onUpdateTeacherKo(
+      TeacherError teacherError, TeacherBO teacher) {
+    if (teacherError.errorType == TeacherErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+              (right) => updateTeacher(teacher));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertTeacher(teacherError));
+    }
+  }
+
+  void _onUpdateTeacherOk() {
+    hideProgress();
+    getTeachers();
+  }
+
+  void deleteTeacher(TeacherBO teacher) {
+    hideError();
+    showProgress();
+    dataRepository.deleteTeacher(teacher.id).fold(
+          (left) => _onDeleteTeacherKo(left, teacher),
+          (right) => _onDeleteTeacherOk(),
+    );
+  }
+
+  void _onDeleteTeacherKo(
+      TeacherError teacherError, TeacherBO teacher) {
+    if (teacherError.errorType == TeacherErrorType.expiredToken) {
+      dataRepository.updateToken().fold((left) => _onUpdateTokenError(),
+              (right) => deleteTeacher(teacher));
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertTeacher(teacherError));
+    }
+  }
+
+  void _onDeleteTeacherOk() {
+    hideProgress();
+    getTeachers();
   }
 
   void getSubjects() {

@@ -10,11 +10,13 @@ import '../custom/department_tile.dart';
 import '../custom/empty_view.dart';
 import '../custom/exam_tile.dart';
 import '../custom/subject_tile.dart';
+import '../custom/teacher_tile.dart';
 import '../dialog/classroom_dialog.dart';
 import '../dialog/department_dialog.dart';
 import '../dialog/exam_dialog.dart';
 import '../dialog/filter_exam_dialog.dart';
 import '../dialog/filter_subject_dialog.dart';
+import '../dialog/teacher_dialog.dart';
 
 class DataScreen extends GetView<DataController> {
   const DataScreen({Key? key}) : super(key: key);
@@ -176,8 +178,10 @@ class DataScreen extends GetView<DataController> {
       case 2:
         return 'department'.tr;
       case 3:
-        return 'subject'.tr;
+        return 'teacher'.tr;
       case 4:
+        return 'subject'.tr;
+      case 5:
         return 'exam'.tr;
       default:
         return '';
@@ -208,6 +212,15 @@ class DataScreen extends GetView<DataController> {
                     (department) => (controller.uploadDepartment(department)));
                 break;
               case 3:
+                if (controller.departments.isEmpty) {
+                  controller.showError();
+                  controller.showErrorMessage('canNotCreateTeacher'.tr);
+                } else {
+                  teacherDialog('createTeacher'.tr, context, controller.departments, null,
+                      (teacher) => (controller.uploadTeacher(teacher)));
+                }
+                break;
+              case 4:
                 if (controller.classrooms.isEmpty ||
                     controller.departments.isEmpty ||
                     controller.degrees.isEmpty) {
@@ -225,7 +238,7 @@ class DataScreen extends GetView<DataController> {
                       (subject) => (controller.uploadSubject(subject)));
                 }
                 break;
-              case 4:
+              case 5:
                 if (controller.subjects.isEmpty) {
                   controller.showError();
                   controller.showErrorMessage('canNotCreateExam'.tr);
@@ -260,6 +273,12 @@ class DataScreen extends GetView<DataController> {
                         arguments: {'departments': controller.departments});
                     break;
                   case 3:
+                    Get.toNamed(Routes.teacherList, arguments: {
+                      'departments': controller.departments,
+                      'teachers': controller.teachers,
+                    });
+                    break;
+                  case 4:
                     Get.toNamed(Routes.subjectList, arguments: {
                       'subjects': controller.subjects,
                       'degrees': controller.degrees,
@@ -267,7 +286,7 @@ class DataScreen extends GetView<DataController> {
                       'departments': controller.departments
                     });
                     break;
-                  case 4:
+                  case 5:
                     Get.toNamed(Routes.examList, arguments: {
                       'exams': controller.exams,
                       'subjects': controller.subjects
@@ -301,8 +320,10 @@ class DataScreen extends GetView<DataController> {
       case 2:
         return Expanded(child: _setDepartmentList(context, mobile));
       case 3:
-        return Expanded(child: _setSubjectList(context, mobile));
+        return Expanded(child: _setTeacherList(context, mobile));
       case 4:
+        return Expanded(child: _setSubjectList(context, mobile));
+      case 5:
         return Expanded(child: _setExamList(context, mobile));
       default:
         return Expanded(
@@ -551,6 +572,89 @@ class DataScreen extends GetView<DataController> {
                     );
                   },
                   itemCount: controller.departments.length)),
+    );
+  }
+
+  Widget _setTeacherList(
+      BuildContext context,
+      bool mobile
+      ) {
+    final snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.redAccent,
+      content: Text(controller.errorMsg),
+    );
+    Future.delayed(Duration.zero, () {
+      if (controller.error) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        controller.hideError();
+      }
+    });
+
+    return Scaffold(
+      body: controller.teachers.isEmpty
+          ? emptyView('noTeacher'.tr, mobile, () {
+        controller.getTeachers();
+      })
+          : SafeArea(
+          child: ListView.separated(
+              primary: false,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      teacherTile(
+                          MediaQuery.of(context).size.width < 600,
+                          controller.teachers,
+                          index),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              teacherDialog(
+                                  'editTeacher'.tr,
+                                  context,
+                                  controller.departments,
+                                  controller.teachers[index],
+                                      (teacher) => (controller
+                                      .updateTeacher(teacher)));
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              controller.deleteTeacher(
+                                  controller.teachers[index]);
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: SizedBox(
+                    height: 1,
+                    child: Container(
+                      color: Colors.grey,
+                    ),
+                  ),
+                );
+              },
+              itemCount: controller.teachers.length)),
     );
   }
 
