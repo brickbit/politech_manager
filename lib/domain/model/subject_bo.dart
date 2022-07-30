@@ -14,9 +14,6 @@ class SubjectBO {
   final bool english;
   final int time;
   final int semester;
-  final String days;
-  final String hours;
-  final String turns;
   final ClassroomBO classroom;
   final DepartmentBO department;
   final DegreeBO degree;
@@ -33,9 +30,6 @@ class SubjectBO {
       this.english,
       this.time,
       this.semester,
-      this.days,
-      this.hours,
-      this.turns,
       this.classroom,
       this.department,
       this.degree,
@@ -52,9 +46,6 @@ class SubjectBO {
         false,
         60,
         1,
-        "",
-        "",
-        "",
         ClassroomBO("C1", Pavilion.central.toString(), "C1", 1),
         DepartmentBO("Mock", "M", 1),
         DegreeBO("Mock", 8, "2021-2022", 1),
@@ -62,19 +53,16 @@ class SubjectBO {
         1);
   }
 
-  SubjectBO copyWith(
-      {required String newDay,
-        required String newHour,
-        required String newTurn}) =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, newDay, newHour, newTurn, classroom, department, degree, color, id);
+  SubjectBO copyWith() =>
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, classroom, department, degree, color, id);
 
   SubjectBO reduceTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, days, hours, turns, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, classroom, department, degree, color, id);
 
   SubjectBO addTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, classroom, department, degree, color, id);
 
   SubjectBO updateState(SubjectState newState) =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, days, hours, turns, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, classroom, department, degree, color, id);
 
 }

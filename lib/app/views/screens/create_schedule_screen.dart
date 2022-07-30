@@ -352,7 +352,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       },
       onAccept: (SubjectBox subject) {
         final item =
-            subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
+            subject.subject.copyWith();
         controller.completeDrag(item, index, false);
       },
     );
@@ -452,7 +452,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       },
       onAccept: (SubjectBox subject) {
         final item =
-            subject.subject.copyWith(newDay: "", newHour: "", newTurn: "");
+            subject.subject.copyWith();
         controller.completeDrag(item, index, true);
       },
     );

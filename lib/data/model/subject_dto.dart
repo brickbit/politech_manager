@@ -11,9 +11,6 @@ class SubjectDto {
   bool english;
   int time;
   int semester;
-  String days;
-  String hours;
-  String turns;
   ClassroomDto classroom;
   DepartmentDto department;
   DegreeDto degree;
@@ -29,9 +26,6 @@ class SubjectDto {
       required this.english,
       required this.time,
       required this.semester,
-      required this.days,
-      required this.hours,
-      required this.turns,
       required this.classroom,
       required this.department,
       required this.degree,
@@ -48,9 +42,6 @@ class SubjectDto {
       english: json['english'],
       time: json['time'],
       semester: json['semester'],
-      days: json['days'] ?? "",
-      hours: json['hours'] ?? "",
-      turns: json['turns'] ?? "",
       classroom: ClassroomDto.fromJson(json['classroom']),
       department: DepartmentDto.fromJson(json['department']),
       degree: DegreeDto.fromJson(json['degree']),
@@ -69,9 +60,6 @@ class SubjectDto {
     data['english'] = english;
     data['time'] = time;
     data['semester'] = semester;
-    data['days'] = days;
-    data['hours'] = hours;
-    data['turns'] = turns;
     data['classroom'] = classroom;
     data['department'] = department;
     data['degree'] = degree;
