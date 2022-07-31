@@ -70,7 +70,7 @@ class DataScreen extends GetView<DataController> {
               child: Divider(color: Colors.grey),
             );
           },
-          itemCount: 5,
+          itemCount: 6,
           itemBuilder: (BuildContext context, int index) {
             return _dataTile(getName(index), index, true, context);
           },
@@ -96,13 +96,13 @@ class DataScreen extends GetView<DataController> {
       appBar: AppBar(
         title: Text('fillData'.tr),
         automaticallyImplyLeading: false,
-        actions: controller.currentIndex == 3 || controller.currentIndex == 4
+        actions: controller.currentIndex == 4 || controller.currentIndex == 5
             ? <Widget>[
           controller.filterActive
               ? IconButton(
             icon: const Icon(Icons.delete_sweep),
             onPressed: () {
-              if(controller.currentIndex == 3) {
+              if(controller.currentIndex == 4) {
                 controller.eraseSubjectFilters();
               } else {
                 controller.eraseExamFilters();
@@ -113,7 +113,7 @@ class DataScreen extends GetView<DataController> {
             icon: const Icon(Icons.filter_list),
             color: controller.filterActive ? Colors.green : Colors.grey,
             onPressed: () {
-              if(controller.currentIndex == 3) {
+              if(controller.currentIndex == 4) {
                 filterSubjectDialog(
                     context,
                     controller.classrooms,
@@ -144,7 +144,7 @@ class DataScreen extends GetView<DataController> {
                     child: Divider(color: Colors.grey),
                   );
                 },
-                itemCount: 5,
+                itemCount: 6,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
