@@ -70,6 +70,8 @@ class CreateScheduleController extends BaseController {
 
   final _schedules = Rx<List<ScheduleBO>>([]);
 
+  final showCollisions = false.obs;
+
   @override
   void onInit() {
     _subjects.value = argumentData['subjects'];
@@ -114,6 +116,12 @@ class CreateScheduleController extends BaseController {
       for (var i = 0; i < _subjectsToUpload.value.length; i++) {
         _subjectsToUpload.value[i] = SubjectStateBO(subjectsObtained[i], SubjectState.free);
       }
+    }
+  }
+
+  void hideConflicts() {
+    for(var i = 0; i < _subjectsToUpload.value.length; i++) {
+        _subjectsToUpload.value[i] = SubjectStateBO(_subjectsToUpload.value[i]?.subject, SubjectState.free);
     }
   }
 
@@ -430,7 +438,23 @@ class CreateScheduleController extends BaseController {
         _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.free);
       }
     } else {
-      _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.free);
+      switch (_subjectsToUpload.value[index]?.state) {
+        case SubjectState.free:
+          _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.free);
+          break;
+        case SubjectState.departmentCollision:
+          _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.departmentCollision);
+          showErrorMessage('departmentCollision'.tr);
+          showWarning();
+          break;
+        case SubjectState.classroomCollision:
+          _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.classroomCollision);
+          showErrorMessage('classroomCollision'.tr);
+          showError();
+          break;
+        case null:
+          break;
+      }
     }
   }
 

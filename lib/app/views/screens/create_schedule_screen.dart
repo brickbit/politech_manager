@@ -5,9 +5,11 @@ import 'package:politech_manager/app/views/custom/subject_box.dart';
 import 'package:politech_manager/app/views/dialog/file_type_dialog.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import '../../../domain/constant/constant.dart';
+import '../../../domain/model/subject_bo.dart';
 import '../../../domain/model/subject_state.dart';
 import '../../controller/create_schedule_controller.dart';
 import '../../navigation/app_routes.dart';
+import '../dialog/conflict_dialog.dart';
 import '../dialog/file_dialog.dart';
 
 class CreateScheduleScreen extends GetView<CreateScheduleController> {
@@ -41,12 +43,26 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       content: Text(controller.errorMsg),
     );
 
+    final snackBarWarning = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.amber,
+      content: Text(controller.errorMsg, style: const TextStyle(color: Colors.black),),
+    );
+
     Future.delayed(Duration.zero, () {
       if (controller.error) {
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWarning);
         controller.hideError();
       }
     });
+
+    Future.delayed(Duration.zero, () {
+      if (controller.warning) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        controller.hideWarning();
+      }
+    });
+
     Future.delayed(Duration.zero, () {
       if (controller.fileDownloaded) {
         fileDialog(controller.path, context, () {
@@ -66,6 +82,27 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
             },
             icon: const Icon(Icons.arrow_back_ios_outlined)),
         actions: [
+          IconButton(
+              onPressed: () {
+                if (!controller.showCollisions.value) {
+                  List<SubjectBO> items = controller.subjects.where((element) =>
+                  !element.seminary && !element.laboratory)
+                      .toSet()
+                      .toList();
+                  conflictDialog(items, context, (subject) {
+                    controller.hideConflicts();
+                    controller.showDepartmentConflicts(subject.department);
+                    controller.showClassroomConflicts(subject.classroom);
+                    controller.showCollisions.value = true;
+                    controller.update();
+                  });
+                } else {
+                  controller.hideConflicts();
+                  controller.showCollisions.value = false;
+                  controller.update();
+                }
+              },
+              icon: controller.showCollisions.value ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility)),
           IconButton(
               onPressed: () {
                 controller.saveSchedule();
@@ -89,8 +126,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   context: context,
                   removeTop: true,
                   child: controller.scheduleType == 'oneSubjectPerHour'.tr
-                      ? _simpleSchedule(mobile)
-                      : _severalSchedule(mobile, context)),
+                      ? controller.showCollisions.value ? _simpleSchedule(mobile) : _simpleSchedule(mobile)
+                      : controller.showCollisions.value ? _severalSchedule(mobile, context) : _severalSchedule(mobile, context)),
             ),
             _dragListSubjects()
           ],
@@ -232,7 +269,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 SubjectState.departmentCollision
                 ? const Icon(
               Icons.warning,
-              size: 14,
+              color: Colors.amberAccent,
+              size: 18,
             )
                 : Container(),
             controller.subjectsToUpload[index]
@@ -240,7 +278,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 SubjectState.departmentCollision
                 ? const Icon(
               Icons.cancel,
-              size: 14,
+              color: Colors.red,
+              size: 18,
             )
                 : Container()
           ],
@@ -347,6 +386,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         if (subject != null) {
           controller.showDepartmentConflicts(subject.subject.department);
           controller.showClassroomConflicts(subject.subject.classroom);
+          controller.showCollisions.value = true;
+          controller.update();
         }
         return true;
       },
@@ -354,6 +395,14 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         final item =
             subject.subject.copyWith();
         controller.completeDrag(item, index, false);
+        controller.hideConflicts();
+        controller.showCollisions.value = false;
+        controller.update();
+      },
+      onLeave: (SubjectBox? subject) {
+        controller.hideConflicts();
+        controller.showCollisions.value = false;
+        controller.update();
       },
     );
   }

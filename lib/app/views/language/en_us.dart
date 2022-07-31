@@ -101,6 +101,8 @@ const Map<String, String> enUS = {
   'calendar': 'Exam schedule',
   'datesError': 'The end date must be greater than the start date',
   'emptyDatesError': 'You must select a start date and an end date to continue',
+  //Conflict dialog
+  'showConflicts': 'Show subjects collision:',
   //Degree dialog
   'name': 'Name',
   'year': 'Year',
@@ -178,6 +180,9 @@ const Map<String, String> enUS = {
   'X':'W',
   'J':'Th',
   'V':'F',
+  'departmentCollision': 'Dangerous assignment: this department is already teaching at this time',
+  'classroomCollision': 'Invalid assignment: this class is already occupied at this time',
+  'teacherCollision': 'Invalid assignment: this teacher is already busy at this time',
   //Calendar
   'editCalendar': 'Edit exam calendar',
   'weekend': 'Weekend',

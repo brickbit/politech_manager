@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 abstract class BaseController extends FullLifeCycleController with FullLifeCycleMixin {
   final Rx<bool> _loading = false.obs;
   final Rx<bool> _error = false.obs;
+  final Rx<bool> _warning = false.obs;
   final Rx<String> _errorMsg = "".obs;
 
   bool get loading => _loading.value;
 
   bool get error => _error.value;
+  bool get warning => _warning.value;
   String get errorMsg => _errorMsg.value;
 
   @override
@@ -48,6 +50,15 @@ abstract class BaseController extends FullLifeCycleController with FullLifeCycle
 
   void hideError() {
     _error.value = false;
+    _errorMsg.value = '';
+  }
+
+  void showWarning() {
+    _warning.value = true;
+  }
+
+  void hideWarning() {
+    _warning.value = false;
     _errorMsg.value = '';
   }
 

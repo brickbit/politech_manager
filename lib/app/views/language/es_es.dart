@@ -101,6 +101,8 @@ const Map<String, String> esES = {
   'calendar': 'Calendario de exámenes',
   'datesError': 'La fecha de finalización debe ser mayor que la de inicio',
   'emptyDatesError': 'Debe seleccionar una fecha de inicio y una fecha de fin para continuar',
+  //Conflict dialog
+  'showConflicts': 'Ver colisiones de la asignatura:',
   //Degree dialog
   'name': 'Nombre',
   'year': 'Año',
@@ -178,6 +180,9 @@ const Map<String, String> esES = {
   'X':'X',
   'J':'J',
   'V':'V',
+  'departmentCollision': 'Asignación peligrosa: este departamento ya está impartiendo clase a esta hora',
+  'classroomCollision': 'Asignación inválida: esta clase ya está ocupada a esta hora',
+  'teacherCollision': 'Asignación inválida: este profesor ya está ocupado a esta hora',
   //Calendar
   'editCalendar': 'Editar calendario de exámenes',
   'weekend': 'F.sem',
