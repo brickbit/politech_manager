@@ -51,14 +51,14 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
 
     Future.delayed(Duration.zero, () {
       if (controller.error) {
-        ScaffoldMessenger.of(context).showSnackBar(snackBarWarning);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         controller.hideError();
       }
     });
 
     Future.delayed(Duration.zero, () {
       if (controller.warning) {
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWarning);
         controller.hideWarning();
       }
     });
@@ -265,8 +265,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
           MainAxisAlignment.spaceBetween,
           children: [
             controller.subjectsToUpload[index]
-                ?.state ==
-                SubjectState.departmentCollision
+                ?.state == SubjectState.departmentCollision
                 ? const Icon(
               Icons.warning,
               color: Colors.amberAccent,
@@ -275,7 +274,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 : Container(),
             controller.subjectsToUpload[index]
                 ?.state ==
-                SubjectState.departmentCollision
+                SubjectState.classroomCollision
                 ? const Icon(
               Icons.cancel,
               color: Colors.red,

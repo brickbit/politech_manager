@@ -150,7 +150,7 @@ class CreateScheduleController extends BaseController {
 
     for(var i = 0; i < _schedules.value.length; i++) {
       for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
-        if(_schedules.value[i].subjects[j]?.department.id == classroom.id) {
+        if(_schedules.value[i].subjects[j]?.classroom.id == classroom.id) {
           _subjectsToUpload.value[j] = SubjectStateBO(_subjectsToUpload.value[j]?.subject, SubjectState.classroomCollision);
         }
       }
