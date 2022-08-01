@@ -434,8 +434,37 @@ class CreateScheduleController extends BaseController {
       List<String> columnSubject = subjects.where((element) => !element.seminary && !element.laboratory).map((e) => e.acronym).toSet().toList();
       columnSubject.sort();
       var module = index % 5;
-      if (columnSubject.indexOf(item.acronym) == module) {
-        _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.free);
+      switch (_subjectsToUpload.value[index]?.state) {
+        case SubjectState.free:
+          if (columnSubject.indexOf(item.acronym) == module) {
+            _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.free);
+          } else {
+            showErrorMessage('incorrectColumnForSubject'.tr);
+            showError();
+          }
+          break;
+        case SubjectState.departmentCollision:
+          if (columnSubject.indexOf(item.acronym) == module) {
+            _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.departmentCollision);
+            showErrorMessage('departmentCollision'.tr);
+            showWarning();
+          } else {
+            showErrorMessage('incorrectColumnForSubject'.tr);
+            showError();
+          }
+          break;
+        case SubjectState.classroomCollision:
+          if (columnSubject.indexOf(item.acronym) == module) {
+            _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.classroomCollision);
+            showErrorMessage('classroomCollision'.tr);
+            showError();
+          } else {
+            showErrorMessage('incorrectColumnForSubject'.tr);
+            showError();
+          }
+          break;
+        case null:
+          break;
       }
     } else {
       switch (_subjectsToUpload.value[index]?.state) {

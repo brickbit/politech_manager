@@ -183,6 +183,7 @@ const Map<String, String> enUS = {
   'departmentCollision': 'Dangerous assignment: this department is already teaching at this time',
   'classroomCollision': 'Invalid assignment: this class is already occupied at this time',
   'teacherCollision': 'Invalid assignment: this teacher is already busy at this time',
+  'incorrectColumnForSubject': 'Error. You have placed the subject in a column of another subject',
   //Calendar
   'editCalendar': 'Edit exam calendar',
   'weekend': 'Weekend',

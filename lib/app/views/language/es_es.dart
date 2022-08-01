@@ -183,6 +183,7 @@ const Map<String, String> esES = {
   'departmentCollision': 'Asignación peligrosa: este departamento ya está impartiendo clase a esta hora',
   'classroomCollision': 'Asignación inválida: esta clase ya está ocupada a esta hora',
   'teacherCollision': 'Asignación inválida: este profesor ya está ocupado a esta hora',
+  'incorrectColumnForSubject': 'Error. Ha colocado la asignatura en una columna de otra asignatura',
   //Calendar
   'editCalendar': 'Editar calendario de exámenes',
   'weekend': 'F.sem',

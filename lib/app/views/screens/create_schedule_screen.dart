@@ -46,7 +46,10 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
     final snackBarWarning = SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.amber,
-      content: Text(controller.errorMsg, style: const TextStyle(color: Colors.black),),
+      content: Text(
+        controller.errorMsg,
+        style: const TextStyle(color: Colors.black),
+      ),
     );
 
     Future.delayed(Duration.zero, () {
@@ -85,8 +88,9 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
           IconButton(
               onPressed: () {
                 if (!controller.showCollisions.value) {
-                  List<SubjectBO> items = controller.subjects.where((element) =>
-                  !element.seminary && !element.laboratory)
+                  List<SubjectBO> items = controller.subjects
+                      .where(
+                          (element) => !element.seminary && !element.laboratory)
                       .toSet()
                       .toList();
                   conflictDialog(items, context, (subject) {
@@ -102,7 +106,9 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   controller.update();
                 }
               },
-              icon: controller.showCollisions.value ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility)),
+              icon: controller.showCollisions.value
+                  ? const Icon(Icons.visibility_off)
+                  : const Icon(Icons.visibility)),
           IconButton(
               onPressed: () {
                 controller.saveSchedule();
@@ -126,8 +132,12 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   context: context,
                   removeTop: true,
                   child: controller.scheduleType == 'oneSubjectPerHour'.tr
-                      ? controller.showCollisions.value ? _simpleSchedule(mobile) : _simpleSchedule(mobile)
-                      : controller.showCollisions.value ? _severalSchedule(mobile, context) : _severalSchedule(mobile, context)),
+                      ? controller.showCollisions.value
+                          ? _simpleSchedule(mobile)
+                          : _simpleSchedule(mobile)
+                      : controller.showCollisions.value
+                          ? _severalSchedule(mobile, context)
+                          : _severalSchedule(mobile, context)),
             ),
             _dragListSubjects()
           ],
@@ -229,7 +239,9 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${controller.calculateSubjects(index)} ${controller.calculateHour(index)}', style: const TextStyle(fontSize: 10),),
+                    '${controller.calculateSubjects(index)} ${controller.calculateHour(index)}',
+                    style: const TextStyle(fontSize: 10),
+                  ),
                   const Padding(
                       padding: EdgeInsets.only(bottom: 8, left: 8, right: 8)),
                   _dragTargetLayered(index + day * 120, mobile, 0),
@@ -246,7 +258,9 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
 
   Color _getCellColor(int index) {
     if (controller.subjectsToUpload[index] != null) {
-      return controller.subjectsToUpload[index]!.subject != null ? controller.subjectsToUpload[index]!.subject!.color.parseColor() : Colors.white;
+      return controller.subjectsToUpload[index]!.subject != null
+          ? controller.subjectsToUpload[index]!.subject!.color.parseColor()
+          : Colors.white;
     } else {
       return Colors.white;
     }
@@ -261,32 +275,29 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
           style: const TextStyle(fontSize: 12),
         ),
         Row(
-          mainAxisAlignment:
-          MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            controller.subjectsToUpload[index]
-                ?.state == SubjectState.departmentCollision
+            controller.subjectsToUpload[index]?.state ==
+                    SubjectState.departmentCollision
                 ? const Icon(
-              Icons.warning,
-              color: Colors.amberAccent,
-              size: 18,
-            )
+                    Icons.warning,
+                    color: Colors.amberAccent,
+                    size: 18,
+                  )
                 : Container(),
-            controller.subjectsToUpload[index]
-                ?.state ==
-                SubjectState.classroomCollision
+            controller.subjectsToUpload[index]?.state ==
+                    SubjectState.classroomCollision
                 ? const Icon(
-              Icons.cancel,
-              color: Colors.red,
-              size: 18,
-            )
+                    Icons.cancel,
+                    color: Colors.red,
+                    size: 18,
+                  )
                 : Container()
           ],
         )
       ],
     );
   }
-
 
   Widget _dragTarget(int index, bool mobile) {
     return DragTarget<SubjectBox>(
@@ -314,17 +325,15 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       (controller.subjectsToUpload[index]?.subject == null)
-                          ? SizedBox(
-                              height: 36,
-                              child: _setEmptyCell(index)
-                            )
+                          ? SizedBox(height: 36, child: _setEmptyCell(index))
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   children: [
                                     Text(
-                                      controller.subjectsToUpload[index]!.subject!.acronym,
+                                      controller.subjectsToUpload[index]!
+                                          .subject!.acronym,
                                       style: const TextStyle(fontSize: 11),
                                     ),
                                     Row(
@@ -333,7 +342,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        ((controller.subjectsToUpload[index]?.subject?.laboratory ??
+                                        ((controller.subjectsToUpload[index]
+                                                        ?.subject?.laboratory ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -341,7 +351,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.subject?.seminary ??
+                                        ((controller.subjectsToUpload[index]
+                                                        ?.subject?.seminary ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -349,7 +360,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.subject?.english ??
+                                        ((controller.subjectsToUpload[index]
+                                                        ?.subject?.english ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -391,8 +403,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         return true;
       },
       onAccept: (SubjectBox subject) {
-        final item =
-            subject.subject.copyWith();
+        final item = subject.subject.copyWith();
         controller.completeDrag(item, index, false);
         controller.hideConflicts();
         controller.showCollisions.value = false;
@@ -415,7 +426,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       ) {
         return Obx(
           () => Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             child: Container(
               decoration: BoxDecoration(
                 color: _getCellColor(index),
@@ -430,18 +441,16 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      (controller.subjectsToUpload[index] == null)
-                          ? SizedBox(
-                              height: 36,
-                              child: _setEmptyCell(index)
-                            )
+                      (controller.subjectsToUpload[index]?.subject == null)
+                          ? SizedBox(height: 36, child: _setEmptyCell(index))
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   children: [
                                     Text(
-                                      controller.subjectsToUpload[index]!.subject!.classGroup,
+                                      controller.subjectsToUpload[index]!
+                                              .subject!.classGroup,
                                       style: const TextStyle(fontSize: 10),
                                     ),
                                     Row(
@@ -450,7 +459,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        ((controller.subjectsToUpload[index]?.subject?.laboratory ??
+                                        ((controller.subjectsToUpload[index]
+                                                        ?.subject?.laboratory ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -458,7 +468,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.subject?.seminary ??
+                                        ((controller.subjectsToUpload[index]
+                                                        ?.subject?.seminary ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -466,7 +477,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                                 size: mobile ? 14 : 18,
                                               )
                                             : Container(),
-                                        ((controller.subjectsToUpload[index]?.subject?.english ??
+                                        ((controller.subjectsToUpload[index]
+                                                        ?.subject?.english ??
                                                     false) ==
                                                 true)
                                             ? Icon(
@@ -499,8 +511,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
         );
       },
       onAccept: (SubjectBox subject) {
-        final item =
-            subject.subject.copyWith();
+        final item = subject.subject.copyWith();
         controller.completeDrag(item, index, true);
       },
     );
