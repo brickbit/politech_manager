@@ -102,6 +102,7 @@ class SubjectListScreen extends GetView<SubjectListController> {
                                           controller.subjects[index],
                                           controller.classrooms,
                                           controller.departments,
+                                          controller.teachers,
                                           controller.degrees,
                                           mobile,
                                           (subject) => (controller

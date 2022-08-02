@@ -4,6 +4,7 @@ import 'package:politech_manager/domain/model/pavilion.dart';
 import 'classroom_bo.dart';
 import 'degree_bo.dart';
 import 'department_bo.dart';
+import 'teacher_bo.dart';
 
 class SubjectBO {
   final String name;
@@ -16,6 +17,7 @@ class SubjectBO {
   final int semester;
   final ClassroomBO classroom;
   final DepartmentBO department;
+  final TeacherBO? teacher;
   final DegreeBO degree;
   final int color;
   final int id;
@@ -32,6 +34,7 @@ class SubjectBO {
       this.semester,
       this.classroom,
       this.department,
+      this.teacher,
       this.degree,
       this.color,
       this.id);
@@ -48,21 +51,22 @@ class SubjectBO {
         1,
         ClassroomBO("C1", Pavilion.central.toString(), "C1", 1),
         DepartmentBO("Mock", "M", 1),
+        TeacherBO("name", DepartmentBO("Mock", "M", 1), 1),
         DegreeBO("Mock", 8, "2021-2022", 1),
         1,
         1);
   }
 
   SubjectBO copyWith() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time, semester, classroom, department, teacher, degree, color, id);
 
   SubjectBO reduceTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time - 30, semester, classroom, department, teacher, degree, color, id);
 
   SubjectBO addTime() =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, classroom, department, teacher, degree, color, id);
 
   SubjectBO updateState(SubjectState newState) =>
-      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, classroom, department, degree, color, id);
+      SubjectBO(name, acronym, classGroup, seminary, laboratory, english, time + 30, semester, classroom, department, teacher, degree, color, id);
 
 }

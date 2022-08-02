@@ -4,6 +4,7 @@ import 'package:politech_manager/domain/error/subject_error_type.dart';
 import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
+import 'package:politech_manager/domain/model/teacher_bo.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/error/subject_error.dart';
 import '../../domain/model/subject_bo.dart';
@@ -32,6 +33,10 @@ class SubjectListController extends BaseController {
 
   List<DepartmentBO> get departments => _departments.value;
 
+  final _teachers = Rx<List<TeacherBO>>([]);
+
+  List<TeacherBO> get teachers => _teachers.value;
+
   final _degrees = Rx<List<DegreeBO>>([]);
 
   List<DegreeBO> get degrees => _degrees.value;
@@ -44,6 +49,7 @@ class SubjectListController extends BaseController {
   void onInit() {
     _subjects.value = argumentData['subjects'];
     _departments.value = argumentData['departments'];
+    _teachers.value = argumentData['teachers'];
     _degrees.value = argumentData['degrees'];
     _classrooms.value = argumentData['classrooms'];
     super.onInit();

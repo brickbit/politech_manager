@@ -419,6 +419,7 @@ class CreateScheduleController extends BaseController {
               targetSubject.subject!.semester,
               targetSubject.subject!.classroom,
               targetSubject.subject!.department,
+              targetSubject.subject!.teacher,
               targetSubject.subject!.degree,
               targetSubject.subject!.color,
               targetSubject.subject!.id));

@@ -66,6 +66,7 @@ extension SubjectBOMapper on SubjectDto {
         semester,
         classroom.toBO(),
         department.toBO(),
+        teacher?.toBO(),
         degree.toBO(),
         color,
         id);
@@ -207,6 +208,7 @@ extension SubjectDtoMapper on SubjectBO {
         semester: semester,
         classroom: classroom.toDto(),
         department: department.toDto(),
+        teacher: teacher?.toDto(),
         degree: degree.toDto(),
         color: color,
         id: id);

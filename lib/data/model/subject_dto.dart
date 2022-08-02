@@ -1,6 +1,7 @@
 import 'package:politech_manager/data/model/classroom_dto.dart';
 import 'package:politech_manager/data/model/degree_dto.dart';
 import 'package:politech_manager/data/model/department_dto.dart';
+import 'package:politech_manager/data/model/teacher_dto.dart';
 
 class SubjectDto {
   String name;
@@ -13,6 +14,7 @@ class SubjectDto {
   int semester;
   ClassroomDto classroom;
   DepartmentDto department;
+  TeacherDto? teacher;
   DegreeDto degree;
   int color;
   int id;
@@ -28,6 +30,7 @@ class SubjectDto {
       required this.semester,
       required this.classroom,
       required this.department,
+      required this.teacher,
       required this.degree,
       required this.color,
       required this.id});
@@ -44,6 +47,7 @@ class SubjectDto {
       semester: json['semester'],
       classroom: ClassroomDto.fromJson(json['classroom']),
       department: DepartmentDto.fromJson(json['department']),
+      teacher: (json['teacher'] != null) ? TeacherDto.fromJson(json['teacher']) : null,
       degree: DegreeDto.fromJson(json['degree']),
       color: json['color'],
       id: json['id'],
@@ -62,6 +66,7 @@ class SubjectDto {
     data['semester'] = semester;
     data['classroom'] = classroom;
     data['department'] = department;
+    data['teacher'] = teacher;
     data['degree'] = degree;
     data['color'] = color;
     data['id'] = id;

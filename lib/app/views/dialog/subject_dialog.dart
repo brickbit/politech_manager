@@ -8,11 +8,13 @@ import 'package:uuid/uuid.dart';
 import '../../../domain/model/classroom_bo.dart';
 import '../../../domain/model/department_bo.dart';
 import '../../../domain/model/subject_bo.dart';
+import '../../../domain/model/teacher_bo.dart';
 import '../custom/material_dropdown.dart';
 import '../custom/material_dropdown_classroom.dart';
 import '../custom/material_dropdown_color.dart';
 import '../custom/material_dropdown_degree.dart';
 import '../custom/material_dropdown_department.dart';
+import '../custom/material_dropdown_teacher.dart';
 
 void subjectDialog(
     String title,
@@ -20,6 +22,7 @@ void subjectDialog(
     SubjectBO? subject,
     List<ClassroomBO> classrooms,
     List<DepartmentBO> departments,
+    List<TeacherBO> teachers,
     List<DegreeBO> degrees,
     bool mobile,
     void Function(SubjectBO) manageSubject) {
@@ -38,6 +41,8 @@ void subjectDialog(
   var _departmentItems = departments;
   var _department = _departmentItems[0].obs;
   var _degreeItems = degrees;
+  var _teachers = teachers[0].obs;
+  var _teacherItems = teachers;
   var _degree = _degreeItems[0].obs;
   var _colorItems = ['blue'.tr, 'red'.tr, 'yellow'.tr, 'orange'.tr, 'green'.tr];
   var _color = _colorItems[subject?.color ?? 0].obs;
@@ -153,6 +158,11 @@ void subjectDialog(
                 ]),
                 const SizedBox(height: 24),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('teacher'.tr),
+                  materialDropdownTeacher(_teachers, _teacherItems),
+                ]),
+                const SizedBox(height: 24),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('degree'.tr),
                   materialDropdownDegree(_degree, _degreeItems),
                 ]),
@@ -185,6 +195,7 @@ void subjectDialog(
                 int.parse(_semester.value),
                 _classroom.value,
                 _department.value,
+                _teachers.value,
                 _degree.value,
                 _color.value.getColorNumber(),
                 id ?? uuid.v4().hashCode);

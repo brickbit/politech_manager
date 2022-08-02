@@ -233,6 +233,7 @@ class DataScreen extends GetView<DataController> {
                       null,
                       controller.classrooms,
                       controller.departments,
+                      controller.teachers,
                       controller.degrees,
                       mobile,
                       (subject) => (controller.uploadSubject(subject)));
@@ -283,7 +284,8 @@ class DataScreen extends GetView<DataController> {
                       'subjects': controller.subjects,
                       'degrees': controller.degrees,
                       'classrooms': controller.classrooms,
-                      'departments': controller.departments
+                      'departments': controller.departments,
+                      'teachers': controller.teachers
                     });
                     break;
                   case 5:
@@ -698,6 +700,7 @@ class DataScreen extends GetView<DataController> {
                                       controller.subjects[index],
                                       controller.classrooms,
                                       controller.departments,
+                                      controller.teachers,
                                       controller.degrees,
                                       mobile,
                                       (subject) =>

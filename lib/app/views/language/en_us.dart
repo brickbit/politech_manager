@@ -128,6 +128,7 @@ const Map<String, String> enUS = {
   'red': 'Red',
   'yellow': 'Yellow',
   'orange': 'Orange',
+  'teacherName': 'Teacher: @name',
   //Exam dialog
   'call':'Call',
   'turn':'Turn',

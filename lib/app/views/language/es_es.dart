@@ -128,6 +128,7 @@ const Map<String, String> esES = {
   'red': 'Rojo',
   'yellow': 'Amarillo',
   'orange': 'Naranja',
+  'teacherName': 'Profesor: @name',
   //Exam dialog
   'call':'Convocatoria',
   'turn':'Turno',

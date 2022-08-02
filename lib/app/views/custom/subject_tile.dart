@@ -13,7 +13,7 @@ Widget subjectTile(bool mobile, List<SubjectBO> subjects, int index) {
       children: [
         SizedBox(
           width: 6,
-          height: 140,
+          height: 200,
           child: Container(
             color: subjects[index].color.parseColor(),
           ),
@@ -109,6 +109,23 @@ Widget subjectTile(bool mobile, List<SubjectBO> subjects, int index) {
                     subjects[index].seminary == false ? 'no'.tr : 'yes'.tr
                   }),
                 ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            subjects[index].teacher != null ? Text('teacherName'.trParams({
+              'name': subjects[index].teacher!.name
+            })) : Container(),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(Icons.access_time),
+                const SizedBox(width: 4,),
+                Text(subjects[index].time.toString()),
               ],
             ),
           ],
