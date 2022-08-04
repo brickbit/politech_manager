@@ -510,9 +510,26 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
           ),
         );
       },
+      onWillAccept: (SubjectBox? subject) {
+        if (subject != null) {
+          controller.showDepartmentConflicts(subject.subject.department);
+          controller.showClassroomConflicts(subject.subject.classroom);
+          controller.showCollisions.value = true;
+          controller.update();
+        }
+        return true;
+      },
       onAccept: (SubjectBox subject) {
         final item = subject.subject.copyWith();
         controller.completeDrag(item, index, true);
+        controller.hideConflicts();
+        controller.showCollisions.value = false;
+        controller.update();
+      },
+      onLeave: (SubjectBox? subject) {
+        controller.hideConflicts();
+        controller.showCollisions.value = false;
+        controller.update();
       },
     );
   }
