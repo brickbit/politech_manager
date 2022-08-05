@@ -12,6 +12,7 @@ void scheduleDialog(String title, BuildContext context, List<DegreeBO> degrees, 
   var semester = '1'.obs;
   var degreeItems = degrees;
   var degree = degreeItems[0].obs;
+  var teacherKnown = false.obs;
   var scheduleTypes = ['oneSubjectPerHour'.tr, 'severalSubjectsPerHour'.tr];
   var scheduleType = 'oneSubjectPerHour'.tr.obs;
 
@@ -44,6 +45,22 @@ void scheduleDialog(String title, BuildContext context, List<DegreeBO> degrees, 
                 ],
               ),
               const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 150,
+                    child: Text('teacherKnown'.tr),
+                  ),
+                  Obx(
+                        () => Switch(
+                      value: teacherKnown.value,
+                      activeColor: Colors.amber,
+                      onChanged: (value) => teacherKnown.value = value,
+                    ),
+                  ),
+              ],),
+              const SizedBox(height: 24),
 
             ],
           ),
@@ -58,7 +75,7 @@ void scheduleDialog(String title, BuildContext context, List<DegreeBO> degrees, 
           onPressed: () {
             final subjectsFiltered = subjects.where((element) => element.semester == int.parse(semester.value) && element.degree.id == degree.value.id).toList();
             Navigator.pop(context, 'OK');
-            filteredSubjects(ScheduleFilter(subjectsFiltered, semester.value.toString(), scheduleType.value, degree.value.name, degree.value.year));
+            filteredSubjects(ScheduleFilter(subjectsFiltered, semester.value.toString(), scheduleType.value, degree.value.name, degree.value.year, teacherKnown.value));
           },
           child: Text('ok'.tr),
         ),

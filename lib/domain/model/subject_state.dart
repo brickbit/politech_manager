@@ -1,2 +1,2 @@
 
-enum SubjectState { free, departmentCollision, classroomCollision }
+enum SubjectState { free, departmentCollision, classroomCollision, teacherCollision }

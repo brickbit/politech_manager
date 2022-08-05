@@ -52,7 +52,8 @@ class ScheduleListController extends BaseController {
       'semester': scheduleFilter.semester,
       'degree': scheduleFilter.degree,
       'year': scheduleFilter.year,
-      'update': false
+      'update': false,
+      'teachersKnown': scheduleFilter.teacherKnown
     });
   }
 
@@ -142,7 +143,8 @@ class ScheduleListController extends BaseController {
       'semester': schedule.semester,
       'degree': schedule.degree,
       'year': schedule.year,
-      'update': true
+      'update': true,
+      'teachersKnown': !(schedule.subjects.map((e) => e?.teacher != null).toList().any((element) => element == false))
     });
   }
 

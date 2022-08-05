@@ -135,6 +135,7 @@ const Map<String, String> esES = {
   //Schedule dialog
   'scheduleType':'Tipo de horario',
   'fileType':'Tipo de archivo',
+  'teacherKnown': '¿Quiere habilitar las colisiones por profesor?',
   //Calendar dialog
   'createCalendar': 'Crear calendario de exámenes',
   'startDate': 'Fecha de inicio',

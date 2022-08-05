@@ -19,6 +19,7 @@ import '../../domain/error/error_manager.dart';
 import '../../domain/error/schedule_error.dart';
 import '../../domain/model/classroom_bo.dart';
 import '../../domain/model/schedule_bo.dart';
+import '../../domain/model/teacher_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import 'base_controller.dart';
 
@@ -66,11 +67,16 @@ class CreateScheduleController extends BaseController {
 
   final _departmentsInCell = Rx<List<List<DepartmentBO?>>>([]);
 
+  final _teachersInCell = Rx<List<List<TeacherBO?>>>([]);
+
   final _classroomsInCell = Rx<List<List<ClassroomBO?>>>([]);
 
   final _schedules = Rx<List<ScheduleBO>>([]);
 
   final showCollisions = false.obs;
+
+  final teachersKnown = false.obs;
+
 
   @override
   void onInit() {
@@ -80,6 +86,7 @@ class CreateScheduleController extends BaseController {
     _degree.value = argumentData['degree'];
     _year.value = argumentData['year'];
     _update.value = argumentData['update'];
+    teachersKnown.value = argumentData['teachersKnown'];
     if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
       _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
     } else {
@@ -136,6 +143,22 @@ class CreateScheduleController extends BaseController {
       for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
         if(_schedules.value[i].subjects[j]?.department.id == department.id) {
           _subjectsToUpload.value[j] = SubjectStateBO(_subjectsToUpload.value[j]?.subject, SubjectState.departmentCollision);
+        }
+      }
+    }
+  }
+
+  void showTeacherConflicts(TeacherBO teacher) {
+    if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+      _teachersInCell.value = List.generate(maxCellsOneSubjectPerDay, (i) => List<TeacherBO?>.filled(_schedules.value.length, null, growable: false), growable: false);
+    } else {
+      _teachersInCell.value = List.generate(maxCellsSeveralSubjectPerDay, (i) => List<TeacherBO?>.filled(_schedules.value.length, null, growable: false), growable: false);
+    }
+
+    for(var i = 0; i < _schedules.value.length; i++) {
+      for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
+        if(_schedules.value[i].subjects[j]?.teacher?.id == teacher.id) {
+          _subjectsToUpload.value[j] = SubjectStateBO(_subjectsToUpload.value[j]?.subject, SubjectState.teacherCollision);
         }
       }
     }
@@ -464,6 +487,16 @@ class CreateScheduleController extends BaseController {
             showError();
           }
           break;
+        case SubjectState.teacherCollision:
+          if (columnSubject.indexOf(item.acronym) == module) {
+            _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.teacherCollision);
+            showErrorMessage('teacherCollision'.tr);
+            showError();
+          } else {
+            showErrorMessage('incorrectColumnForSubject'.tr);
+            showError();
+          }
+          break;
         case null:
           break;
       }
@@ -480,6 +513,11 @@ class CreateScheduleController extends BaseController {
         case SubjectState.classroomCollision:
           _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.classroomCollision);
           showErrorMessage('classroomCollision'.tr);
+          showError();
+          break;
+        case SubjectState.teacherCollision:
+          _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.teacherCollision);
+          showErrorMessage('teacherCollision'.tr);
           showError();
           break;
         case null:

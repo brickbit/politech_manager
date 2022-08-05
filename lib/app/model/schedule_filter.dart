@@ -7,7 +7,8 @@ class ScheduleFilter {
   final String scheduleType;
   final String degree;
   final String year;
+  final bool teacherKnown;
 
-  ScheduleFilter(this.subjects, this.semester, this.scheduleType, this.degree, this.year);
+  ScheduleFilter(this.subjects, this.semester, this.scheduleType, this.degree, this.year, this.teacherKnown);
 
 }

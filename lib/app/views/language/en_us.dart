@@ -135,6 +135,7 @@ const Map<String, String> enUS = {
   //Schedule dialog
   'scheduleType':'Schedule type',
   'fileType':'File type',
+  'teacherKnown': 'Do yo want enable teacher collision?',
   //Calendar dialog
   'createCalendar': 'Create exam calendar',
   'startDate': 'Start date',

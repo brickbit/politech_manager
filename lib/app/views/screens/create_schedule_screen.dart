@@ -95,7 +95,11 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                       .toList();
                   conflictDialog(items, context, (subject) {
                     controller.hideConflicts();
-                    controller.showDepartmentConflicts(subject.department);
+                    if(controller.teachersKnown.value) {
+                      controller.showTeacherConflicts(subject.teacher!);
+                    } else {
+                      controller.showDepartmentConflicts(subject.department);
+                    }
                     controller.showClassroomConflicts(subject.classroom);
                     controller.showCollisions.value = true;
                     controller.update();
@@ -286,7 +290,8 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                   )
                 : Container(),
             controller.subjectsToUpload[index]?.state ==
-                    SubjectState.classroomCollision
+                    SubjectState.classroomCollision || controller.subjectsToUpload[index]?.state ==
+                SubjectState.teacherCollision
                 ? const Icon(
                     Icons.cancel,
                     color: Colors.red,
@@ -395,7 +400,11 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       },
       onWillAccept: (SubjectBox? subject) {
         if (subject != null) {
-          controller.showDepartmentConflicts(subject.subject.department);
+          if (controller.teachersKnown.value) {
+            controller.showTeacherConflicts(subject.subject.teacher!);
+          } else {
+            controller.showDepartmentConflicts(subject.subject.department);
+          }
           controller.showClassroomConflicts(subject.subject.classroom);
           controller.showCollisions.value = true;
           controller.update();
@@ -512,7 +521,11 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       },
       onWillAccept: (SubjectBox? subject) {
         if (subject != null) {
-          controller.showDepartmentConflicts(subject.subject.department);
+          if (controller.teachersKnown.value) {
+            controller.showTeacherConflicts(subject.subject.teacher!);
+          } else {
+            controller.showDepartmentConflicts(subject.subject.department);
+          }
           controller.showClassroomConflicts(subject.subject.classroom);
           controller.showCollisions.value = true;
           controller.update();
