@@ -77,6 +77,7 @@ class CreateScheduleController extends BaseController {
 
   final teachersKnown = false.obs;
 
+  final _id = 0.obs;
 
   @override
   void onInit() {
@@ -87,6 +88,7 @@ class CreateScheduleController extends BaseController {
     _year.value = argumentData['year'];
     _update.value = argumentData['update'];
     teachersKnown.value = argumentData['teachersKnown'];
+    _id.value = (argumentData['scheduleId'] != null) ? argumentData['scheduleId'] : 0;
     if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
       _subjectsToUpload.value = List.filled(maxCellsOneSubjectPerDay, null);
     } else {
@@ -119,7 +121,7 @@ class CreateScheduleController extends BaseController {
     hideProgress();
     _schedules.value = schedules;
     if (_update.value) {
-      var subjectsObtained = _schedules.value.where((element) => element.id == argumentData['scheduleId']).first.subjects;
+      var subjectsObtained = _schedules.value.where((element) => element.id == _id.value).first.subjects;
       for (var i = 0; i < _subjectsToUpload.value.length; i++) {
         _subjectsToUpload.value[i] = SubjectStateBO(subjectsObtained[i], SubjectState.free);
       }
@@ -142,7 +144,21 @@ class CreateScheduleController extends BaseController {
     for(var i = 0; i < _schedules.value.length; i++) {
       for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
         if(_schedules.value[i].subjects[j]?.department.id == department.id) {
-          _subjectsToUpload.value[j] = SubjectStateBO(_subjectsToUpload.value[j]?.subject, SubjectState.departmentCollision);
+          if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+            _subjectsToUpload.value[j] = SubjectStateBO(
+                _subjectsToUpload.value[j]?.subject,
+                SubjectState.departmentCollision);
+          } else {
+            _subjectsToUpload.value[j] = SubjectStateBO(
+                _subjectsToUpload.value[j]?.subject,
+                SubjectState.departmentCollision);
+            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5] = SubjectStateBO(
+                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5]?.subject,
+                SubjectState.departmentCollision);
+            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2] = SubjectStateBO(
+                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2]?.subject,
+                SubjectState.departmentCollision);
+          }
         }
       }
     }
@@ -158,7 +174,21 @@ class CreateScheduleController extends BaseController {
     for(var i = 0; i < _schedules.value.length; i++) {
       for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
         if(_schedules.value[i].subjects[j]?.teacher?.id == teacher.id) {
-          _subjectsToUpload.value[j] = SubjectStateBO(_subjectsToUpload.value[j]?.subject, SubjectState.teacherCollision);
+          if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+            _subjectsToUpload.value[j] = SubjectStateBO(
+                _subjectsToUpload.value[j]?.subject,
+                SubjectState.teacherCollision);
+          } else {
+            _subjectsToUpload.value[j] = SubjectStateBO(
+                _subjectsToUpload.value[j]?.subject,
+                SubjectState.teacherCollision);
+            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5] = SubjectStateBO(
+                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5]?.subject,
+                SubjectState.teacherCollision);
+            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2] = SubjectStateBO(
+                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2]?.subject,
+                SubjectState.teacherCollision);
+          }
         }
       }
     }
@@ -174,7 +204,21 @@ class CreateScheduleController extends BaseController {
     for(var i = 0; i < _schedules.value.length; i++) {
       for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
         if(_schedules.value[i].subjects[j]?.classroom.id == classroom.id) {
-          _subjectsToUpload.value[j] = SubjectStateBO(_subjectsToUpload.value[j]?.subject, SubjectState.classroomCollision);
+          if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+            _subjectsToUpload.value[j] = SubjectStateBO(
+                _subjectsToUpload.value[j]?.subject,
+                SubjectState.classroomCollision);
+          } else {
+            _subjectsToUpload.value[j] = SubjectStateBO(
+                _subjectsToUpload.value[j]?.subject,
+                SubjectState.classroomCollision);
+            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5] = SubjectStateBO(
+                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5]?.subject,
+                SubjectState.classroomCollision);
+            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2] = SubjectStateBO(
+                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2]?.subject,
+                SubjectState.classroomCollision);
+          }
         }
       }
     }
@@ -184,18 +228,34 @@ class CreateScheduleController extends BaseController {
   void saveSchedule() {
     hideError();
     showProgress();
-    var schedule = ScheduleBO(
-        _subjectsToUpload.value.map((e) => e?.subject).toList(),
-        _scheduleType.value.toScheduleTypeInt(),
-        fileType.value.toFileTypeInt(),
-        _degree.value,
-        _semester.value.toString(),
-        _year.value,
-        0);
-    dataRepository.postSchedule(schedule).fold(
-          (left) => _onSaveScheduleKo(left),
-          (right) => _onSaveScheduleOk(),
-        );
+
+    if(!_update.value) {
+      var schedule = ScheduleBO(
+          _subjectsToUpload.value.map((e) => e?.subject).toList(),
+          _scheduleType.value.toScheduleTypeInt(),
+          fileType.value.toFileTypeInt(),
+          _degree.value,
+          _semester.value.toString(),
+          _year.value,
+          0);
+      dataRepository.postSchedule(schedule).fold(
+            (left) => _onSaveScheduleKo(left),
+            (right) => _onSaveScheduleOk(),
+      );
+    } else {
+      var schedule = ScheduleBO(
+          _subjectsToUpload.value.map((e) => e?.subject).toList(),
+          _scheduleType.value.toScheduleTypeInt(),
+          fileType.value.toFileTypeInt(),
+          _degree.value,
+          _semester.value.toString(),
+          _year.value,
+          _id.value);
+      dataRepository.updateSchedule(schedule).fold(
+            (left) => _onSaveScheduleKo(left),
+            (right) => _onSaveScheduleOk(),
+      );
+    }
   }
 
   void _onSaveScheduleKo(ScheduleError scheduleError) {

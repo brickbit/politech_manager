@@ -711,9 +711,9 @@ class NetworkDataSourceImpl extends NetworkDataSource {
 
   @override
   Future<Either<ScheduleError, ResponseOkBO>> updateSchedule(ScheduleBO schedule) async {
-    final subjectJson = schedule.toDto().toJson();
+    final scheduleJson = schedule.toDto().toJson();
     final response = await client.post(Uri.parse("${endpoint}schedule/update"),
-        headers: authJsonHeaders, body: json.encode(subjectJson));
+        headers: authJsonHeaders, body: json.encode(scheduleJson));
     if (response.statusCode == 200) {
       final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
       return Right(dto.toBO());
