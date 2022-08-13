@@ -8,10 +8,12 @@ import 'package:politech_manager/app/extension/string_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
 import 'package:politech_manager/domain/error/calendar_error_type.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
+import 'package:politech_manager/domain/model/exam_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../domain/error/calendar_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/model/calendar_bo.dart';
+import '../../domain/model/exam_state_bo.dart';
 import '../../domain/model/pair_exam_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import 'base_controller.dart';
@@ -62,9 +64,9 @@ class CreateCalendarController extends BaseController {
 
   List<String> get dateArray => _dateArray.value;
 
-  final _examsToUpload = Rx<List<PairExamBO>>([]);
+  final _examsToUpload = Rx<List<ExamStateBO>>([]);
 
-  List<PairExamBO> get examsToUpload => _examsToUpload.value;
+  List<ExamStateBO> get examsToUpload => _examsToUpload.value;
 
   final _mobile = false.obs;
 
@@ -83,7 +85,7 @@ class CreateCalendarController extends BaseController {
     _degree.value = argumentData['degree'];
     _getNumberOfCells();
     _examsToUpload.value =
-        List.filled(_numberOfCells.value, PairExamBO(null, null));
+        List.filled(_numberOfCells.value, ExamStateBO(PairExamBO(null, null),ExamState.free));
     super.onInit();
   }
 
@@ -111,8 +113,8 @@ class CreateCalendarController extends BaseController {
   void saveCalendar() {
     hideError();
     showProgress();
-    final itemMorning = _examsToUpload.value.map((item) => item.first).toList();
-    final itemAfternoon = _examsToUpload.value.map((item) => item.last);
+    final itemMorning = _examsToUpload.value.map((item) => item.exam?.first).toList();
+    final itemAfternoon = _examsToUpload.value.map((item) => item.exam?.last);
     itemMorning.addAll(itemAfternoon);
     itemMorning.removeWhere((element) => element == null);
     var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value,
@@ -142,8 +144,8 @@ class CreateCalendarController extends BaseController {
   void downloadFile() {
     hideError();
     showProgress();
-    final itemMorning = _examsToUpload.value.map((item) => item.first).toList();
-    final itemAfternoon = _examsToUpload.value.map((item) => item.last);
+    final itemMorning = _examsToUpload.value.map((item) => item.exam?.first).toList();
+    final itemAfternoon = _examsToUpload.value.map((item) => item.exam?.last);
     itemMorning.addAll(itemAfternoon);
     itemMorning.removeWhere((element) => element == null);
     var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value,
@@ -230,23 +232,23 @@ class CreateCalendarController extends BaseController {
   }
 
   void completeDrag(ExamBO item, int index, bool morning) {
-    final PairExamBO cell = _examsToUpload.value[index];
+    final PairExamBO cell = _examsToUpload.value[index].exam!;
     if (morning) {
-      _examsToUpload.value[index] = PairExamBO(item, cell.last);
+      _examsToUpload.value[index] = ExamStateBO(PairExamBO(item, cell.last), _examsToUpload.value[index].state);
     } else {
-      _examsToUpload.value[index] = PairExamBO(cell.first, item);
+      _examsToUpload.value[index] = ExamStateBO(PairExamBO(cell.first, item),_examsToUpload.value[index].state);
     }
   }
 
   void deleteItem(ExamBO exam, bool morning) {
     if (morning) {
       final index = _examsToUpload.value
-          .indexWhere((element) => element.first?.id == exam.id);
-      _examsToUpload.value[index] = PairExamBO(null, null);
+          .indexWhere((element) => element.exam!.first?.id == exam.id);
+      _examsToUpload.value[index] = ExamStateBO(PairExamBO(null, null),_examsToUpload.value[index].state);
     } else {
       final index = _examsToUpload.value
-          .indexWhere((element) => element.last?.id == exam.id);
-      _examsToUpload.value[index] = PairExamBO(null, null);
+          .indexWhere((element) => element.exam!.last?.id == exam.id);
+      _examsToUpload.value[index] = ExamStateBO(PairExamBO(null, null),_examsToUpload.value[index].state);
     }
     _exams.value.add(exam);
     _examsToUpload.refresh();

@@ -150,10 +150,10 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                 color: weekend
                     ? Colors.red
                     : morning
-                        ? (controller.examsToUpload[index].first != null
+                        ? (controller.examsToUpload[index].exam!.first != null
                             ? Colors.green
                             : Colors.white)
-                        : (controller.examsToUpload[index].last != null
+                        : (controller.examsToUpload[index].exam!.last != null
                             ? Colors.orange
                             : Colors.white),
                 border: Border.all(
@@ -170,27 +170,22 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      weekend ? Text('weekend'.tr, style: const TextStyle(fontSize: 12)) :
                       morning
-                          ? Text(weekend
-                              ? 'weekend'.tr
-                              : controller.examsToUpload[index].first != null
-                                  ? controller
-                                      .examsToUpload[index].first!.acronym
-                                  : 'morning'.tr, style: const TextStyle(fontSize: 12),)
-                          : Text(weekend
-                              ? 'weekend'.tr
-                              : controller.examsToUpload[index].last != null
-                                  ? controller
-                                      .examsToUpload[index].last!.acronym
-                                  : 'afternoon'.tr, style: const TextStyle(fontSize: 12),),
+                          ? controller.examsToUpload[index].exam!.first == null
+                            ? _setEmptyCell(index, morning)
+                            : Text(controller.examsToUpload[index].exam!.first!.acronym, style: const TextStyle(fontSize: 12))
+                          : controller.examsToUpload[index].exam!.last == null
+                            ? _setEmptyCell(index, morning)
+                            : Text(controller.examsToUpload[index].exam!.last!.acronym, style: const TextStyle(fontSize: 12)),
                       morning
-                          ? (controller.examsToUpload[index].first != null
+                          ? (controller.examsToUpload[index].exam!.first != null
                               ? IconButton(
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(
-                                        controller.examsToUpload[index].first!,
+                                        controller.examsToUpload[index].exam!.first!,
                                         morning);
                                   },
                                   icon: Icon(
@@ -202,13 +197,13 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                                   height: mobile ? 18 : 36,
                                   width: mobile ? 18 : 36,
                                 ))
-                          : (controller.examsToUpload[index].last != null
+                          : (controller.examsToUpload[index].exam!.last != null
                               ? IconButton(
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(
-                                        controller.examsToUpload[index].last!,
+                                        controller.examsToUpload[index].exam!.last!,
                                         morning);
                                   },
                                   icon: Icon(Icons.delete, size: mobile ? 18 : 20),
@@ -238,6 +233,25 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
           controller.restoreDraggableItem(exam.exam);
         }
       },
+    );
+  }
+
+  Widget _setEmptyCell(int index, bool morning) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(morning
+            ? 'morning'.tr
+            : 'afternoon'.tr, style: const TextStyle(fontSize: 12)),
+        /*controller.examsToUpload[index].state == ExamState.classroomCollision ||
+            controller.examsToUpload[index].state == ExamState.teacherCollision ? const Icon(
+          Icons.cancel,
+          color: Colors.red,
+          size: 18,
+        )
+            : Container()*/
+
+      ],
     );
   }
 
