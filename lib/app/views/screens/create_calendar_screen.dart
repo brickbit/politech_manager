@@ -164,7 +164,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(8),
                 child: SizedBox(
                   width: Size.infinite.width,
                   child: Row(
@@ -195,7 +195,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                                   },
                                   icon: Icon(
                                     Icons.delete,
-                                    size: mobile ? 10 : 20,
+                                    size: mobile ? 18 : 20,
                                   ),
                                 )
                               : SizedBox(
@@ -211,7 +211,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                                         controller.examsToUpload[index].last!,
                                         morning);
                                   },
-                                  icon: Icon(Icons.delete, size: mobile ? 10 : 20),
+                                  icon: Icon(Icons.delete, size: mobile ? 18 : 20),
                                 )
                               : SizedBox(
                                   height: mobile ? 18 : 36,

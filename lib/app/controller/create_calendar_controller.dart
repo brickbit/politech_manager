@@ -96,7 +96,7 @@ class CreateCalendarController extends BaseController {
     final startDateArray = _startDate.value.split("-");
 
     final start = DateTime(int.parse(startDateArray[2]),
-        int.parse(startDateArray[1]), int.parse(startDateArray[1]));
+        int.parse(startDateArray[1]), int.parse(startDateArray[0]));
     final end = DateTime(int.parse(endDateArray[2]), int.parse(endDateArray[1]),
         int.parse(endDateArray[0]));
     _numberOfCells.value = end.difference(start).inDays;
