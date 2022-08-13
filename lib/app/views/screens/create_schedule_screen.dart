@@ -275,7 +275,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'empty'.tr,
+          index.toString(),
           style: const TextStyle(fontSize: 12),
         ),
         Row(
@@ -383,7 +383,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                   constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(controller
-                                        .subjectsToUpload[index]!.subject!);
+                                        .subjectsToUpload[index]!.subject!, index);
                                   },
                                   icon: Icon(Icons.delete,
                                       size: mobile ? 16 : 20),
@@ -504,7 +504,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
                                   constraints: const BoxConstraints(),
                                   onPressed: () {
                                     controller.deleteItem(controller
-                                        .subjectsToUpload[index]!.subject!);
+                                        .subjectsToUpload[index]!.subject!, index);
                                   },
                                   icon: Icon(Icons.delete,
                                       size: mobile ? 16 : 20),

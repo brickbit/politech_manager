@@ -477,11 +477,8 @@ class CreateScheduleController extends BaseController {
     }
   }
 
-  void deleteItem(SubjectBO subject) {
-    final index = _subjectsToUpload.value
-        .indexWhere((element) => element?.subject?.id == subject.id);
-    var targetSubject = _subjectsToUpload.value
-        .firstWhere((element) => element?.subject?.id == subject.id);
+  void deleteItem(SubjectBO subject, int index) {
+    var targetSubject = _subjectsToUpload.value[index];
     _subjectsToUpload.value[index] = null;
 
     final indexDraggeable =
