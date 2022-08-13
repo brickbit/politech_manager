@@ -275,7 +275,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          index.toString(),
+          'empty'.tr,
           style: const TextStyle(fontSize: 12),
         ),
         Row(

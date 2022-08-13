@@ -520,8 +520,7 @@ class CreateScheduleController extends BaseController {
           if (columnSubject.indexOf(item.acronym) == module) {
             _subjectsToUpload.value[index] = SubjectStateBO(item, SubjectState.free);
           } else {
-            showErrorMessage('incorrectColumnForSubject'.tr);
-            showError();
+            _handleIncorrectColumnForSubject(index, item);
           }
           break;
         case SubjectState.departmentCollision:
@@ -530,28 +529,21 @@ class CreateScheduleController extends BaseController {
             showErrorMessage('departmentCollision'.tr);
             showWarning();
           } else {
-            showErrorMessage('incorrectColumnForSubject'.tr);
-            showError();
+            _handleIncorrectColumnForSubject(index, item);
           }
           break;
         case SubjectState.classroomCollision:
           if (columnSubject.indexOf(item.acronym) == module) {
-            _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.classroomCollision);
-            showErrorMessage('classroomCollision'.tr);
-            showError();
+            _handleClassroomCollision(index, item);
           } else {
-            showErrorMessage('incorrectColumnForSubject'.tr);
-            showError();
+            _handleIncorrectColumnForSubject(index, item);
           }
           break;
         case SubjectState.teacherCollision:
           if (columnSubject.indexOf(item.acronym) == module) {
-            _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.teacherCollision);
-            showErrorMessage('teacherCollision'.tr);
-            showError();
+            _handleTeacherCollision(index, item);
           } else {
-            showErrorMessage('incorrectColumnForSubject'.tr);
-            showError();
+            _handleIncorrectColumnForSubject(index, item);
           }
           break;
         case null:
@@ -568,19 +560,55 @@ class CreateScheduleController extends BaseController {
           showWarning();
           break;
         case SubjectState.classroomCollision:
-          _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.classroomCollision);
-          showErrorMessage('classroomCollision'.tr);
-          showError();
+          _handleClassroomCollision(index, item);
           break;
         case SubjectState.teacherCollision:
-          _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.teacherCollision);
-          showErrorMessage('teacherCollision'.tr);
-          showError();
+          _handleTeacherCollision(index, item);
           break;
         case null:
           break;
       }
     }
+  }
+
+  void _handleClassroomCollision(int index, SubjectBO item) {
+    _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.classroomCollision);
+    _recoverSubject(item);
+    showErrorMessage('classroomCollision'.tr);
+    showError();
+  }
+
+  void _handleTeacherCollision(int index, SubjectBO item) {
+    _subjectsToUpload.value[index] = SubjectStateBO(null, SubjectState.teacherCollision);
+    _recoverSubject(item);
+    showErrorMessage('teacherCollision'.tr);
+    showError();
+  }
+
+  void _handleIncorrectColumnForSubject(int index, SubjectBO item) {
+    _recoverSubject(item);
+    showErrorMessage('incorrectColumnForSubject'.tr);
+    showError();
+  }
+
+  void _recoverSubject(SubjectBO item) {
+    int indexRecover = _subjects.value.indexWhere((element) => element.id == item.id);
+    _subjects.value[indexRecover] =
+        SubjectBO(
+            item.name,
+            item.acronym,
+            item.classGroup,
+            item.seminary,
+            item.laboratory,
+            item.english,
+            item.time + 30,
+            item.semester,
+            item.classroom,
+            item.department,
+            item.teacher,
+            item.degree,
+            item.color,
+            item.id);
   }
 
   void _onUpdateTokenError() {
