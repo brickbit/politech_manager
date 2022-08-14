@@ -725,6 +725,21 @@ class NetworkDataSourceImpl extends NetworkDataSource {
   }
 
   @override
+  Future<Either<CalendarError, ResponseOkBO>> updateCalendar(CalendarBO calendar) async {
+    final calendarJson = calendar.toDto().toJson();
+    final response = await client.post(Uri.parse("${endpoint}calendar/update"),
+        headers: authJsonHeaders, body: json.encode(calendarJson));
+    if (response.statusCode == 200) {
+      final dto = ResponseOkDto.fromJson(jsonDecode(response.body));
+      return Right(dto.toBO());
+    } else if (response.statusCode == 403) {
+      return Left(CalendarError(errorType: CalendarErrorType.expiredToken));
+    } else {
+      return Left(CalendarError(errorType: CalendarErrorType.wrongUser));
+    }
+  }
+
+  @override
   Future<Either<ScheduleError, Uint8List>> downloadSchedule(ScheduleBO schedule) async {
     var request = http.Request('GET', Uri.parse("${endpoint}schedule/download"));
     final dto = schedule.toDto();

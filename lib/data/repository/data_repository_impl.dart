@@ -288,6 +288,16 @@ class DataRepositoryImpl extends DataRepository {
   }
 
   @override
+  Future<Either<CalendarError, ResponseOkBO>> updateCalendar(CalendarBO calendar) async {
+    final response = await network.updateCalendar(calendar);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      return Right(response.right);
+    }
+  }
+
+  @override
   Future<Either<ClassroomError, ResponseOkBO>> deleteClassroom(
       int id) async {
     final response = await network.deleteClassroom(id);

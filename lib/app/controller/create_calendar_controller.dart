@@ -185,12 +185,33 @@ class CreateCalendarController extends BaseController {
     final itemMorning = _examsToUpload.value.map((item) => item.exam?.first).toList();
     final itemAfternoon = _examsToUpload.value.map((item) => item.exam?.last);
     itemMorning.addAll(itemAfternoon);
-    var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value,
-        _endDate.value, _call.value, 0);
-    dataRepository.postCalendar(calendar).fold(
-          (left) => _onSaveCalendarKo(left),
-          (right) => _onSaveCalendarOk(),
-        );
+    if(!_update.value) {
+      var calendar = CalendarBO(
+          itemMorning,
+          "GIIC",
+          "year",
+          _startDate.value,
+          _endDate.value,
+          _call.value,
+          0);
+      dataRepository.postCalendar(calendar).fold(
+            (left) => _onSaveCalendarKo(left),
+            (right) => _onSaveCalendarOk(),
+      );
+    } else {
+      var calendar = CalendarBO(
+          itemMorning,
+          "GIIC",
+          "year",
+          _startDate.value,
+          _endDate.value,
+          _call.value,
+          _id.value);
+      dataRepository.updateCalendar(calendar).fold(
+            (left) => _onSaveCalendarKo(left),
+            (right) => _onSaveCalendarOk(),
+      );
+    }
   }
 
   void _onSaveCalendarKo(CalendarError calendarError) {
