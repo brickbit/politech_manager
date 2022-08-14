@@ -1,8 +1,8 @@
-import 'exam_bo.dart';
+import 'package:politech_manager/domain/model/exam_state_bo.dart';
 
 class PairExamBO {
-  final ExamBO? first;
-  final ExamBO? last;
+  final ExamStateBO? first;
+  final ExamStateBO? last;
 
   PairExamBO(this.first, this.last);
 }
