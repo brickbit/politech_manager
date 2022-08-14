@@ -171,6 +171,7 @@ class CalendarListController extends BaseController {
           'endDate': calendarFilter.endDate,
           'call': calendarFilter.call,
           'degree': calendarFilter.degree,
+          'update': false,
         });
       } else {
         showErrorMessage('datesError'.tr);
@@ -179,33 +180,27 @@ class CalendarListController extends BaseController {
     }
   }
 
-  /*void updateSchedule(ScheduleBO schedule) {
-    //TODO: fix server model
-    /*var candidateSubjects = subjects.where((element) => element.semester == int.parse(schedule.semester) && element.degree.id == schedule.degree.id).toList();
-    Get.toNamed(Routes.schedule, arguments: {
-      'subjects': candidateSubjects,
-      'savedSubjects': schedule.subjects
-      'scheduleType': schedule.type,
-      'semester': scheduleFilter.semester,
-    });*/
-    /*hideError();
-    showProgress();
-    dataRepository.updateSchedule(schedule).fold(
-          (left) => _onUpdateScheduleKo(left),
-          (right) => _onUpdateScheduleOk(),
-    );*/
+  void updateCalendar(CalendarBO calendar) {
+    Get.offNamed(Routes.calendar, arguments: {
+      'exams': _calculateExamToUpload(calendar),
+      'startDate': calendar.startDate,
+      'endDate': calendar.endDate,
+      'call': calendar.call,
+      'degree': calendar.degree,
+      'update': true,
+      'calendarId': calendar.id
+    });
   }
 
-  void _onUpdateScheduleKo(ScheduleError scheduleError) {
-    hideProgress();
-    showError();
-    showErrorMessage(errorManager.convertSchedule(scheduleError));
+  List<ExamBO> _calculateExamToUpload(CalendarBO calendar) {
+    List<ExamBO> initialExams = exams;
+    for (int i = 0; i < calendar.exams.length; i++) {
+      if (calendar.exams[i] != null) {
+          initialExams.removeWhere((element) => element.id == calendar.exams[i]?.id);
+      }
+    }
+    return initialExams;
   }
-
-  void _onUpdateScheduleOk() {
-    hideProgress();
-    getSchedules();
-  }*/
 
   void _onUpdateTokenError() {
     hideProgress();

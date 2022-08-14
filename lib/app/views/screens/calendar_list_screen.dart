@@ -94,7 +94,7 @@ class CalendarListScreen extends GetView<CalendarListController> {
                                 children: [
                                   IconButton(
                                     onPressed: () async {
-                                      //controller.updateCalendar(controller.schedules[index]);
+                                      controller.updateCalendar(controller.calendars[index]);
                                     },
                                     icon: const Icon(
                                       Icons.edit,

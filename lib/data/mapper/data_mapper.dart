@@ -8,7 +8,6 @@ import 'package:politech_manager/domain/model/classroom_bo.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
 import 'package:politech_manager/domain/model/department_bo.dart';
 import 'package:politech_manager/domain/model/exam_bo.dart';
-import 'package:politech_manager/domain/model/subject_state.dart';
 import 'package:politech_manager/domain/model/schedule_bo.dart';
 import '../../app/views/custom/exam_box.dart';
 import '../../app/views/custom/subject_box.dart';

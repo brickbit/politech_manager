@@ -22,7 +22,7 @@ class CalendarDto {
 
   factory CalendarDto.fromJson(Map<String, dynamic> json) {
     return CalendarDto(
-      exams: json['exams'][0] == null ? [] : (json['exams'] as List<dynamic>).map((e) => ExamDto.fromJson(e)).toList(),
+      exams: (json['exams'] as List<dynamic>).map((e) => e != null ? ExamDto.fromJson(e) : null).toList(),
       degree: json['degree'],
       year: json['year'],
       startDate: json['startDate'],

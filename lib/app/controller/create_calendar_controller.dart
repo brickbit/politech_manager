@@ -70,6 +70,12 @@ class CreateCalendarController extends BaseController {
 
   final _mobile = false.obs;
 
+  final _calendars = Rx<List<CalendarBO?>>([]);
+
+  final _id = 0.obs;
+
+  final _update = false.obs;
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -83,11 +89,74 @@ class CreateCalendarController extends BaseController {
     _endDate.value = argumentData['endDate'];
     _call.value = argumentData['call'];
     _degree.value = argumentData['degree'];
+    _id.value = (argumentData['calendarId'] != null) ? argumentData['calendarId'] : 0;
+    _update.value = argumentData['update'];
     _getNumberOfCells();
     _examsToUpload.value =
         List.filled(_numberOfCells.value, ExamStateBO(PairExamBO(null, null),ExamState.free));
+    _getCalendars();
     super.onInit();
   }
+
+  void _getCalendars() {
+    dataRepository.getCalendars().fold(
+          (left) => _onGetCalendarsKo(left),
+          (right) => _onGetCalendarsOk(right),
+    );
+  }
+
+  void _onGetCalendarsKo(CalendarError calendarError) {
+    if (calendarError.errorType == CalendarErrorType.expiredToken) {
+      dataRepository
+          .updateToken()
+          .fold((left) => _onUpdateTokenError(), (right) => saveCalendar());
+    } else {
+      hideProgress();
+      showError();
+      showErrorMessage(errorManager.convertCalendar(calendarError));
+    }
+  }
+
+  void _onGetCalendarsOk(List<CalendarBO?> calendars) {
+    hideProgress();
+    _calendars.value = calendars;
+    if (_update.value) {
+      var examsObtained = _calendars.value.where((element) => element?.id == _id.value).first?.exams;
+      for (var i = 0; i < _examsToUpload.value.length; i++) {
+        _examsToUpload.value[i] = parseToExamStateMorning(examsObtained?[i], i);
+      }
+      for (var i = _examsToUpload.value.length; i < _examsToUpload.value.length*2; i++) {
+        _examsToUpload.value[i - _examsToUpload.value.length] = parseToExamStateAfternoon(examsObtained?[i], i);
+      }
+    }
+  }
+
+  ExamStateBO parseToExamStateMorning(ExamBO? exam, int index) {
+    if (exam != null) {
+        return ExamStateBO(
+            PairExamBO(exam, _examsToUpload.value[index].exam?.last),
+            _examsToUpload.value[index].state);
+    } else {
+      return ExamStateBO(
+          PairExamBO(_examsToUpload.value[index].exam?.first,
+              _examsToUpload.value[index].exam?.last),
+          _examsToUpload.value[index].state);
+    }
+  }
+
+  ExamStateBO parseToExamStateAfternoon(ExamBO? exam, int index) {
+    if (exam != null) {
+        return ExamStateBO(
+            PairExamBO(_examsToUpload.value[index - _examsToUpload.value.length].exam?.first, exam),
+            _examsToUpload.value[index - _examsToUpload.value.length].state);
+    } else {
+      return ExamStateBO(
+          PairExamBO(_examsToUpload.value[index - _examsToUpload.value.length].exam?.first,
+              _examsToUpload.value[index - _examsToUpload.value.length].exam?.last),
+          _examsToUpload.value[index - _examsToUpload.value.length].state);
+    }
+  }
+
 
   void setMobile(bool mobile) {
     _mobile.value = mobile;
@@ -116,7 +185,6 @@ class CreateCalendarController extends BaseController {
     final itemMorning = _examsToUpload.value.map((item) => item.exam?.first).toList();
     final itemAfternoon = _examsToUpload.value.map((item) => item.exam?.last);
     itemMorning.addAll(itemAfternoon);
-    itemMorning.removeWhere((element) => element == null);
     var calendar = CalendarBO(itemMorning, "GIIC", "year", _startDate.value,
         _endDate.value, _call.value, 0);
     dataRepository.postCalendar(calendar).fold(
