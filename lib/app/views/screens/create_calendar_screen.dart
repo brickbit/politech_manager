@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/extension/datetime_extension.dart';
 import 'package:politech_manager/data/mapper/data_mapper.dart';
+import '../../../domain/model/exam_bo.dart';
+import '../../../domain/model/exam_state.dart';
 import '../../controller/create_calendar_controller.dart';
 import '../../navigation/app_routes.dart';
 import '../custom/exam_box.dart';
+import '../dialog/conflict_exam_dialog.dart';
 import '../dialog/file_dialog.dart';
 
 class CreateCalendarScreen extends GetView<CreateCalendarController> {
@@ -64,6 +67,27 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
             },
             icon: const Icon(Icons.arrow_back_ios_outlined)),
         actions: [
+          IconButton(
+              onPressed: () {
+                if (!controller.showCollisions.value) {
+                  List<ExamBO> items = controller.exams;
+                  conflictExamDialog(items, context, (exam) {
+                    controller.hideConflicts();
+                    controller.showTeacherConflicts(exam.subject.teacher!);
+
+                    controller.showClassroomConflicts(exam.subject.classroom);
+                    controller.showCollisions.value = true;
+                    controller.update();
+                  });
+                } else {
+                  controller.hideConflicts();
+                  controller.showCollisions.value = false;
+                  controller.update();
+                }
+              },
+              icon: controller.showCollisions.value
+                  ? const Icon(Icons.visibility_off)
+                  : const Icon(Icons.visibility)),
           IconButton(
               onPressed: () {
                 controller.saveCalendar();
@@ -149,13 +173,15 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
               decoration: BoxDecoration(
                 color: weekend
                     ? Colors.red
-                    : morning
+                    : controller.examsToUpload[index].exam != null
+                      ? morning
                         ? (controller.examsToUpload[index].exam!.first != null
                             ? Colors.green
                             : Colors.white)
                         : (controller.examsToUpload[index].exam!.last != null
                             ? Colors.orange
-                            : Colors.white),
+                            : Colors.white)
+                      : Colors.white,
                 border: Border.all(
                   color: Colors.black,
                 ),
@@ -164,21 +190,28 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.only(top:8, bottom: 8,left: 2),
                 child: SizedBox(
                   width: Size.infinite.width,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      weekend ? Text('weekend'.tr, style: const TextStyle(fontSize: 12)) :
-                      morning
-                          ? controller.examsToUpload[index].exam!.first == null
+                      weekend ? Text('weekend'.tr, style: const TextStyle(fontSize: 12))
+                          : controller.examsToUpload[index].exam == null
                             ? _setEmptyCell(index, morning)
-                            : Text(controller.examsToUpload[index].exam!.first!.acronym, style: const TextStyle(fontSize: 12))
-                          : controller.examsToUpload[index].exam!.last == null
-                            ? _setEmptyCell(index, morning)
-                            : Text(controller.examsToUpload[index].exam!.last!.acronym, style: const TextStyle(fontSize: 12)),
-                      morning
+                          : morning
+                            ? controller.examsToUpload[index].exam!.first == null
+                              ? _setEmptyCell(index, morning)
+                              : Text(controller.examsToUpload[index].exam!.first!.acronym, style: const TextStyle(fontSize: 12))
+                            : controller.examsToUpload[index].exam!.last == null
+                              ? _setEmptyCell(index, morning)
+                              : Text(controller.examsToUpload[index].exam!.last!.acronym, style: const TextStyle(fontSize: 12)),
+                      controller.examsToUpload[index].exam == null
+                          ? SizedBox(
+                            height: mobile ? 18 : 36,
+                            width: mobile ? 18 : 36,
+                          )
+                          : morning
                           ? (controller.examsToUpload[index].exam!.first != null
                               ? IconButton(
                         padding: EdgeInsets.zero,
@@ -220,6 +253,15 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
           ),
         );
       },
+      onWillAccept: (ExamBox? exam) {
+        if (exam != null) {
+          controller.showTeacherConflicts(exam.exam.subject.teacher!);
+          controller.showClassroomConflicts(exam.exam.subject.classroom);
+          controller.showCollisions.value = true;
+          controller.update();
+        }
+        return true;
+      },
       onAccept: (ExamBox exam) {
         if (!weekend) {
           final item = exam.exam.copyWith(
@@ -227,11 +269,19 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
               newCall: controller.call,
               newTurn: morning ? "MORNING" : "AFTERNOON");
           controller.completeDrag(item, index, morning);
+          controller.hideConflicts();
+          controller.showCollisions.value = false;
+          controller.update();
         } else {
           controller.showErrorMessage('noExamAllowed'.tr);
           controller.showError();
           controller.restoreDraggableItem(exam.exam);
         }
+      },
+      onLeave: (ExamBox? exam) {
+        controller.hideConflicts();
+        controller.showCollisions.value = false;
+        controller.update();
       },
     );
   }
@@ -243,14 +293,15 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
         Text(morning
             ? 'morning'.tr
             : 'afternoon'.tr, style: const TextStyle(fontSize: 12)),
-        /*controller.examsToUpload[index].state == ExamState.classroomCollision ||
-            controller.examsToUpload[index].state == ExamState.teacherCollision ? const Icon(
+        controller.examsToUpload[index].state ==
+            ExamState.classroomCollision || controller.examsToUpload[index].state ==
+            ExamState.teacherCollision
+            ? const Icon(
           Icons.cancel,
           color: Colors.red,
-          size: 18,
+          size: 16,
         )
-            : Container()*/
-
+            : Container()
       ],
     );
   }
@@ -282,7 +333,8 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                 return SizedBox(
                   width: 70,
                   height: 50,
-                  child: Draggable<ExamBox>(
+                  child: Obx(
+                () => Draggable<ExamBox>(
                     data: controller.exams
                         .map((data) => data.toExamBox())
                         .toList()[index],
@@ -298,6 +350,7 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
                     child: controller.exams
                         .map((data) => data.toExamBox())
                         .toList()[index],
+                  ),
                   ),
                 );
               },

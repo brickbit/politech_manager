@@ -13,8 +13,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../domain/error/calendar_error.dart';
 import '../../domain/error/error_manager.dart';
 import '../../domain/model/calendar_bo.dart';
+import '../../domain/model/classroom_bo.dart';
 import '../../domain/model/exam_state_bo.dart';
 import '../../domain/model/pair_exam_bo.dart';
+import '../../domain/model/teacher_bo.dart';
 import '../../domain/repository/data_repository.dart';
 import 'base_controller.dart';
 
@@ -74,6 +76,12 @@ class CreateCalendarController extends BaseController {
 
   final _id = 0.obs;
 
+  final _teachersInCell = Rx<List<TeacherBO?>>([]);
+
+  final _classroomsInCell = Rx<List<ClassroomBO?>>([]);
+
+  final showCollisions = false.obs;
+
   final _update = false.obs;
 
   Future<String> get _localPath async {
@@ -130,6 +138,54 @@ class CreateCalendarController extends BaseController {
       }
     }
   }
+
+  void hideConflicts() {
+    for(var i = 0; i < _examsToUpload.value.length; i++) {
+      _examsToUpload.value[i] = ExamStateBO(_examsToUpload.value[i].exam, ExamState.free);
+    }
+  }
+
+  void showTeacherConflicts(TeacherBO teacher) {
+    _teachersInCell.value = List.filled(_numberOfCells.value, null, growable: false);
+
+    for(var i = 0; i < _calendars.value.length; i++) {
+      for(var j = 0; j < _calendars.value[i]!.exams.length; j++) {
+        if(_calendars.value[i]!.exams[j]?.subject.teacher?.id == teacher.id) {
+          if (j < _examsToUpload.value.length) {
+            _examsToUpload.value[j] = ExamStateBO(
+                _examsToUpload.value[j].exam,
+                ExamState.teacherCollision);
+          } else {
+            _examsToUpload.value[j - _examsToUpload.value.length] = ExamStateBO(
+                _examsToUpload.value[j - _examsToUpload.value.length].exam,
+                ExamState.teacherCollision);
+          }
+        }
+      }
+    }
+  }
+
+  void showClassroomConflicts(ClassroomBO classroom) {
+    _classroomsInCell.value = List.filled(_numberOfCells.value, null, growable: false);
+
+    for(var i = 0; i < _calendars.value.length; i++) {
+      for(var j = 0; j < _calendars.value[i]!.exams.length; j++) {
+        if(_calendars.value[i]!.exams[j]?.subject.classroom.id == classroom.id) {
+          if (j < _examsToUpload.value.length) {
+            _examsToUpload.value[j] = ExamStateBO(
+                _examsToUpload.value[j].exam,
+                ExamState.classroomCollision);
+          } else {
+            _examsToUpload.value[j - _examsToUpload.value.length] = ExamStateBO(
+                _examsToUpload.value[j - _examsToUpload.value.length].exam,
+                ExamState.classroomCollision);
+          }
+        }
+      }
+    }
+    update();
+  }
+
 
   ExamStateBO parseToExamStateMorning(ExamBO? exam, int index) {
     if (exam != null) {
@@ -321,12 +377,50 @@ class CreateCalendarController extends BaseController {
   }
 
   void completeDrag(ExamBO item, int index, bool morning) {
-    final PairExamBO cell = _examsToUpload.value[index].exam!;
-    if (morning) {
-      _examsToUpload.value[index] = ExamStateBO(PairExamBO(item, cell.last), _examsToUpload.value[index].state);
-    } else {
-      _examsToUpload.value[index] = ExamStateBO(PairExamBO(cell.first, item),_examsToUpload.value[index].state);
+    final PairExamBO? cell = _examsToUpload.value[index].exam;
+    switch (_examsToUpload.value[index].state) {
+      case ExamState.free:
+        if (morning) {
+          _examsToUpload.value[index] = ExamStateBO(PairExamBO(item, cell?.last), _examsToUpload.value[index].state);
+        } else {
+          _examsToUpload.value[index] = ExamStateBO(PairExamBO(cell?.first, item),_examsToUpload.value[index].state);
+        }
+        break;
+      case ExamState.classroomCollision:
+        _handleClassroomCollision(index, item);
+        break;
+      case ExamState.teacherCollision:
+        _handleTeacherCollision(index, item);
+        break;
     }
+  }
+
+  void _handleClassroomCollision(int index, ExamBO item) {
+    _examsToUpload.value[index] = ExamStateBO(null, ExamState.classroomCollision);
+    _recoverExam(item);
+    showErrorMessage('classroomCollision'.tr);
+    showError();
+  }
+
+  void _handleTeacherCollision(int index, ExamBO item) {
+    _examsToUpload.value[index] = ExamStateBO(null, ExamState.teacherCollision);
+    _recoverExam(item);
+    showErrorMessage('teacherCollision'.tr);
+    showError();
+  }
+
+  void _recoverExam(ExamBO item) {
+    var exam = ExamBO(
+            item.subject,
+            item.acronym,
+            item.semester,
+            item.date,
+            item.call,
+            item.turn,
+            item.id);
+    _exams.value.add(exam);
+    _exams.refresh();
+    update();
   }
 
   void deleteItem(ExamBO exam, bool morning) {
