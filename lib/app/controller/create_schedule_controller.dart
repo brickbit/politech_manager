@@ -164,30 +164,40 @@ class CreateScheduleController extends BaseController {
     }
   }
 
-  void showTeacherConflicts(TeacherBO teacher) {
-    if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
-      _teachersInCell.value = List.generate(maxCellsOneSubjectPerDay, (i) => List<TeacherBO?>.filled(_schedules.value.length, null, growable: false), growable: false);
-    } else {
-      _teachersInCell.value = List.generate(maxCellsSeveralSubjectPerDay, (i) => List<TeacherBO?>.filled(_schedules.value.length, null, growable: false), growable: false);
-    }
+  void showTeacherConflicts(TeacherBO? teacher) {
+    if (teacher != null) {
+      if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+        _teachersInCell.value = List.generate(
+            maxCellsOneSubjectPerDay, (i) => List<TeacherBO?>.filled(
+            _schedules.value.length, null, growable: false), growable: false);
+      } else {
+        _teachersInCell.value = List.generate(
+            maxCellsSeveralSubjectPerDay, (i) => List<TeacherBO?>.filled(
+            _schedules.value.length, null, growable: false), growable: false);
+      }
 
-    for(var i = 0; i < _schedules.value.length; i++) {
-      for(var j = 0; j < _schedules.value[i].subjects.length; j++) {
-        if(_schedules.value[i].subjects[j]?.teacher?.id == teacher.id) {
-          if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
-            _subjectsToUpload.value[j] = SubjectStateBO(
-                _subjectsToUpload.value[j]?.subject,
-                SubjectState.teacherCollision);
-          } else {
-            _subjectsToUpload.value[j] = SubjectStateBO(
-                _subjectsToUpload.value[j]?.subject,
-                SubjectState.teacherCollision);
-            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5] = SubjectStateBO(
-                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5]?.subject,
-                SubjectState.teacherCollision);
-            _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2] = SubjectStateBO(
-                _subjectsToUpload.value[j+maxCellsOneSubjectPerDay*5*2]?.subject,
-                SubjectState.teacherCollision);
+      for (var i = 0; i < _schedules.value.length; i++) {
+        for (var j = 0; j < _schedules.value[i].subjects.length; j++) {
+          if (_schedules.value[i].subjects[j]?.teacher?.id == teacher?.id) {
+            if (_scheduleType.value == 'oneSubjectPerHour'.tr) {
+              _subjectsToUpload.value[j] = SubjectStateBO(
+                  _subjectsToUpload.value[j]?.subject,
+                  SubjectState.teacherCollision);
+            } else {
+              _subjectsToUpload.value[j] = SubjectStateBO(
+                  _subjectsToUpload.value[j]?.subject,
+                  SubjectState.teacherCollision);
+              _subjectsToUpload.value[j + maxCellsOneSubjectPerDay * 5] =
+                  SubjectStateBO(
+                      _subjectsToUpload.value[j + maxCellsOneSubjectPerDay * 5]
+                          ?.subject,
+                      SubjectState.teacherCollision);
+              _subjectsToUpload.value[j + maxCellsOneSubjectPerDay * 5 * 2] =
+                  SubjectStateBO(
+                      _subjectsToUpload.value[j +
+                          maxCellsOneSubjectPerDay * 5 * 2]?.subject,
+                      SubjectState.teacherCollision);
+            }
           }
         }
       }

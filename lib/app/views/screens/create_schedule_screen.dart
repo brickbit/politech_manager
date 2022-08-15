@@ -401,7 +401,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
       onWillAccept: (SubjectBox? subject) {
         if (subject != null) {
           if (controller.teachersKnown.value) {
-            controller.showTeacherConflicts(subject.subject.teacher!);
+            controller.showTeacherConflicts(subject.subject.teacher);
           } else {
             controller.showDepartmentConflicts(subject.subject.department);
           }

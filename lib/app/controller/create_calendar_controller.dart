@@ -147,20 +147,33 @@ class CreateCalendarController extends BaseController {
     }
   }
 
-  void showTeacherConflicts(TeacherBO teacher) {
-    _teachersInCell.value = List.filled(_numberOfCells.value, null, growable: false);
+  void showTeacherConflicts(TeacherBO? teacher) {
+    if(teacher != null) {
+      _teachersInCell.value =
+          List.filled(_numberOfCells.value, null, growable: false);
 
-    for(var i = 0; i < _calendars.value.length; i++) {
-      for(var j = 0; j < _calendars.value[i]!.exams.length; j++) {
-        if(_calendars.value[i]!.exams[j]?.subject.teacher?.id == teacher.id) {
-          if (j < _examsToUpload.value.length) {
-            _examsToUpload.value[j] = PairExamBO(
-                ExamStateBO(_examsToUpload.value[j].first?.exam, ExamState.teacherCollision),
-                ExamStateBO(_examsToUpload.value[j].last?.exam, _examsToUpload.value[j].last!.state));
-          } else {
-            _examsToUpload.value[j - _examsToUpload.value.length] = PairExamBO(
-                ExamStateBO(_examsToUpload.value[j - _examsToUpload.value.length].first?.exam, _examsToUpload.value[j - _examsToUpload.value.length].first!.state),
-                ExamStateBO(_examsToUpload.value[j - _examsToUpload.value.length].last?.exam, ExamState.teacherCollision));
+      for (var i = 0; i < _calendars.value.length; i++) {
+        for (var j = 0; j < _calendars.value[i]!.exams.length; j++) {
+          if (_calendars.value[i]!.exams[j]?.subject.teacher?.id ==
+              teacher.id) {
+            if (j < _examsToUpload.value.length) {
+              _examsToUpload.value[j] = PairExamBO(
+                  ExamStateBO(_examsToUpload.value[j].first?.exam,
+                      ExamState.teacherCollision),
+                  ExamStateBO(_examsToUpload.value[j].last?.exam,
+                      _examsToUpload.value[j].last!.state));
+            } else {
+              _examsToUpload.value[j - _examsToUpload.value.length] =
+                  PairExamBO(
+                      ExamStateBO(
+                          _examsToUpload.value[j - _examsToUpload.value.length]
+                              .first?.exam,
+                          _examsToUpload.value[j - _examsToUpload.value.length]
+                              .first!.state),
+                      ExamStateBO(
+                          _examsToUpload.value[j - _examsToUpload.value.length]
+                              .last?.exam, ExamState.teacherCollision));
+            }
           }
         }
       }

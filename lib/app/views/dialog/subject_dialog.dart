@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:politech_manager/app/extension/color_extension.dart';
 import 'package:politech_manager/domain/model/degree_bo.dart';
-import 'package:politech_manager/domain/model/subject_state.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../domain/model/classroom_bo.dart';
@@ -32,6 +31,7 @@ void subjectDialog(
   var _isSeminary = (subject?.seminary ?? false).obs;
   var _isLaboratory = (subject?.laboratory ?? false).obs;
   var _isEnglish = (subject?.english ?? false).obs;
+  var _teacherKnown = false.obs;
   var _time = (subject?.time.toString() ?? '60').obs;
   var _semester = (subject?.semester ?? 1).toString().obs;
   var id = subject?.id;
@@ -158,8 +158,19 @@ void subjectDialog(
                 ]),
                 const SizedBox(height: 24),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('teacher'.tr),
-                  materialDropdownTeacher(_teachers, _teacherItems),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                    Text('teacher'.tr),
+                    Obx(
+                          () => Switch(
+                        value: _teacherKnown.value,
+                        activeColor: Colors.amber,
+                        onChanged: (value) => _teacherKnown.value = value,
+                      ),
+                    ),
+                  ],),
+                  Obx(() => !_teacherKnown.value ? Container() : materialDropdownTeacher(_teachers, _teacherItems),),
                 ]),
                 const SizedBox(height: 24),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -195,7 +206,7 @@ void subjectDialog(
                 int.parse(_semester.value),
                 _classroom.value,
                 _department.value,
-                _teachers.value,
+                !_teacherKnown.value ? null : _teachers.value,
                 _degree.value,
                 _color.value.getColorNumber(),
                 id ?? uuid.v4().hashCode);
