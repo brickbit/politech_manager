@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "172845243028",
+    "project_id": "epcc-manager",
+    "storage_bucket": "epcc-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172845243028:android:80043d4e7fe10edd67b281",
+        "android_client_info": {
+          "package_name": "com.example.politech_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172845243028-7dre68vvnb9is5b7f3bfr4tr8vuhpq91.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBioy1bGnCtCpQLdG6h9ZxeJ2hah4Pdz14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172845243028-7dre68vvnb9is5b7f3bfr4tr8vuhpq91.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "172845243028-dcqg9b36abkto28ephu616ib6hj2otgj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.politechManager"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
