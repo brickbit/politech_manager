@@ -1,0 +1,29 @@
+name: epcc-manager
+version: 0.1.0
+summary: Manage schedules and calendars
+description: Manage schedules and calendars
+
+confinement: strict
+base: core18
+grade: stable
+
+slots:
+  dbus-epcc-manager: # adjust accordingly to your app name
+    interface: dbus
+    bus: session
+    name: com.epcc.epccmanager # adjust accordingly to your app name and
+    
+apps:
+  epcc-manager:
+    command: epcc-manager
+    extensions: [flutter-master] # Where "master" defines which Flutter channel to use for the build
+    plugs:
+    - network
+    slots:
+      - dbus-epcc-manager
+parts:
+  epcc-manager:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart # The main entry-point file of the application
+

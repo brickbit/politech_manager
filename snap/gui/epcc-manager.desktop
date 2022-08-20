@@ -1,0 +1,9 @@
+  [Desktop Entry]
+  Name=Epcc Manager
+  Comment=Manage schedules and calendars
+  Exec=epcc-manager
+  Icon=${SNAP}/meta/gui/epcc-manager.png # replace name to your app name
+  Terminal=false
+  Type=Application
+  Categories=Education; #adjust accordingly your snap category
+
