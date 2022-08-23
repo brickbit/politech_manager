@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000311">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: update_fastlane" time="0.117121">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: Switch to ios config_env lane" time="0.000209">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: match" time="3.914881">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: update_project_team" time="0.069031">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: gym" time="102.053317">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
