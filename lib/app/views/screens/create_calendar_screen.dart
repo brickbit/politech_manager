@@ -246,7 +246,9 @@ class CreateCalendarScreen extends GetView<CreateCalendarController> {
       },
       onWillAccept: (ExamBox? exam) {
         if (exam != null) {
-          controller.showTeacherConflicts(exam.exam.subject.teacher!);
+          if(exam.exam.subject.teacher != null) {
+            controller.showTeacherConflicts(exam.exam.subject.teacher);
+          }
           controller.showClassroomConflicts(exam.exam.subject.classroom);
           controller.showCollisions.value = true;
           controller.update();
