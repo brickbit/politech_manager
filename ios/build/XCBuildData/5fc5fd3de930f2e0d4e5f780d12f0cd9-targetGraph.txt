@@ -1,0 +1,16 @@
+Target dependency graph (6 targets)
+Flutter in Pods, no dependencies
+open_file in Pods, depends on:
+Flutter in Pods (explicit)
+package_info_plus in Pods, depends on:
+Flutter in Pods (explicit)
+path_provider_ios in Pods, depends on:
+Flutter in Pods (explicit)
+url_launcher_ios in Pods, depends on:
+Flutter in Pods (explicit)
+Pods-Runner in Pods, depends on:
+Flutter in Pods (explicit)
+open_file in Pods (explicit)
+package_info_plus in Pods (explicit)
+path_provider_ios in Pods (explicit)
+url_launcher_ios in Pods (explicit)
