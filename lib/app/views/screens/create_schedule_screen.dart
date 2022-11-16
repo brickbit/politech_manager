@@ -572,7 +572,7 @@ class CreateScheduleScreen extends GetView<CreateScheduleController> {
               itemCount: controller.subjects.length,
               itemBuilder: (context, index) {
                 return SizedBox(
-                  width: 80,
+                  width: 85,
                   height: 50,
                   child: Obx(
                     () => Draggable<SubjectBox>(

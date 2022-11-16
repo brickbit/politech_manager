@@ -13,7 +13,7 @@ class SubjectBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80,
+      width: 85,
       height: 60,
       decoration: BoxDecoration(
         color: subject.color.parseColor(),

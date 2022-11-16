@@ -82,6 +82,7 @@ class CreateScheduleController extends BaseController {
   @override
   void onInit() {
     _subjects.value = argumentData['subjects'];
+    _subjects.value.removeWhere((element) => element.time <= 0);
     _scheduleType.value = argumentData['scheduleType'];
     _semester.value = int.parse(argumentData['semester']);
     _degree.value = argumentData['degree'];
